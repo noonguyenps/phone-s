@@ -8,9 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.*;
+import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.repository.AttributeOptionRepository;
 import project.phoneshop.repository.ImageProductRepository;
 import project.phoneshop.repository.ProductRepository;
+import project.phoneshop.service.ProductRatingService;
 import project.phoneshop.service.ProductService;
 
 import java.util.*;
@@ -22,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final AttributeOptionRepository attributeOptionRepository;
     private final ImageProductRepository imageProductRepository;
+    private final ProductRatingService productRatingService;
     @Override
     public List<ProductEntity> findAllProduct(){
         List<ProductEntity> productEntityList = productRepository.findAll();
@@ -155,5 +158,31 @@ public class ProductServiceImpl implements ProductService {
     public long countProduct() {
         return productRepository.count();
     }
-
+    @Override
+    public ProductResponse productResponse(ProductEntity product){
+        List<ImageProductEntity> imageProductEntityList = imageProductRepository.findByProduct(product);
+        List<String> list = new ArrayList<>();
+        for (ImageProductEntity imageProductEntity : imageProductEntityList){
+            list.add(imageProductEntity.getUrl());
+        }
+        Set<AttributeOptionEntity> attributeEntitySet = product.getAttributeOptionEntities();
+        Double rate = productRatingService.getRateByProductId(product.getId());
+        if(rate == null){
+            rate = 0.0;
+        }
+        return new ProductResponse(
+                product.getId(),
+                product.getImageProductEntityList().get(0).getUrl(),
+                product.getName(),
+                product.getDescription(),
+                product.getProductCategory().getName(),
+                rate,
+                product.getPrice(),
+                0.0,
+                product.getSellAmount(),
+                product.getProductBrand().getName(),
+                product.getProductBrand().getBrandCountry(),
+                list,
+                product.getAttributeOptionEntities());
+    }
 }

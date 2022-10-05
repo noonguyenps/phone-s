@@ -13,6 +13,7 @@ import project.phoneshop.model.payload.request.product.AddNewProductRequest;
 import project.phoneshop.model.payload.request.product.ProductFromJson;
 import project.phoneshop.model.payload.request.product.UpdateProductRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +42,11 @@ public class ProductController {
         List<ProductEntity> listProduct = productService.findPaginated(page, size, sort);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
         Map<String, Object> data = new HashMap<>();
-        data.put("listProduct",listProduct);
+        data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
     @GetMapping("/product/byCategory")
@@ -148,9 +152,13 @@ public class ProductController {
             if(category == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Category is Not Found",null), HttpStatus.NOT_FOUND);
             Set<AttributeOptionEntity> listAttributeOption = new HashSet<>();
-            for (String attributeOptionId : productReq.getAttribute())
-                if(attributeService.findByIdAttributeOption(attributeOptionId) == null)
+            for (String attributeOptionId : productReq.getAttribute()){
+                AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attributeOptionId);
+                if(attributeOption == null)
                     new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",null), HttpStatus.NOT_FOUND);
+                else
+                    listAttributeOption.add(attributeOption);
+            }
             ProductEntity product = ProductMapping.addJsonProductToEntity(productReq,category,brand,listAttributeOption);
             productService.saveProduct(product);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Product Successfully",null), HttpStatus.OK);

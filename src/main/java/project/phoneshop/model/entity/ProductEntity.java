@@ -50,9 +50,6 @@ public class ProductEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "productCart",cascade = CascadeType.ALL)
     private List<CartEntity> listCart;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "cart",targetEntity = CartItemEntity.class,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    private List<CartItemEntity> list;
     @JsonIgnore
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ImageProductEntity> imageProductEntityList;

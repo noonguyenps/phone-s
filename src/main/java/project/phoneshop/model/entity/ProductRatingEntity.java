@@ -29,88 +29,66 @@ public class ProductRatingEntity {
     private Date date;
     @OneToMany(mappedBy = "productRating",targetEntity = ProductRatingLikeEntity.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ProductRatingLikeEntity> likeList;
-
     @OneToMany(mappedBy = "productRating",targetEntity = ProductRatingImageEntity.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ProductRatingImageEntity> imageList;
-
     @OneToMany(mappedBy = "productRating",targetEntity = ProductRatingCommentEntity.class,cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ProductRatingCommentEntity> commentList;
-
     public List<ProductRatingCommentEntity> getCommentList() {
         return commentList;
     }
-
     public void setCommentList(List<ProductRatingCommentEntity> commentList) {
         this.commentList = commentList;
     }
-
     public List<ProductRatingImageEntity> getImageList() {
         return imageList;
     }
-
     public void setImageList(List<ProductRatingImageEntity> imageList) {
         this.imageList = imageList;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public ProductEntity getProduct() {
         return product;
     }
-
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
-
     public UserEntity getUser() {
         return user;
     }
-
     public void setUser(UserEntity user) {
         this.user = user;
     }
-
     public int getRatingPoint() {
         return ratingPoint;
     }
-
     public void setRatingPoint(int ratingPoint) {
         this.ratingPoint = ratingPoint;
     }
-
     public String getMessage() {
         return message;
     }
-
     public void setMessage(String message) {
         this.message = message;
     }
-
     public Date getDate() {
         return date;
     }
-
     public void setDate(Date date) {
         this.date = date;
     }
-
     public List<ProductRatingLikeEntity> getLikeList() {
         return likeList;
     }
-
     public void setLikeList(List<ProductRatingLikeEntity> likeList) {
         this.likeList = likeList;
     }
-
     public ProductRatingEntity() {
     }
-
     public ProductRatingEntity(ProductEntity product, UserEntity user, int ratingPoint, String message, Date date) {
         this.product = product;
         this.user = user;

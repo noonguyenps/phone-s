@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.BrandEntity;
 import project.phoneshop.model.entity.CategoryEntity;
 import project.phoneshop.model.entity.ProductEntity;
+import project.phoneshop.model.payload.response.product.ProductResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,4 +44,6 @@ public interface ProductService {
     void minusProduct(ProductEntity product, int quantity);
 
     long countProduct();
+
+    ProductResponse productResponse(ProductEntity product);
 }

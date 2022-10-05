@@ -12,6 +12,7 @@ import project.phoneshop.service.ProductRatingService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -97,5 +98,9 @@ public class ProductRatingServiceImpl implements ProductRatingService {
     @Override
     public ProductRatingCommentEntity saveComment(ProductRatingCommentEntity commentEntity) {
         return productRatingCommentRepository.save(commentEntity);
+    }
+    @Override
+    public Double getRateByProductId(UUID productId) {
+        return productRatingRepository.getRatingPointByProductId(productId);
     }
 }

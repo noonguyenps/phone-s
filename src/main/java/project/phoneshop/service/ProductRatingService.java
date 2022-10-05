@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Service
@@ -21,5 +22,5 @@ public interface ProductRatingService {
     ProductRatingEntity getByUserAndProduct(UserEntity user, ProductEntity product);
     ProductRatingEntity getRatingById(int id);
     ProductRatingCommentEntity saveComment(ProductRatingCommentEntity commentEntity);
-
+    Double getRateByProductId(UUID productId);
 }
