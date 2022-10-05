@@ -62,8 +62,11 @@ public class ProductController {
         List<ProductEntity> listProduct = productService.findProductByCategory(categoryEntity,page,size,sort);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
         Map<String, Object> data = new HashMap<>();
-        data.put("listProduct",listProduct);
+        data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Query Successfully",data), HttpStatus.OK);
     }
     @PostMapping("/product/category/{id}")
@@ -84,8 +87,11 @@ public class ProductController {
             listProduct = productService.findProductByAttributes(categoryEntity,listAttribute,page,size,sort);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty", null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
         Map<String, Object> data = new HashMap<>();
-        data.put("listProduct",listProduct);
+        data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
     @GetMapping("/product/brand/{id}")
@@ -101,8 +107,11 @@ public class ProductController {
         List<ProductEntity> listProduct = productService.findProductByBrand(brand,page,size,sort);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
         Map<String,Object> data = new HashMap<>();
-        data.put("listProduct",listProduct);
+        data.put("listProduct", listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
     @GetMapping("/product/key/{keyword}")
@@ -115,8 +124,11 @@ public class ProductController {
         List<ProductEntity> listProduct = productService.findProductByKeyword(keyword,page,size,sort);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
         Map<String,Object> data = new HashMap<>();
-        data.put("listProduct",listProduct);
+        data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
     @GetMapping("/product/{id}")
@@ -125,7 +137,7 @@ public class ProductController {
         if(product == null)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"Product is Not Found",null), HttpStatus.FOUND);
         Map<String, Object> data = new HashMap<>();
-        data.put("product",product);
+        data.put("product",productService.productResponse(product));
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
     @PostMapping("/admin/product/insert")
