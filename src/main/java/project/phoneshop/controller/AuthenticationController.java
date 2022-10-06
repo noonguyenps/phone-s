@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
@@ -238,43 +239,42 @@ public class AuthenticationController {
 //
 //        return new ResponseEntity<SuccessResponse>(response,HttpStatus.OK);
 //    }
-//    @GetMapping("/social")
-//    public ResponseEntity<SuccessResponse> socialToken(
-//                                                       @RequestParam(defaultValue = "") String token,
-//                                                       HttpServletResponse resp) {
-//        if(token == null || token.equals("")){
-//            throw new BadCredentialsException("token is not valid");
-//        }
-//        String email= jwtUtils.getUserNameFromJwtToken(token);
-//        UserEntity user = userService.findByEmail(email);
-//
-//        if(user == null){
-//            throw new RecordNotFoundException("Not found, please register again");
-//        }
-//        AppUserDetail userDetails =  AppUserDetail.build(user);
-//
-//        String accessToken = jwtUtils.generateJwtToken(userDetails);
-//        String refreshToken=jwtUtils.generateRefreshJwtToken(userDetails);
-//
-//        System.out.println(jwtUtils.getUserNameFromJwtToken(accessToken));
-//        SuccessResponse response = new SuccessResponse();
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setMessage("Login successful");
-//        response.setSuccess(true);
-//
-//        Cookie cookieAccessToken = new Cookie("accessToken", accessToken);
-//        Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
-//
-//        resp.setHeader("Set-Cookie", "test=value; Path=/");
-//        resp.addCookie(cookieAccessToken);
-//        resp.addCookie(cookieRefreshToken);
-//
-//        response.getData().put("accessToken",accessToken);
-//        response.getData().put("refreshToken",refreshToken);
-//        response.getData().put("user",user);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-////
+    @GetMapping("/social")
+    public ResponseEntity<SuccessResponse> socialToken(
+                                                       @RequestParam(defaultValue = "") String token,
+                                                       HttpServletResponse resp) {
+        if(token == null || token.equals("")){
+            throw new BadCredentialsException("token is not valid");
+        }
+        String email= jwtUtils.getUserNameFromJwtToken(token);
+        UserEntity user = userService.findByEmail(email);
+
+        if(user == null){
+            throw new RecordNotFoundException("Not found, please register again");
+        }
+        AppUserDetail userDetails =  AppUserDetail.build(user);
+
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+        String refreshToken=jwtUtils.generateRefreshJwtToken(userDetails);
+
+        System.out.println(jwtUtils.getUserNameFromJwtToken(accessToken));
+        SuccessResponse response = new SuccessResponse();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Login successful");
+        response.setSuccess(true);
+
+        Cookie cookieAccessToken = new Cookie("accessToken", accessToken);
+        Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
+
+        resp.setHeader("Set-Cookie", "test=value; Path=/");
+        resp.addCookie(cookieAccessToken);
+        resp.addCookie(cookieRefreshToken);
+
+        response.getData().put("accessToken",accessToken);
+        response.getData().put("refreshToken",refreshToken);
+        response.getData().put("user",user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 //    @PostMapping("/forgetPassword")
 //    public ResponseEntity<SuccessResponse> forgetPassword(@RequestBody @Valid ReActiveRequest request, BindingResult errors) throws Exception{
 //        if (errors.hasErrors()) {
