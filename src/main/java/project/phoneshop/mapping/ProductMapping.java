@@ -22,6 +22,7 @@ public class ProductMapping {
         product.setProductCategory(category);
         product.setPrice(productFromJson.getPrice());
         product.setDescription(productFromJson.getDescription());
+        product.setDiscount(productFromJson.getDiscount());
         product.setInventory(productFromJson.getInventory());
         product.setCreate(new Date());
         product.setSellAmount(0);
@@ -42,6 +43,7 @@ public class ProductMapping {
         product.setDescription(updateProductRequest.getDescription());
         product.setName(updateProductRequest.getName());
         product.setPrice(updateProductRequest.getPrice());
+        product.setDiscount(updateProductRequest.getDiscount());
         product.setInventory(updateProductRequest.getInventory());
         return product;
     }

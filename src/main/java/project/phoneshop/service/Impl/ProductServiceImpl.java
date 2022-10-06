@@ -167,9 +167,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Set<AttributeOptionEntity> attributeEntitySet = product.getAttributeOptionEntities();
         Double rate = productRatingService.getRateByProductId(product.getId());
-        if(rate == null){
-            rate = 0.0;
-        }
+        if(rate == null)rate = 0.0;
         return new ProductResponse(
                 product.getId(),
                 product.getImageProductEntityList().get(0).getUrl(),
@@ -178,7 +176,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getProductCategory().getName(),
                 rate,
                 product.getPrice(),
-                0.0,
+                product.getDiscount(),
                 product.getSellAmount(),
                 product.getProductBrand().getName(),
                 product.getProductBrand().getBrandCountry(),

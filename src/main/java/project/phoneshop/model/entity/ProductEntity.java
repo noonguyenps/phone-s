@@ -39,6 +39,8 @@ public class ProductEntity {
     private Double price;
     @Column(name = "\"product_description\"")
     private String description;
+    @Column(name = "\"product_discount\"")
+    private double discount;
     @Column(name = "\"product_status\"")
     private int status;
     @Column(name = "\"product_inventory\"")
@@ -167,6 +169,14 @@ public class ProductEntity {
 
     public void setAttributeOptionEntities(Set<AttributeOptionEntity> attributeOptionEntities) {
         this.attributeOptionEntities = attributeOptionEntities;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     public List<CartEntity> getListCart() {

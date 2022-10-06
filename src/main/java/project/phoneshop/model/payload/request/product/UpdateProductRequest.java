@@ -22,6 +22,7 @@ public class UpdateProductRequest {
     @NotEmpty(message = "Category is Not Empty")
     private UUID category;
     private String description;
+    private double discount;
     @NotEmpty(message = "Price is Not Empty")
     private Double price;
     @NotEmpty(message = "Inventory is Not Empty")

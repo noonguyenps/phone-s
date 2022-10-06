@@ -17,6 +17,7 @@ public class ProductFromJson {
     private UUID brand;
     private UUID category;
     private String description;
+    private double discount;
     private Double price;
     private Integer inventory;
     List<String> attribute;
