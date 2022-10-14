@@ -16,7 +16,6 @@ public class AttributeMapping {
         AttributeOptionEntity attributeOption = new AttributeOptionEntity();
         attributeOption.setId(attributeOptionRequest.getId());
         attributeOption.setValue(attributeOptionRequest.getValue());
-        attributeOption.setCompareValue(0);
         attributeOption.setIdType(attribute);
         return attributeOption;
     }

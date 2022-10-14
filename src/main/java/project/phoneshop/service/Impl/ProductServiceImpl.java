@@ -66,14 +66,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addAttribute(ProductEntity product, String attributeOptionId){
-        Optional<AttributeOptionEntity> attribute = attributeOptionRepository.findById(attributeOptionId);
-        product.getAttributeOptionEntities().add(attribute.get());
+//        Optional<AttributeOptionEntity> attribute = attributeOptionRepository.findById(attributeOptionId);
+//        product.getAttributeOptionEntities().add(attribute.get());
         productRepository.save(product);
     }
     @Override
     public void deleteAttribute(ProductEntity product, String attributeId){
-        Optional<AttributeOptionEntity> attribute = attributeOptionRepository.findById(attributeId);
-        product.getAttributeOptionEntities().remove(attribute.get());
+//        Optional<AttributeOptionEntity> attribute = attributeOptionRepository.findById(attributeId);
+//        product.getAttributeOptionEntities().remove(attribute.get());
         productRepository.save(product);
     }
 
@@ -165,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
         for (ImageProductEntity imageProductEntity : imageProductEntityList){
             list.add(imageProductEntity.getUrl());
         }
-        Set<AttributeOptionEntity> attributeEntitySet = product.getAttributeOptionEntities();
+//        Set<AttributeOptionEntity> attributeEntitySet = product.getAttributeOptionEntities();
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
         return new ProductResponse(
@@ -180,7 +180,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getSellAmount(),
                 product.getProductBrand().getName(),
                 product.getProductBrand().getBrandCountry(),
-                list,
-                product.getAttributeOptionEntities());
+                list,null);
+//                product.getAttributeOptionEntities());
     }
 }

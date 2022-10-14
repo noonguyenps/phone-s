@@ -34,7 +34,7 @@ public class ProductMapping {
             img.setProduct(product);
         }
         product.setImageProductEntityList(listImageProduct);
-        product.setAttributeOptionEntities(listAttributeOption);
+//        product.setAttributeOptionEntities(listAttributeOption);
         return product;
     }
     public static ProductEntity updateProduct(ProductEntity product, UpdateProductRequest updateProductRequest, BrandEntity brand, CategoryEntity category){

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
+import java.util.List;
 
 @RestResource(exported = false)
 @Entity
@@ -18,9 +19,8 @@ public class AttributeOptionEntity {
     private AttributeEntity idType;
     @Column(name = "\"value\"")
     private String value;
-    @Column(name = "\"compare_value\"")
-    private long compareValue;
-
+    @OneToMany(mappedBy = "attributeOption",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<ProductAttributeOptionDetail> productAttributeOptionDetails;
     public AttributeOptionEntity() {
     }
 
@@ -46,13 +46,5 @@ public class AttributeOptionEntity {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public long getCompareValue() {
-        return compareValue;
-    }
-
-    public void setCompareValue(long compareValue) {
-        this.compareValue = compareValue;
     }
 }

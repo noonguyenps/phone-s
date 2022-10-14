@@ -55,10 +55,8 @@ public class ProductEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ImageProductEntity> imageProductEntityList;
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "\"product_attribute_options\"", joinColumns = @JoinColumn(name = "\"product_id\""), inverseJoinColumns = @JoinColumn(name = "\"id\""))
-    private Set<AttributeOptionEntity> attributeOptionEntities;
+    @OneToMany(mappedBy = "productAttribute",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<ProductAttributeOptionDetail> productAttributeOptionDetails;
 
     public ProductEntity(BrandEntity productBrand, CategoryEntity productCategory, String name, Double price, String description, Integer inventory) {
         this.productBrand = productBrand;
@@ -161,14 +159,6 @@ public class ProductEntity {
 
     public void setImageProductEntityList(List<ImageProductEntity> imageProductEntityList) {
         this.imageProductEntityList = imageProductEntityList;
-    }
-
-    public Set<AttributeOptionEntity> getAttributeOptionEntities() {
-        return attributeOptionEntities;
-    }
-
-    public void setAttributeOptionEntities(Set<AttributeOptionEntity> attributeOptionEntities) {
-        this.attributeOptionEntities = attributeOptionEntities;
     }
 
     public double getDiscount() {
