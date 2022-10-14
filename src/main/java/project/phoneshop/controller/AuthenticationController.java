@@ -91,9 +91,9 @@ public class AuthenticationController {
     public ResponseEntity<SuccessResponse> verifyPhoneNumber(@RequestBody @Valid VerifyPhoneRequest request) {
         UserEntity user=userService.findByPhone(request.getPhone());
         if(user!=null)
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.BAD_REQUEST.value(),"This phone already exists",null),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.FOUND.value(),"This phone already exists",null),HttpStatus.OK);
         else
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"This phone ok",null),HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"This phone ok",null),HttpStatus.OK);
     }
     private ResponseEntity SendErrorValid(String field, String message,String title){
         ErrorResponseMap errorResponseMap = new ErrorResponseMap();
