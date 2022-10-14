@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
+import project.phoneshop.model.payload.request.authentication.VerifyPhoneRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.security.DTO.AppUserDetail;
@@ -86,23 +87,14 @@ public class AuthenticationController {
         response.getData().put("user",loginUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-//    @PostMapping("/verification")
-//    public ResponseEntity<SuccessResponse> verifyPhoneNumber(@RequestBody @Valid VerifyPhoneRequest request) {
-//        UserEntity user=userService.findByPhone(request.getPhone());
-//        SuccessResponse response=new SuccessResponse();
-//        if(user!=null){
-//            response.setMessage("This phone already exists"+" ("+user.getPhone()+")");
-//            response.setSuccess(true);
-//            response.setStatus(HttpStatus.BAD_REQUEST.value());
-//            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//        }
-//        else{
-//            response.setMessage("You can create an account with this phone number");
-//            response.setSuccess(true);
-//            response.setStatus(HttpStatus.OK.value());
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//    }
+    @PostMapping("/verification")
+    public ResponseEntity<SuccessResponse> verifyPhoneNumber(@RequestBody @Valid VerifyPhoneRequest request) {
+        UserEntity user=userService.findByPhone(request.getPhone());
+        if(user!=null)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.BAD_REQUEST.value(),"This phone already exists",null),HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"This phone ok",null),HttpStatus.OK);
+    }
     private ResponseEntity SendErrorValid(String field, String message,String title){
         ErrorResponseMap errorResponseMap = new ErrorResponseMap();
         Map<String,String> temp =new HashMap<>();
