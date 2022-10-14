@@ -13,14 +13,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import project.phoneshop.handler.HttpMessageNotReadableException;
+import project.phoneshop.handler.MethodArgumentNotValidException;
 import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
+import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
 import project.phoneshop.model.payload.request.authentication.VerifyPhoneRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.security.DTO.AppUserDetail;
 import project.phoneshop.security.JWT.JwtUtils;
+import project.phoneshop.service.EmailService;
 import project.phoneshop.service.UserService;
 
 import javax.servlet.http.Cookie;
@@ -40,7 +44,7 @@ import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 public class AuthenticationController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//    private final EmailService emailService;
+    private final EmailService emailService;
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -267,40 +271,36 @@ public class AuthenticationController {
         response.getData().put("user",user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-//    @PostMapping("/forgetPassword")
-//    public ResponseEntity<SuccessResponse> forgetPassword(@RequestBody @Valid ReActiveRequest request, BindingResult errors) throws Exception{
-//        if (errors.hasErrors()) {
-//            throw new MethodArgumentNotValidException(errors);
-//        }
-//        if (request == null) {
-//            throw new HttpMessageNotReadableException("Missing field");
-//        }
-//
-//        if(userService.findByEmail(request.getEmail())==null){
-//            throw new HttpMessageNotReadableException("Email is not Registered");
-//        }
-//        UserEntity user=userService.findByEmail(request.getEmail());
-//        try{
-//            emailService.sendForgetPasswordMessage(user);
-//
-//            SuccessResponse response = new SuccessResponse();
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("Send email with new password successful");
-//            response.setSuccess(true);
-//            response.getData().put("email",user.getEmail());
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//
-//
-//        }
-//        catch (Exception ex){
-//            SuccessResponse response = new SuccessResponse();
-//            response.setStatus(HttpStatus.BAD_REQUEST.value());
-//            response.setMessage("Failed to send reset password email");
-//            response.setSuccess(false);
-//            throw  new Exception(ex.toString());
-//        }
-//
-//    }
+    @PostMapping("/forgetPassword")
+    public ResponseEntity<SuccessResponse> forgetPassword(@RequestBody @Valid ReActiveRequest request, BindingResult errors) throws Exception{
+        if (errors.hasErrors()) {
+            throw new MethodArgumentNotValidException(errors);
+        }
+        if (request == null) {
+            throw new HttpMessageNotReadableException("Missing field");
+        }
+        if(userService.findByEmail(request.getEmail())==null){
+            throw new HttpMessageNotReadableException("Email is not Registered");
+        }
+        UserEntity user=userService.findByEmail(request.getEmail());
+        try{
+            emailService.sendForgetPasswordMessage(user);
+            SuccessResponse response = new SuccessResponse();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Send email with new password successful");
+            response.setSuccess(true);
+            response.getData().put("email",user.getEmail());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        catch (Exception ex){
+            SuccessResponse response = new SuccessResponse();
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setMessage("Failed to send reset password email");
+            response.setSuccess(false);
+            throw  new Exception(ex.toString());
+        }
+
+    }
 //    @PostMapping("/resetPassword")
 //    public ResponseEntity<SuccessResponse> resetPassword(@RequestParam(defaultValue = "") String token, @RequestBody @Valid ResetPasswordRequest req,
 //             BindingResult errors) throws Exception{
