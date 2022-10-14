@@ -12,7 +12,7 @@
 
                 <thead>
                 <tr height='80'>
-                    <th colspan='4' style='background-color:#f5f5f5; border-bottom:solid 1px #bdbdbd; font-family:Verdana, Geneva, sans-serif; color:#333; font-size:34px;'>TIKI SHOP</th>
+                    <th colspan='4' style='background-color:#f5f5f5; border-bottom:solid 1px #bdbdbd; font-family:Verdana, Geneva, sans-serif; color:#333; font-size:34px;'>S-PHONE SHOP</th>
                 </tr>
                 </thead>
 
