@@ -23,7 +23,7 @@
 
                 <tr>
                     <td colspan='4' style='padding:15px;'>
-                        <p style='font-size:20px;'>Dear ${fullname} ,</p>
+                        <p style='font-size:20px;'>Dear My Friend,</p>
                         <p style='font-size:13px; font-family:Verdana, Geneva, sans-serif; text-justify: auto'> Please click the link below to reset your password</p>
                         <a href="${link}" target="_blank">Click here !</a>
                     </td>

@@ -106,6 +106,26 @@ public class BrandController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @PostMapping("/admin/brand/uploadLogo/{id}")
+    public ResponseEntity<SuccessResponse> uploadImgLogoByID(HttpServletRequest request,@PathVariable UUID id,
+                                                         @RequestPart MultipartFile file) throws Exception{
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            if(!imageStorageService.isImageFile(file))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            BrandEntity brand = brandService.findById(id);
+            if(brand==null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Brand was not found",null),HttpStatus.NOT_FOUND);
+            String url = imageStorageService.saveLogo(file, String.valueOf(brand.getId()));
+            if(url.equals(""))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Upload Logo Failure",null), HttpStatus.NOT_FOUND);
+            Map<String, Object> data = new HashMap<>();
+            data.put("url",url);
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Upload Logo Successfully",data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @PostMapping(value = "/admin/brand/insert")
     public ResponseEntity<SuccessResponse> insertBrandNew(HttpServletRequest request,
                                                           @RequestBody AddNewBrandRequest addNewBrandRequest){

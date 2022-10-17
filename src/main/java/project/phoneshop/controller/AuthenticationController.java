@@ -20,6 +20,7 @@ import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
 import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
 import project.phoneshop.model.payload.request.authentication.VerifyPhoneRequest;
+import project.phoneshop.model.payload.request.user.ResetPasswordRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.security.DTO.AppUserDetail;
@@ -284,53 +285,36 @@ public class AuthenticationController {
         }
         UserEntity user=userService.findByEmail(request.getEmail());
         try{
-            emailService.sendForgetPasswordMessage(user);
-            SuccessResponse response = new SuccessResponse();
-            response.setStatus(HttpStatus.OK.value());
-            response.setMessage("Send email with new password successful");
-            response.setSuccess(true);
-            response.getData().put("email",user.getEmail());
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            emailService.sendmail(user);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Send email with new password successfully",null),HttpStatus.OK);
         }
         catch (Exception ex){
-            SuccessResponse response = new SuccessResponse();
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.setMessage("Failed to send reset password email");
-            response.setSuccess(false);
             throw  new Exception(ex.toString());
         }
 
     }
-//    @PostMapping("/resetPassword")
-//    public ResponseEntity<SuccessResponse> resetPassword(@RequestParam(defaultValue = "") String token, @RequestBody @Valid ResetPasswordRequest req,
-//             BindingResult errors) throws Exception{
-//        SuccessResponse response = new SuccessResponse();
-//
-//        if (errors.hasErrors()) {
-//            response.setStatus(HttpStatus.BAD_REQUEST.value());
-//            response.setSuccess(true);
-//            response.setMessage("Invalid");
-//        }
-//        if(token == null || token.equals("")){
-//            throw new BadCredentialsException("token is not valid");
-//        }
-//        String email= jwtUtils.getUserNameFromJwtToken(token);
-//        UserEntity user = userService.findByEmail(email);
-//        if(user == null){
-//            throw new RecordNotFoundException("User not found, please check again");
-//        }
-//        if(req.getNewPassword().equals(req.getConfirmPassword())){
-//            user.setPassword(passwordEncoder.encode(req.getNewPassword()));
-//            userService.saveInfo(user);
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("Reset password successful");
-//            response.setSuccess(true);
-//            response.getData().put("email",user.getEmail());
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//        else{
-//            throw new BadCredentialsException("New password doesn't match confirm password");
-//        }
-//    }
+    @PostMapping("/resetPassword")
+    public ResponseEntity<SuccessResponse> resetPassword(@RequestParam(defaultValue = "") String token, @RequestBody @Valid ResetPasswordRequest req,
+             BindingResult errors) throws Exception{
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.BAD_REQUEST.value(), "Invalid",null),HttpStatus.BAD_REQUEST);
+        }
+        if(token == null || token.equals("")){
+            throw new BadCredentialsException("token is not valid");
+        }
+        String email= jwtUtils.getUserNameFromJwtToken(token);
+        UserEntity user = userService.findByEmail(email);
+        if(user == null){
+            throw new RecordNotFoundException("User not found, please check again");
+        }
+        if(req.getNewPassword().equals(req.getConfirmPassword())){
+            user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+            userService.saveInfo(user);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Reset password successfully",null),HttpStatus.OK);
+        }
+        else{
+            throw new BadCredentialsException("New password doesn't match confirm password");
+        }
+    }
 }
 
