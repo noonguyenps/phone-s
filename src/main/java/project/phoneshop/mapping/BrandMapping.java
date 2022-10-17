@@ -33,6 +33,7 @@ public class BrandMapping {
         brand.setDescription(updateBrandRequest.getDescription());
         brand.setYearCreate(LocalDate.now().getYear());
         brand.setAddressDetails(updateBrandRequest.getAddressDetails());
+        brand.setImg(updateBrandRequest.getImg());
         return brand;
     }
     public static UUID getIdFromURL(String url){

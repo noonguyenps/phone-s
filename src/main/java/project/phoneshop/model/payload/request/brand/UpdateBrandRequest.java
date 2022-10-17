@@ -19,4 +19,5 @@ public class UpdateBrandRequest {
     private String commune;
     private String addressDetails;
     private String description;
+    private String img;
 }
