@@ -47,8 +47,8 @@ public class AdminController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/user/id")
-    public ResponseEntity<SuccessResponse> getAllUser(HttpServletRequest request,@PathVariable UUID id){
+    @GetMapping("/user/{id}")
+    public ResponseEntity<SuccessResponse> getUserByID(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             UserEntity userEntity = userService.findById(id);
