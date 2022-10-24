@@ -47,6 +47,20 @@ public class AdminController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/user/id")
+    public ResponseEntity<SuccessResponse> getAllUser(HttpServletRequest request,@PathVariable UUID id){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            UserEntity userEntity = userService.findById(id);
+            if(userEntity == null)
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "user not found",null),HttpStatus.NOT_FOUND);
+            Map<String,Object> data = new HashMap<>();
+            data.put("user",userEntity);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"User",data),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/list")
     public ResponseEntity<SuccessResponse> getAllNotification(HttpServletRequest request){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);

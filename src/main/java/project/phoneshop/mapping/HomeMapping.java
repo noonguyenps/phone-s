@@ -20,7 +20,7 @@ public class HomeMapping {
         list.add(new QuickLink(10,"https://salt.tikicdn.com/cache/w100/ts/upload/4a/b2/c5/b388ee0e511889c83fab1217608fe82f.png.webp","Ưu đãi thanh toán",""));
     }
     public void getListEvent(List<QuickLink> list){
-        list.add(new QuickLink(1,"https://cdn1.hoanghamobile.com/tin-tuc/wp-content/uploads/2022/10/doc-moi-2-1536x800.png","",""));
+        list.add(new QuickLink(1,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/21/iphone-14-1200x382.jpg","",""));
         list.add(new QuickLink(2,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/04/tai-nghe-bwoo-1200x382.jpg","",""));
         list.add(new QuickLink(3,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/06/laptop-gaming-gigabyte-1200x382.jpg","",""));
         list.add(new QuickLink(4,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/19/web-hotsale-samsung-galaxy-a-series-01.jpg","",""));
