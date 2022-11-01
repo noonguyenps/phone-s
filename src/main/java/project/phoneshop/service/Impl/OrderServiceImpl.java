@@ -49,6 +49,11 @@ public class OrderServiceImpl implements OrderService {
     public double countPayMoney(OrderEntity order) {return order.getTotal();}
 
     @Override
+    public List<Object> countUserPerMonth() {
+        return orderRepository.countOrderPerMonth();
+    }
+
+    @Override
     public void delete(int id) {
         orderRepository.deleteById(id);
     }

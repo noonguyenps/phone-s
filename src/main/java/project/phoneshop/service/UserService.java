@@ -3,6 +3,7 @@ package project.phoneshop.service;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.payload.response.CountPerMonth;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,8 @@ public interface UserService {
     Boolean existsByPhone(String phone);
     UserEntity saveInfo(UserEntity user);
     UserEntity findByEmail(String email);
+
+    List<Object> countUserPerMonth();
 //    UserEntity updateActive(UserEntity user);
 //    UserEntity setStatus(UserEntity user,Boolean status);
 }

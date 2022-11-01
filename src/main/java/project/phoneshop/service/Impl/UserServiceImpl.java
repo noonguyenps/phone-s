@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.RoleEntity;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.repository.RoleRepository;
 import project.phoneshop.repository.UserRepository;
 import project.phoneshop.service.UserService;
@@ -77,6 +78,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean existsByPhone(String phone) {
         return userRepository.existsByPhone(phone);
+    }
+    @Override
+    public List<Object> countUserPerMonth(){
+        return userRepository.countUserPerMonth();
     }
 //
 //    @Override

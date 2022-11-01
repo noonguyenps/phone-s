@@ -17,4 +17,5 @@ public interface OrderService {
     long countOrder();
     long countOrderPrice();
     double countPayMoney(OrderEntity order);
+    List<Object> countUserPerMonth();
 }

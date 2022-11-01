@@ -12,6 +12,7 @@ import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.entity.UserNotificationEntity;
 import project.phoneshop.model.payload.request.notification.AddNotificationRequest;
+import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.service.OrderService;
 import project.phoneshop.service.ProductService;
@@ -19,6 +20,8 @@ import project.phoneshop.service.UserNotificationService;
 import project.phoneshop.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
@@ -93,21 +96,38 @@ public class AdminController {
     public ResponseEntity<SuccessResponse> getStatistic(HttpServletRequest request){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
-            long countUser = userService.getCountUser();
             long countProduct = productService.countProduct();
-            long countOrder = orderService.countOrder();
-            long countOrderPrice = orderService.countOrderPrice();
+            int totalUser = 0;
+            int totalOrder = 0;
+            int totalRevenueOrder = 0;
             Map<String,Object> data = new HashMap<>();
-            data.put("countUser",countUser);
-            data.put("countProduct",countProduct);
-            data.put("countOrder",countOrder);
-            data.put("countOrderPrice",countOrderPrice);
-            Double[] statisticMonth = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-            List<OrderEntity> orderEntities = orderService.getAll();
-            for(OrderEntity order: orderEntities){
-                statisticMonth[order.getCreatedDate().getMonth()] += order.getTotal();
+            List<Object> countUserPerMonth = userService.countUserPerMonth();
+            List<Map<String, Object>> listCountPerMonth = new ArrayList<>();
+            for(Object countUser : countUserPerMonth){
+                totalUser += Integer.valueOf(((Object[])countUser)[2].toString());
+                if(String.valueOf(((Object[])countUser)[1]).equals(String.valueOf(LocalDate.now().getYear()))){
+                    Map<String,Object> perMonth = new HashMap<>();
+                    perMonth.put(String.valueOf(((Object[])countUser)[0]),((Object[])countUser)[2]);
+                    listCountPerMonth.add(perMonth);
+                }
             }
-            data.put("statisticMonth",statisticMonth);
+            List<Object> countOrderPerMonth = orderService.countUserPerMonth();
+            List<Map<String, Object>> listRevenuePerMonth = new ArrayList<>();
+            for(Object countOrder : countOrderPerMonth){
+                totalOrder += Integer.valueOf(((Object[])countOrder)[2].toString());
+                totalRevenueOrder += Integer.valueOf(((Object[])countOrder)[3].toString());
+                if(String.valueOf(((Object[])countOrder)[1]).equals(String.valueOf(LocalDate.now().getYear()))){
+                    Map<String,Object> revenuePerMonth = new HashMap<>();
+                    revenuePerMonth.put(String.valueOf(((Object[])countOrder)[0]),((Object[])countOrder)[3]);
+                    listRevenuePerMonth.add(revenuePerMonth);
+                }
+            }
+            data.put("userPerMonth",listCountPerMonth);
+            data.put("revenuePerMonth",listRevenuePerMonth);
+            data.put("countProducts",countProduct);
+            data.put("countUser",totalUser);
+            data.put("countOrder",totalOrder);
+            data.put("countRevenue",totalRevenueOrder);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Statistic",data),HttpStatus.OK);
         }
         else
