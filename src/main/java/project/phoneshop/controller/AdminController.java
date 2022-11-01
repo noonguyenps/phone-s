@@ -102,28 +102,26 @@ public class AdminController {
             int totalRevenueOrder = 0;
             Map<String,Object> data = new HashMap<>();
             List<Object> countUserPerMonth = userService.countUserPerMonth();
-            List<Map<String, Object>> listCountPerMonth = new ArrayList<>();
+            int orderPerMonth[] = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ;
+            int userPerMonth[] = new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ;
             for(Object countUser : countUserPerMonth){
                 totalUser += Integer.valueOf(((Object[])countUser)[2].toString());
                 if(String.valueOf(((Object[])countUser)[1]).equals(String.valueOf(LocalDate.now().getYear()))){
-                    Map<String,Object> perMonth = new HashMap<>();
-                    perMonth.put(String.valueOf(((Object[])countUser)[0]),((Object[])countUser)[2]);
-                    listCountPerMonth.add(perMonth);
+                    int i = Integer.parseInt(((Object[]) countUser)[0].toString()) - 1;
+                    userPerMonth[i] = Integer.parseInt(((Object[])countUser)[2].toString());
                 }
             }
             List<Object> countOrderPerMonth = orderService.countUserPerMonth();
-            List<Map<String, Object>> listRevenuePerMonth = new ArrayList<>();
             for(Object countOrder : countOrderPerMonth){
                 totalOrder += Integer.valueOf(((Object[])countOrder)[2].toString());
                 totalRevenueOrder += Integer.valueOf(((Object[])countOrder)[3].toString());
                 if(String.valueOf(((Object[])countOrder)[1]).equals(String.valueOf(LocalDate.now().getYear()))){
-                    Map<String,Object> revenuePerMonth = new HashMap<>();
-                    revenuePerMonth.put(String.valueOf(((Object[])countOrder)[0]),((Object[])countOrder)[3]);
-                    listRevenuePerMonth.add(revenuePerMonth);
+                    int i = Integer.parseInt(((Object[]) countOrder)[0].toString()) - 1;
+                    orderPerMonth[i] = Integer.parseInt(((Object[])countOrder)[2].toString());
                 }
             }
-            data.put("userPerMonth",listCountPerMonth);
-            data.put("revenuePerMonth",listRevenuePerMonth);
+            data.put("userPerMonth",userPerMonth);
+            data.put("orderPerMonth",orderPerMonth);
             data.put("countProducts",countProduct);
             data.put("countUser",totalUser);
             data.put("countOrder",totalOrder);
