@@ -44,6 +44,15 @@ public class AttributeController {
         data.put("listAttribute", listAttribute);
         return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Query Attribute Successfully", data ), HttpStatus.OK);
     }
+    @GetMapping("/attribute/{id}")
+    public ResponseEntity<SuccessResponse> getAllAttributeById(@PathVariable String id){
+        AttributeEntity attribute = attributeService.findById(id);
+        if(attribute == null)
+            return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_FOUND.value(), "Attribute was not found",null), HttpStatus.NOT_FOUND);
+        Map<String, Object> data = new HashMap<>();
+        data.put("attribute", attribute);
+        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Query Attribute Successfully", data ), HttpStatus.OK);
+    }
     @GetMapping("/attribute/option/all")
     public ResponseEntity<SuccessResponse> getAllAttributeOptions(){
         List<AttributeOptionEntity> listAttribute = attributeService.findAllAttributeOption();
