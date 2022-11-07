@@ -17,6 +17,7 @@ import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
@@ -243,7 +244,7 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @PostMapping(value = "/admin/product/upload", consumes = {"multipart/form-data"})
-    public ResponseEntity<SuccessResponse> uploadListImgProduct(HttpServletRequest request,@RequestPart(required = true) MultipartFile[] multipleFiles){
+    public ResponseEntity<SuccessResponse> uploadListImgProduct(HttpServletRequest request,@RequestPart(required = true) List<MultipartFile> multipleFiles){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             List<String> urls = new ArrayList<>();
@@ -259,6 +260,24 @@ public class ProductController {
             Map<String, Object> data = new HashMap<>();
             data.put("imgUrl",urls);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Save image Successfully",data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @PostMapping(value = "/admin/product/uploadImg")
+    public ResponseEntity<SuccessResponse> uploadImgProduct(HttpServletRequest request,@RequestPart(required = true) MultipartFile file){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            if(!imageStorageService.isImageFile(file))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            UUID uuid = UUID.randomUUID();
+            LocalDate date = LocalDate.now();
+            String url = imageStorageService.saveLogo(file, date.toString()+String.valueOf(uuid));
+            if(url.equals(""))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Upload Image Failure",null), HttpStatus.NOT_FOUND);
+            Map<String, Object> data = new HashMap<>();
+            data.put("url",url);
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Upload Logo Successfully",data), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
