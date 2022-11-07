@@ -272,7 +272,7 @@ public class ProductController {
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             UUID uuid = UUID.randomUUID();
             LocalDate date = LocalDate.now();
-            String url = imageStorageService.saveLogo(file, date.toString()+String.valueOf(uuid));
+            String url = imageStorageService.saveProductImg(file, date.toString()+"/"+String.valueOf(uuid));
             if(url.equals(""))
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Upload Image Failure",null), HttpStatus.NOT_FOUND);
             Map<String, Object> data = new HashMap<>();
