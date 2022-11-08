@@ -194,6 +194,8 @@ public class ProductServiceImpl implements ProductService {
                 product.getProductBrand().getName(),
                 product.getProductBrand().getBrandCountry(),
                 list,
-                listAttributeOption);
+                listAttributeOption,
+                product.getCreate(),
+                product.getStatus());
     }
 }
