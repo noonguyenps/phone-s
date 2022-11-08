@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -175,6 +174,14 @@ public class ProductEntity {
 
     public void setListCart(List<CartEntity> listCart) {
         this.listCart = listCart;
+    }
+
+    public List<ProductAttributeOptionDetail> getProductAttributeOptionDetails() {
+        return productAttributeOptionDetails;
+    }
+
+    public void setProductAttributeOptionDetails(Set<ProductAttributeOptionDetail> productAttributeOptionDetails) {
+        this.productAttributeOptionDetails = productAttributeOptionDetails;
     }
 }
 

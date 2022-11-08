@@ -43,7 +43,11 @@ public class ProductAttributeOptionDetail {
         return productAttribute;
     }
 
-    public void setProductCart(ProductEntity productAttribute) {
+    public ProductEntity getProductAttribute() {
+        return productAttribute;
+    }
+
+    public void setProductAttribute(ProductEntity productAttribute) {
         this.productAttribute = productAttribute;
     }
 
