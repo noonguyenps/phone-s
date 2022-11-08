@@ -62,15 +62,16 @@ public class ProductMapping {
             listImageProduct.add(img);
             img.setProduct(product);
         }
-        Set<ProductAttributeOptionDetail> listAttributeOptionDetail = new HashSet<>();
+        List<ProductAttributeOptionDetail> listAttributeOptionDetail = new ArrayList<>();
         product.setImageProductEntityList(listImageProduct);
+        int i = 0;
         for(AttributeOptionEntity attributeOption : listAttributeOption){
-            for(AddProductRequest.Attribute attribute: productFromJson.getAttribute())
-                if(attribute.getId().equals(attributeOption.getId())){
-                    ProductAttributeOptionDetail productAttributeOptionDetail = new ProductAttributeOptionDetail();
-                    productAttributeOptionDetail.setValue(attribute.getValue());
-                    productAttributeOptionDetail.setAttributeOption(attributeOption);
-                }
+            ProductAttributeOptionDetail productAttributeOptionDetail = new ProductAttributeOptionDetail();
+            productAttributeOptionDetail.setValue(productFromJson.getValues().get(i));
+            productAttributeOptionDetail.setAttributeOption(attributeOption);
+            productAttributeOptionDetail.setProductAttribute(product);
+            listAttributeOptionDetail.add(productAttributeOptionDetail);
+            i++;
         }
         product.setProductAttributeOptionDetails(listAttributeOptionDetail);
         return product;

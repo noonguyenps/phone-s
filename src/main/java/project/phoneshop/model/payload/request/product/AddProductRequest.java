@@ -13,11 +13,7 @@ public class AddProductRequest {
     private double discount;
     private Double price;
     private Integer inventory;
-    List<Attribute> attribute;
+    List<String> attribute;
+    List<Double> values;
     List<String> imgUrl;
-    @Data
-    public class Attribute{
-        private String id;
-        private Double value;
-    }
 }

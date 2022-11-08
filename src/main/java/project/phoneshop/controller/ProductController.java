@@ -191,8 +191,8 @@ public class ProductController {
             if(category == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Category is Not Found",null), HttpStatus.NOT_FOUND);
             Set<AttributeOptionEntity> listAttributeOption = new HashSet<>();
-            for (AddProductRequest.Attribute attribute: productReq.getAttribute()){
-                AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attribute.getId());
+            for (String attributeId: productReq.getAttribute()){
+                AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attributeId);
                 if(attributeOption == null)
                     new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",null), HttpStatus.NOT_FOUND);
                 else

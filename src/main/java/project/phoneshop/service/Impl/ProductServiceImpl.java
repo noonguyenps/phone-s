@@ -165,12 +165,25 @@ public class ProductServiceImpl implements ProductService {
         for (ImageProductEntity imageProductEntity : imageProductEntityList){
             list.add(imageProductEntity.getUrl());
         }
-//        Set<AttributeOptionEntity> attributeEntitySet = product.getAttributeOptionEntities();
+        String url = "https://res.cloudinary.com/duk2lo18t/image/upload/v1667887284/frontend/R_zzr2lm.png";
+        if(!product.getImageProductEntityList().isEmpty()){
+            url = product.getImageProductEntityList().get(0).getUrl();
+        }
+        List<Map<String,Object>> listAttributeOption = new ArrayList<>();
+        for(ProductAttributeOptionDetail productAttributeOptionDetail : product.getProductAttributeOptionDetails()){
+            Map<String, Object> attributeOption = new HashMap<>();
+            attributeOption.put("id",productAttributeOptionDetail.getAttributeOption().getId());
+            attributeOption.put("name",productAttributeOptionDetail.getAttributeOption().getValue());
+            attributeOption.put("idType",productAttributeOptionDetail.getAttributeOption().getIdType().getId());
+            attributeOption.put("nameType",productAttributeOptionDetail.getAttributeOption().getIdType().getName());
+            attributeOption.put("compareValue",productAttributeOptionDetail.getValue());
+            listAttributeOption.add(attributeOption);
+        }
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
         return new ProductResponse(
                 product.getId(),
-                product.getImageProductEntityList().get(0).getUrl(),
+                url,
                 product.getName(),
                 product.getDescription(),
                 product.getProductCategory().getName(),
@@ -180,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getSellAmount(),
                 product.getProductBrand().getName(),
                 product.getProductBrand().getBrandCountry(),
-                list,null);
-//                product.getAttributeOptionEntities());
+                list,
+                listAttributeOption);
     }
 }

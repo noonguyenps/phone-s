@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import project.phoneshop.model.entity.AttributeOptionEntity;
+import project.phoneshop.model.entity.ProductAttributeOptionDetail;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,9 +29,9 @@ public class ProductResponse {
     private String origins;
     private String category;
     private List<String> img;
-    private Set<AttributeOptionEntity> attributeEntitySet;
+    private List<Map<String,Object>> listAttributeOption;
 
-    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, String brand, String origins, List<String> img, Set<AttributeOptionEntity> attributeEntitySet) {
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, String brand, String origins, List<String> img, List<Map<String,Object>> listAttributeOption) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -42,6 +44,6 @@ public class ProductResponse {
         this.brand = brand;
         this.origins = origins;
         this.img = img;
-        this.attributeEntitySet = attributeEntitySet;
+        this.listAttributeOption = listAttributeOption;
     }
 }

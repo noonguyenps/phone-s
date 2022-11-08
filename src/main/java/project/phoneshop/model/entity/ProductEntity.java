@@ -7,7 +7,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestResource(exported = false)
@@ -180,7 +179,7 @@ public class ProductEntity {
         return productAttributeOptionDetails;
     }
 
-    public void setProductAttributeOptionDetails(Set<ProductAttributeOptionDetail> productAttributeOptionDetails) {
+    public void setProductAttributeOptionDetails(List<ProductAttributeOptionDetail> productAttributeOptionDetails) {
         this.productAttributeOptionDetails = productAttributeOptionDetails;
     }
 }
