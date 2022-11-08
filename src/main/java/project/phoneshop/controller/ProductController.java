@@ -205,6 +205,13 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/product/count")
+    public ResponseEntity<SuccessResponse> getCountProduct(){
+        Map<String, Object> data = new HashMap<>();
+        long countProduct = productService.countProduct();
+        data.put("countProduct",countProduct);
+        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Count Product",data),HttpStatus.OK);
+    }
     @PutMapping("/admin/product/update/{id}")
     public ResponseEntity<SuccessResponse> updateProduct(HttpServletRequest request, @PathVariable UUID id, @RequestBody UpdateProductRequest updateProductRequest){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
