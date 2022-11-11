@@ -322,7 +322,7 @@ public class ProductController {
         list.add("product_price_down");
         list.add("product_sell_amount");
         list.add("create_at");
-        list.add("discount");
+        list.add("product_discount");
         return list;
     }
 }
