@@ -170,15 +170,35 @@ public class ProductServiceImpl implements ProductService {
             url = product.getImageProductEntityList().get(0).getUrl();
         }
         List<Map<String,Object>> listAttributeOption = new ArrayList<>();
-        for(ProductAttributeOptionDetail productAttributeOptionDetail : product.getProductAttributeOptionDetails()){
-            Map<String, Object> attributeOption = new HashMap<>();
-            attributeOption.put("id",productAttributeOptionDetail.getAttributeOption().getId());
-            attributeOption.put("name",productAttributeOptionDetail.getAttributeOption().getValue());
-            attributeOption.put("idType",productAttributeOptionDetail.getAttributeOption().getIdType().getId());
-            attributeOption.put("nameType",productAttributeOptionDetail.getAttributeOption().getIdType().getName());
-            attributeOption.put("compareValue",productAttributeOptionDetail.getValue());
-            listAttributeOption.add(attributeOption);
+        for(ProductAttributeOptionDetail i : product.getProductAttributeOptionDetails()){
+            Map<String, Object> option = new HashMap<>();
+            List<Map<String,Object>> temp = new ArrayList<>();
+            for(ProductAttributeOptionDetail j : product.getProductAttributeOptionDetails()){
+                if(i.getAttributeOption().getIdType().getId().equals(j.getAttributeOption().getIdType().getId())){
+                    Map<String,Object> data = new HashMap<>();
+                    data.put("id",j.getAttributeOption().getId());
+                    data.put("idType",j.getAttributeOption().getIdType().getId());
+                    data.put("value",j.getAttributeOption().getValue());
+                    data.put("compare",j.getValue());
+                    temp.add(data);
+                }
+            }
+            option.put("id",i.getAttributeOption().getIdType().getId());
+            option.put("name",i.getAttributeOption().getIdType().getName());
+            option.put("values",temp);
+            listAttributeOption.add(option);
         }
+//
+//
+//        for(ProductAttributeOptionDetail productAttributeOptionDetail : product.getProductAttributeOptionDetails()){
+//            Map<String, Object> attributeOption = new HashMap<>();
+//            attributeOption.put("id",productAttributeOptionDetail.getAttributeOption().getId());
+//            attributeOption.put("name",productAttributeOptionDetail.getAttributeOption().getValue());
+//            attributeOption.put("idType",productAttributeOptionDetail.getAttributeOption().getIdType().getId());
+//            attributeOption.put("nameType",productAttributeOptionDetail.getAttributeOption().getIdType().getName());
+//            attributeOption.put("compareValue",productAttributeOptionDetail.getValue());
+//            listAttributeOption.add(attributeOption);
+//        }
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
         return new ProductResponse(
