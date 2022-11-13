@@ -26,11 +26,11 @@ public class ProductResponse {
     private String origins;
     private String category;
     private List<String> img;
-    private List<Map<String,Object>> listAttributeOption;
+    private Set<Map<String,Object>> listAttributeOption;
     private Date createAt;
     private int status;
 
-    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, String brand, String origins, List<String> img, List<Map<String,Object>> listAttributeOption,Date createAt, int status) {
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status) {
         this.id = id;
         this.image = image;
         this.name = name;

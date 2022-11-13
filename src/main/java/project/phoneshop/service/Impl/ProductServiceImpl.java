@@ -169,7 +169,7 @@ public class ProductServiceImpl implements ProductService {
         if(!product.getImageProductEntityList().isEmpty()){
             url = product.getImageProductEntityList().get(0).getUrl();
         }
-        List<Map<String,Object>> listAttributeOption = new ArrayList<>();
+        Set<Map<String,Object>> listAttributeOption = new HashSet<>();
         for(ProductAttributeOptionDetail i : product.getProductAttributeOptionDetails()){
             Map<String, Object> option = new HashMap<>();
             List<Map<String,Object>> temp = new ArrayList<>();
