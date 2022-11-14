@@ -68,6 +68,12 @@ public class UserEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "userCart",cascade = CascadeType.ALL)
     private List<CartEntity> listCart;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "\"favorite_list\"",
+            joinColumns = @JoinColumn(name = "\"user_id\""),
+            inverseJoinColumns = @JoinColumn(name = "\"product_id\""))
+    private List<ProductEntity> favoriteProducts;
     public UserEntity() {
     }
     public UserEntity(String phone,String password){
@@ -232,5 +238,13 @@ public class UserEntity {
 
     public void setListCart(List<CartEntity> listCart) {
         this.listCart = listCart;
+    }
+
+    public List<ProductEntity> getFavoriteProducts() {
+        return favoriteProducts;
+    }
+
+    public void setFavoriteProducts(List<ProductEntity> favoriteProducts) {
+        this.favoriteProducts = favoriteProducts;
     }
 }
