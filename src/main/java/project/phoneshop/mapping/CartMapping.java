@@ -1,6 +1,7 @@
 package project.phoneshop.mapping;
 
 import project.phoneshop.model.entity.CartEntity;
+import project.phoneshop.model.entity.ProductAttributeOptionDetail;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.cart.AddNewCartRequest;
@@ -12,6 +13,7 @@ public class CartMapping {
         cartEntity.setQuantity(addNewCartRequest.getQuantity());
         cartEntity.setStatus(false);
         cartEntity.setActive(true);
+        cartEntity.setListAttributeOption(addNewCartRequest.getListAttribute());
         cartEntity.setUserCart(user);
         return cartEntity;
     }

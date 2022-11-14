@@ -15,5 +15,5 @@ import java.util.UUID;
 public class AddNewCartRequest {
     private UUID productId;
     private int quantity;
-    private Set<UUID> listAttribute;
+    private Set<String> listAttribute;
 }
