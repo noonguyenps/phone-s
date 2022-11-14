@@ -6,6 +6,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestResource(exported = false)
@@ -36,6 +37,9 @@ public class CartEntity {
     private Boolean status;
     @Column(name = "\"active\"")
     private Boolean active;
+    @JsonIgnore
+    @ElementCollection
+    private Set<UUID> listAttributeOption;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "\"order_id\"")
@@ -96,5 +100,13 @@ public class CartEntity {
 
     public void setOrder(OrderEntity order) {
         this.order = order;
+    }
+
+    public Set<UUID> getListAttributeOption() {
+        return listAttributeOption;
+    }
+
+    public void setListAttributeOption(Set<UUID> listAttributeOption) {
+        this.listAttributeOption = listAttributeOption;
     }
 }
