@@ -148,91 +148,53 @@ public class UserController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Get wishlist successfully",data),HttpStatus.OK);
         }
     }
-//    @PostMapping("/wishlist/add")
-//    public ResponseEntity<SuccessResponse> addToWishList(HttpServletRequest req,@RequestParam UUID productId) throws Exception{
-//        String authorizationHeader = req.getHeader(AUTHORIZATION);
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//            String accessToken = authorizationHeader.substring("Bearer ".length());
-//            if(jwtUtils.validateExpiredToken(accessToken)){
-//                throw new BadCredentialsException("access token is expired");
-//            }
-//            UserEntity user=userService.findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(accessToken)));
-//            if(user==null)
-//                throw new BadCredentialsException("User not found");
-//            else{
-//                ProductEntity product = productService.findById(productId);
-//                if(product == null)
-//                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
-//                user.getFavoriteProducts().add(product);
-//                userService.saveInfo(user);
-//                SuccessResponse response=new SuccessResponse();
-//                response.setMessage("Add wishlist successfully");
-//                response.setSuccess(true);
-//                response.setStatus(HttpStatus.OK.value());
-//                return new ResponseEntity<>(response, HttpStatus.OK);
-//            }
-//        }
-//        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//    }
-//    @PostMapping("/wishlist/remove")
-//    public ResponseEntity<SuccessResponse> removeToWishList(HttpServletRequest req,@RequestParam UUID productId) throws Exception{
-//        String authorizationHeader = req.getHeader(AUTHORIZATION);
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//            String accessToken = authorizationHeader.substring("Bearer ".length());
-//            if(jwtUtils.validateExpiredToken(accessToken)){
-//                throw new BadCredentialsException("access token is expired");
-//            }
-//            UserEntity user=userService.findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(accessToken)));
-//            if(user==null)
-//                throw new BadCredentialsException("User not found");
-//            else{
-//                ProductEntity product = productService.findById(productId);
-//                if(product == null)
-//                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
-//                user.getFavoriteProducts().remove(product);
-//                userService.saveInfo(user);
-//                SuccessResponse response=new SuccessResponse();
-//                response.setMessage("Remove wishlist successfully");
-//                response.setSuccess(true);
-//                response.setStatus(HttpStatus.OK.value());
-//                return new ResponseEntity<>(response, HttpStatus.OK);
-//            }
-//        }
-//        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//    }
-//    @GetMapping("/wishlist/check")
-//    public ResponseEntity<SuccessResponse> checkWishList(HttpServletRequest req,@RequestParam UUID productId) throws Exception{
-//        String authorizationHeader = req.getHeader(AUTHORIZATION);
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//            String accessToken = authorizationHeader.substring("Bearer ".length());
-//            if(jwtUtils.validateExpiredToken(accessToken)){
-//                throw new BadCredentialsException("access token is expired");
-//            }
-//            UserEntity user=userService.findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(accessToken)));
-//            if(user==null)
-//                throw new BadCredentialsException("User not found");
-//            else{
-//                ProductEntity product = productService.findById(productId);
-//                if(product == null)
-//                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
-//                if(user.getFavoriteProducts().contains(product)){
-//                    SuccessResponse response=new SuccessResponse();
-//                    response.setMessage("Query wishlist successfully");
-//                    response.setSuccess(true);
-//                    response.setStatus(HttpStatus.OK.value());
-//                    List<UUID> listProduct = new ArrayList<>();
-//                    listProduct.add(product.getId());
-//                    response.getData().put("product",listProduct);
-//                    return new ResponseEntity<>(response, HttpStatus.OK);
-//                }
-//                SuccessResponse response=new SuccessResponse();
-//                response.setMessage("Query wishlist successfully");
-//                response.setSuccess(true);
-//                response.setStatus(HttpStatus.OK.value());
-//                response.getData().put("product",new ArrayList<>());
-//                return new ResponseEntity<>(response, HttpStatus.OK);
-//            }
-//        }
-//        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//    }
+    @PostMapping("/wishlist/add")
+    public ResponseEntity<SuccessResponse> addToWishList(HttpServletRequest request,@RequestParam UUID productId) throws Exception{
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            ProductEntity product = productService.findById(productId);
+            if(product == null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
+            user.getFavoriteProducts().add(product);
+            userService.saveInfo(user);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Add wishlist successfully",null),HttpStatus.OK);
+        }
+    }
+    @DeleteMapping("/wishlist/remove")
+    public ResponseEntity<SuccessResponse> removeToWishList(HttpServletRequest request,@RequestParam UUID productId) throws Exception{
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            ProductEntity product = productService.findById(productId);
+            if(product == null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
+            user.getFavoriteProducts().remove(product);
+            userService.saveInfo(user);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Remove wishlist successfully",null),HttpStatus.OK);
+        }
+    }
+    @GetMapping("/wishlist/check")
+    public ResponseEntity<SuccessResponse> checkWishList(HttpServletRequest request,@RequestParam UUID productId) throws Exception{
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            ProductEntity product = productService.findById(productId);
+            if(product == null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Product Not Found",null),HttpStatus.NOT_FOUND);
+            if(user.getFavoriteProducts().contains(product)){
+                List<UUID> listProduct = new ArrayList<>();
+                listProduct.add(product.getId());
+                Map<String,Object> data = new HashMap<>();
+                data.put("product",listProduct);
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Query wishlist successfully",data),HttpStatus.OK);
+            }
+            Map<String,Object> data = new HashMap<>();
+            data.put("product",new ArrayList<>());
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Query wishlist successfully",data), HttpStatus.OK);
+        }
+    }
 }
