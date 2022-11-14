@@ -39,7 +39,7 @@ public class CartEntity {
     private Boolean active;
     @JsonIgnore
     @ElementCollection
-    private Set<UUID> listAttributeOption;
+    private Set<String> listAttributeOption;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "\"order_id\"")
@@ -102,11 +102,11 @@ public class CartEntity {
         this.order = order;
     }
 
-    public Set<UUID> getListAttributeOption() {
+    public Set<String> getListAttributeOption() {
         return listAttributeOption;
     }
 
-    public void setListAttributeOption(Set<UUID> listAttributeOption) {
+    public void setListAttributeOption(Set<String> listAttributeOption) {
         this.listAttributeOption = listAttributeOption;
     }
 }

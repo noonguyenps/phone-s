@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -14,4 +15,5 @@ import java.util.UUID;
 public class AddNewCartRequest {
     private UUID productId;
     private int quantity;
+    private Set<UUID> listAttribute;
 }
