@@ -11,6 +11,7 @@ import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.cart.AddNewCartRequest;
 import project.phoneshop.model.payload.request.cart.UpdateCartRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.cart.CartResponse;
 import project.phoneshop.service.AttributeService;
 import project.phoneshop.service.CartService;
 import project.phoneshop.service.ProductService;
@@ -24,7 +25,6 @@ import java.util.*;
 public class CartController {
     private final CartService cartService;
     private final ProductService productService;
-
     private final AttributeService attributeService;
     @Autowired
     AuthorizationHeader authorizationHeader;
@@ -34,7 +34,11 @@ public class CartController {
         if(user != null){
             List<CartEntity> listCart = user.getListCart();
             Map<String,Object> data = new HashMap<>();
-            data.put("listCart",listCart);
+            List<CartResponse> cartResponseList = new ArrayList<>();
+            for(CartEntity cart : listCart){
+                cartResponseList.add(cartService.getCartResponse(cart));
+            }
+            data.put("listCart",data);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"List Cart",data),HttpStatus.OK);
         }
         else

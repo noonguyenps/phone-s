@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.CartEntity;
+import project.phoneshop.model.entity.ProductAttributeOptionDetail;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.payload.response.cart.CartResponse;
 import project.phoneshop.repository.CartRepository;
 import project.phoneshop.service.CartService;
 import project.phoneshop.service.ProductService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -24,7 +24,6 @@ public class CartServiceImpl implements CartService {
     public CartEntity saveCart(CartEntity cart) {
         return cartRepository.save(cart);
     }
-//
     @Override
     public List<CartEntity> getCartByUid(UserEntity user) {
         List<CartEntity> cart = cartRepository.findByUserCart(user);
@@ -37,6 +36,32 @@ public class CartServiceImpl implements CartService {
     public CartEntity getCartByProduct(UserEntity user,ProductEntity product) {
         CartEntity cartEntity = cartRepository.findByUserCartAndProductCart(user,product);
         return cartEntity;
+    }
+    @Override
+    public CartResponse getCartResponse(CartEntity cart){
+        List<Map<String,Object>> list = new ArrayList<>();
+        for(String id : cart.getListAttributeOption()){
+            for(ProductAttributeOptionDetail productAttributeOptionDetail: cart.getProductCart().getProductAttributeOptionDetails()){
+                if(productAttributeOptionDetail.getAttributeOption().getId().equals(id)){
+                    Map<String,Object> data = new HashMap<>();
+                    data.put("idAttributeOption",productAttributeOptionDetail.getAttributeOption().getId());
+                    data.put("attributeOptionName",productAttributeOptionDetail.getAttributeOption().getValue());
+                    data.put("attributeOptionType",productAttributeOptionDetail.getAttributeOption().getIdType().getName());
+                    data.put("attributeOptionCompare",productAttributeOptionDetail.getValue());
+                    list.add(data);
+                }
+            }
+        }
+        CartResponse cartResponse = new CartResponse(cart.getId(),
+                cart.getProductCart().getId(),
+                cart.getProductCart().getName(),
+                cart.getProductCart().getImageProductEntityList().get(0).getUrl(),
+                cart.getProductCart().getPrice(),
+                cart.getQuantity(),
+                cart.getStatus(),
+                cart.getActive(),
+                list);
+        return cartResponse;
     }
 //
 //    @Override

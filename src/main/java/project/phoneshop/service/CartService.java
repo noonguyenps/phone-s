@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.CartEntity;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.payload.response.cart.CartResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,9 @@ public interface CartService {
     CartEntity saveCart(CartEntity cart);
     List<CartEntity> getCartByUid(UserEntity uid);
     CartEntity getCartByProduct(UserEntity user,ProductEntity product);
+
+    CartResponse getCartResponse(CartEntity cart);
+
     void deleteCartItem(UUID id);
     CartEntity findByCartId(UUID cartId);
 
