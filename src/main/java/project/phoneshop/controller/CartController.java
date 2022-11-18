@@ -45,7 +45,7 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @PostMapping("/user/cart/insert")
-    public ResponseEntity<SuccessResponse> insertToCart(HttpServletRequest request, AddNewCartRequest addNewCartRequest){
+    public ResponseEntity<SuccessResponse> insertToCart(HttpServletRequest request,@RequestBody AddNewCartRequest addNewCartRequest){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             ProductEntity product = productService.findById(addNewCartRequest.getProductId());
