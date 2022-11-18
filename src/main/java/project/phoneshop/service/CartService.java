@@ -26,6 +26,8 @@ public interface CartService {
     CartEntity findByCartId(UUID cartId);
 
     void disActiveCart(CartEntity cartEntity);
+
+    void deleteAllCart(UserEntity user);
 //
 //    List<CartItemEntity> getCartItem(CartEntity cart);
 

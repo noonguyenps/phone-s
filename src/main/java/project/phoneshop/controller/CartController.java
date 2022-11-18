@@ -119,4 +119,19 @@ public class CartController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @DeleteMapping("/user/cart/delete/all")
+    private ResponseEntity deleteAllCart(HttpServletRequest request){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            try {
+                cartService.deleteAllCart(user);
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Delete All product to Cart successfully",null),HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_ACCEPTABLE.value(),"Delete All product to Cart failure",null),HttpStatus.NOT_ACCEPTABLE);
+            }
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+    }
 }

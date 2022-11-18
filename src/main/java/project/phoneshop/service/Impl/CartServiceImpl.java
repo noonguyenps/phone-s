@@ -134,6 +134,11 @@ public class CartServiceImpl implements CartService {
         cartEntity.setActive(false);
         cartRepository.save(cartEntity);
     }
+
+    @Override
+    public void deleteAllCart(UserEntity user) {
+        cartRepository.deleteCartByUser(user);
+    }
 //
 //    @Override
 //    public CartItemEntity getCartItemById(int id) {
