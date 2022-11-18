@@ -19,7 +19,7 @@ public class CartResponseFE {
     private Set<String> optionId;
     private UUID id;
     private String name;
-    private String img;
+    private String image;
     private UUID productId;
     private Double price;
     private int quantity;
@@ -30,7 +30,7 @@ public class CartResponseFE {
         this.optionId = optionId;
         this.id = id;
         this.name = name;
-        this.img = img;
+        this.image= img;
         this.productId = productId;
         this.price = price;
         this.quantity = quantity;
