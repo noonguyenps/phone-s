@@ -28,6 +28,8 @@ public interface CartService {
     void disActiveCart(CartEntity cartEntity);
 
     void deleteAllCart(UserEntity user);
+
+    void setAllCartStatus(UserEntity user,boolean status);
 //
 //    List<CartItemEntity> getCartItem(CartEntity cart);
 

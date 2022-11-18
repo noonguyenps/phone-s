@@ -1,6 +1,7 @@
 package project.phoneshop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import project.phoneshop.model.entity.CartEntity;
 import project.phoneshop.model.entity.ProductEntity;
@@ -17,4 +18,9 @@ public interface CartRepository extends JpaRepository<CartEntity, UUID> {
     List<CartEntity> findByUserCartAndProductCart(UserEntity user, ProductEntity product);
     void deleteCartById(UUID id);
     void deleteCartByUserCart(UserEntity userCart);
+    @Query(value = "UPDATE carts SET status = ?2 WHERE user_id= ?1",
+            countQuery = "UPDATE carts SET status = ?2 WHERE user_id= ?1",
+            nativeQuery = true)
+    void setAllStatusByUserCart(UUID userId,boolean status);
+
 }
