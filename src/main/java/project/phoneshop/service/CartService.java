@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface CartService {
     CartEntity saveCart(CartEntity cart);
     List<CartEntity> getCartByUid(UserEntity uid);
-    CartEntity getCartByProduct(UserEntity user,ProductEntity product);
+    List<CartEntity> getCartByProduct(UserEntity user,ProductEntity product);
 
     CartResponse getCartResponse(CartEntity cart);
 

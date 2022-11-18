@@ -33,8 +33,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartEntity getCartByProduct(UserEntity user,ProductEntity product) {
-        CartEntity cartEntity = cartRepository.findByUserCartAndProductCart(user,product);
+    public List<CartEntity> getCartByProduct(UserEntity user,ProductEntity product) {
+        List<CartEntity> cartEntity = cartRepository.findByUserCartAndProductCart(user,product);
         return cartEntity;
     }
     @Override

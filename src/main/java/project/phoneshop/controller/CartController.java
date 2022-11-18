@@ -38,7 +38,7 @@ public class CartController {
             for(CartEntity cart : listCart){
                 cartResponseList.add(cartService.getCartResponse(cart));
             }
-            data.put("listCart",data);
+            data.put("listCart",cartResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"List Cart",data),HttpStatus.OK);
         }
         else
@@ -74,10 +74,12 @@ public class CartController {
             }
             for(CartEntity cartEntity: user.getListCart()){
                 if(cartEntity.getProductCart() == product && cartEntity.getListAttributeOption().equals(addNewCartRequest.getListAttribute())){
-                    CartEntity cart = cartService.getCartByProduct(user,product);
-                    cartEntity.setQuantity(cartEntity.getQuantity()+addNewCartRequest.getQuantity());
-                    cartService.saveCart(cart);
-                    return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Add product to Cart successfully",null),HttpStatus.OK);
+                    List<CartEntity> listCart = cartService.getCartByProduct(user,product);
+                    for(CartEntity cart: listCart){
+                        cartEntity.setQuantity(cartEntity.getQuantity()+addNewCartRequest.getQuantity());
+                        cartService.saveCart(cart);
+                        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Add product to Cart successfully",null),HttpStatus.OK);
+                    }
                 }
             }
             CartEntity cartEntity = CartMapping.getCartByRequest(addNewCartRequest,user,product);

@@ -14,6 +14,6 @@ public interface CartRepository extends JpaRepository<CartEntity, UUID> {
     @Override
     Optional<CartEntity> findById(UUID uuid);
     List<CartEntity> findByUserCart(UserEntity entity);
-    CartEntity findByUserCartAndProductCart(UserEntity user, ProductEntity product);
+    List<CartEntity> findByUserCartAndProductCart(UserEntity user, ProductEntity product);
     void deleteCartById(UUID id);
 }
