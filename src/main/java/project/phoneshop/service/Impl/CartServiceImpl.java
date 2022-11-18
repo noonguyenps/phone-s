@@ -137,7 +137,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void deleteAllCart(UserEntity user) {
-        cartRepository.deleteCartByUser(user);
+        cartRepository.deleteCartByUserCart(user);
     }
 //
 //    @Override
