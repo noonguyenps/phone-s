@@ -135,14 +135,14 @@ public class CartController {
 
     }
     @PutMapping("/user/cart/choose/all")
-    private ResponseEntity deleteAllCart(HttpServletRequest request,@RequestParam boolean status){
+    private ResponseEntity chooseAllCart(HttpServletRequest request,@RequestParam boolean status){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             try {
                 cartService.setAllCartStatus(user,status);
-                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Delete All product to Cart successfully",null),HttpStatus.OK);
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Set All status Cart successfully",null),HttpStatus.OK);
             }catch (Exception e){
-                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_ACCEPTABLE.value(),"Delete All product to Cart failure",null),HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_ACCEPTABLE.value(),"Set All status Cart failure",null),HttpStatus.NOT_ACCEPTABLE);
             }
         }
         else
