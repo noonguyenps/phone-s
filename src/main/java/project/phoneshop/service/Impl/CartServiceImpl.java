@@ -8,6 +8,7 @@ import project.phoneshop.model.entity.ProductAttributeOptionDetail;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.cart.CartResponse;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.repository.CartRepository;
 import project.phoneshop.service.CartService;
 import project.phoneshop.service.ProductService;
@@ -62,6 +63,32 @@ public class CartServiceImpl implements CartService {
                 cart.getActive(),
                 list);
         return cartResponse;
+    }
+    @Override
+    public CartResponseFE getCartResponseFE(CartEntity cart){
+        Double price = 0.0;
+        List<String> option = new ArrayList<>();
+        for(ProductAttributeOptionDetail productAttributeOptionDetail: cart.getProductCart().getProductAttributeOptionDetails()){
+            if(cart.getListAttributeOption().contains(productAttributeOptionDetail.getId())){
+                price+=productAttributeOptionDetail.getValue();
+                option.add(productAttributeOptionDetail.getAttributeOption().getIdType().getName()+ " : "+productAttributeOptionDetail.getAttributeOption().getValue());
+            }
+        }
+        String url = "https://res.cloudinary.com/duk2lo18t/image/upload/v1667887284/frontend/R_zzr2lm.png";
+        if(!cart.getProductCart().getImageProductEntityList().isEmpty()){
+            url = cart.getProductCart().getImageProductEntityList().get(0).getUrl();
+        }
+        CartResponseFE cartResponseFE = new CartResponseFE(cart.getStatus(),
+                option,
+                cart.getListAttributeOption(),
+                cart.getId(),
+                cart.getProductCart().getName(),
+                url,
+                cart.getProductCart().getId(),
+                price*(1-cart.getProductCart().getDiscount()),
+                cart.getQuantity()
+                );
+        return cartResponseFE;
     }
 //
 //    @Override

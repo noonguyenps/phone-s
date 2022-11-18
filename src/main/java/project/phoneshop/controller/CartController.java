@@ -12,6 +12,7 @@ import project.phoneshop.model.payload.request.cart.AddNewCartRequest;
 import project.phoneshop.model.payload.request.cart.UpdateCartRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.cart.CartResponse;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.service.AttributeService;
 import project.phoneshop.service.CartService;
 import project.phoneshop.service.ProductService;
@@ -34,9 +35,9 @@ public class CartController {
         if(user != null){
             List<CartEntity> listCart = user.getListCart();
             Map<String,Object> data = new HashMap<>();
-            List<CartResponse> cartResponseList = new ArrayList<>();
+            List<CartResponseFE> cartResponseList = new ArrayList<>();
             for(CartEntity cart : listCart){
-                cartResponseList.add(cartService.getCartResponse(cart));
+                cartResponseList.add(cartService.getCartResponseFE(cart));
             }
             data.put("listCart",cartResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"List Cart",data),HttpStatus.OK);

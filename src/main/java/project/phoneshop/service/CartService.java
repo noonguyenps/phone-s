@@ -6,6 +6,7 @@ import project.phoneshop.model.entity.CartEntity;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.cart.CartResponse;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,8 @@ public interface CartService {
     List<CartEntity> getCartByProduct(UserEntity user,ProductEntity product);
 
     CartResponse getCartResponse(CartEntity cart);
+
+    CartResponseFE getCartResponseFE(CartEntity cart);
 
     void deleteCartItem(UUID id);
     CartEntity findByCartId(UUID cartId);
