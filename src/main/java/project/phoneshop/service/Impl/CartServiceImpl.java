@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService {
     }
     @Override
     public CartResponseFE getCartResponseFE(CartEntity cart){
-        Double price = 0.0;
+        Double price = cart.getProductCart().getPrice();
         List<String> option = new ArrayList<>();
         for(ProductAttributeOptionDetail productAttributeOptionDetail: cart.getProductCart().getProductAttributeOptionDetails()){
             if(cart.getListAttributeOption().contains(productAttributeOptionDetail.getAttributeOption().getId())){
@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
                 cart.getProductCart().getName(),
                 url,
                 cart.getProductCart().getId(),
-                price*(1-cart.getProductCart().getDiscount()/100),
+                Double.valueOf(Math.round(price*(1-cart.getProductCart().getDiscount()/100))),
                 cart.getQuantity()
                 );
         return cartResponseFE;
