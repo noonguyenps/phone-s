@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
                 cart.getProductCart().getName(),
                 url,
                 cart.getProductCart().getId(),
-                price*(1-cart.getProductCart().getDiscount()*100),
+                price*(1-cart.getProductCart().getDiscount()/100),
                 cart.getQuantity()
                 );
         return cartResponseFE;
