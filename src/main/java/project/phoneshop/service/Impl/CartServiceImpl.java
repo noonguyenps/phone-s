@@ -70,7 +70,7 @@ public class CartServiceImpl implements CartService {
         List<String> option = new ArrayList<>();
         for(ProductAttributeOptionDetail productAttributeOptionDetail: cart.getProductCart().getProductAttributeOptionDetails()){
             if(cart.getListAttributeOption().contains(productAttributeOptionDetail.getAttributeOption().getId())){
-                price+=productAttributeOptionDetail.getValue();
+                price= price+ productAttributeOptionDetail.getValue();
                 option.add(productAttributeOptionDetail.getAttributeOption().getIdType().getName()+ " : "+productAttributeOptionDetail.getAttributeOption().getValue());
             }
         }
