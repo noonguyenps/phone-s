@@ -156,26 +156,36 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @PostMapping("/admin/product/insert/all")
-    private ResponseEntity<SuccessResponse> insertProductJson(HttpServletRequest request,@RequestBody ProductFromJson productReq){
+    private ResponseEntity<SuccessResponse> insertProductJson(HttpServletRequest request,
+                                                              @RequestBody ProductFromJson productReq){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             BrandEntity brand = brandService.findById(productReq.getBrand());
             if(brand == null)
-                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Brand is Not Found",null), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new SuccessResponse(false,
+                        HttpStatus.NOT_FOUND.value(),"Brand is Not Found",
+                        null), HttpStatus.NOT_FOUND);
             CategoryEntity category = categoryService.findById(productReq.getCategory());
             if(category == null)
-                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Category is Not Found",null), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new SuccessResponse(false,
+                        HttpStatus.NOT_FOUND.value(),"Category is Not Found",
+                        null), HttpStatus.NOT_FOUND);
             Set<AttributeOptionEntity> listAttributeOption = new HashSet<>();
             for (String attributeOptionId : productReq.getAttribute()){
                 AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attributeOptionId);
                 if(attributeOption == null)
-                    new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",null), HttpStatus.NOT_FOUND);
+                    new ResponseEntity<>(new SuccessResponse(false,
+                            HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",
+                            null), HttpStatus.NOT_FOUND);
                 else
                     listAttributeOption.add(attributeOption);
             }
-            ProductEntity product = ProductMapping.addJsonProductToEntity(productReq,category,brand,listAttributeOption);
+            ProductEntity product = ProductMapping.addJsonProductToEntity(productReq,
+                    category,brand,listAttributeOption);
             productService.saveProduct(product);
-            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Product Successfully",null), HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponse(true,
+                    HttpStatus.OK.value(),"Add Product Successfully",
+                    null), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
