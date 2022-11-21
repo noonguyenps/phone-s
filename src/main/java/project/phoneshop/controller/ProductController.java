@@ -174,7 +174,7 @@ public class ProductController {
             for (String attributeOptionId : productReq.getAttribute()){
                 AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attributeOptionId);
                 if(attributeOption == null)
-                    new ResponseEntity<>(new SuccessResponse(false,
+                    return new ResponseEntity<>(new SuccessResponse(false,
                             HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",
                             null), HttpStatus.NOT_FOUND);
                 else
