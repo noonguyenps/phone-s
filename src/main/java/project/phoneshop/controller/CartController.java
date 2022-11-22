@@ -16,6 +16,7 @@ import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.service.AttributeService;
 import project.phoneshop.service.CartService;
 import project.phoneshop.service.ProductService;
+import project.phoneshop.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -27,6 +28,7 @@ public class CartController {
     private final CartService cartService;
     private final ProductService productService;
     private final AttributeService attributeService;
+    private final UserService userService;
     @Autowired
     AuthorizationHeader authorizationHeader;
     @GetMapping("/user/cart")
@@ -139,7 +141,10 @@ public class CartController {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             try {
-                cartService.setAllCartStatus(user,status);
+                for(CartEntity cart : user.getListCart()){
+                    cart.setStatus(status);
+                }
+                userService.saveInfo(user);
                 return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Set All status Cart successfully",null),HttpStatus.OK);
             }catch (Exception e){
                 return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_ACCEPTABLE.value(),"Set All status Cart failure",null),HttpStatus.NOT_ACCEPTABLE);
