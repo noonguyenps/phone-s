@@ -97,7 +97,6 @@ public class OrderController {
             orderService.save(order);
             for(CartEntity cart: listCart){
                 cart.setActive(false);
-                cart.setOrder(order);
                 cartService.saveCart(cart);
             }
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",null), HttpStatus.OK);
