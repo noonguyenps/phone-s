@@ -12,9 +12,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.OrderMapping;
+import project.phoneshop.mapping.ProductMapping;
 import project.phoneshop.model.entity.*;
+import project.phoneshop.model.payload.request.order.AddNewOrderRequest;
 import project.phoneshop.model.payload.request.order.AddOrderRequest;
+import project.phoneshop.model.payload.request.product.AddNewProductRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,8 +51,62 @@ public class OrderController {
     OrderMapping orderMapping;
 
     private static final Logger LOGGER = LogManager.getLogger(AddressController.class);
+    @PostMapping("/user/order/insert")
+    private ResponseEntity<SuccessResponse> insertOrder(HttpServletRequest request, @RequestBody AddNewOrderRequest addNewOrderRequest){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            Double total = 0.0;
+            List<CartEntity> listCart = new ArrayList<>();
+            for(CartEntity cart: user.getListCart()){
+                if(addNewOrderRequest.getListCart().contains(cart.getId())&&cart.getStatus()){
+                    listCart.add(cart);
+                    CartResponseFE cartResponseFE = cartService.getCartResponseFE(cart);
+                    total += cartResponseFE.getPrice();
+                }
+            }
+            if(listCart.isEmpty()){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "No Cart in order",null),HttpStatus.NOT_FOUND);
+            }
+            AddressEntity address = null;
+            for(AddressEntity addressEntity : user.getListAddress()){
+                if(addressEntity.getId().equals(addNewOrderRequest.getAddress())){
+                    address = addressEntity;
+                }
+            }
+            if(address == null){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Address in order not found",null),HttpStatus.NOT_FOUND);
+            }
+            PaymentEntity payment = paymentService.getPaymentById(addNewOrderRequest.getPayment());
+            if(payment==null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Payment in order Not Found",null),HttpStatus.NOT_FOUND);
+            ShipEntity ship = shipService.findShipById(addNewOrderRequest.getShip());
+            if(ship == null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Ship in order is not found",null),HttpStatus.NOT_FOUND);
+            VoucherEntity voucher = null;
+            if(!(String.valueOf(addNewOrderRequest.getVoucher()).equals(""))){
+                VoucherEntity voucherTemp = voucherService.findById(addNewOrderRequest.getVoucher());
+                if(voucherTemp==null){
+                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher not Found",null),HttpStatus.NOT_FOUND);
+                }
+                for(UserEntity user1: voucherTemp.getUserEntities()){
+                    if(user1.getId().equals(user.getId())){
+                        voucher = voucherTemp;
+                    }
+                }
+                if(voucher== null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher in order is not found",null),HttpStatus.NOT_FOUND);
+            }
+            OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
+            orderService.save(order);
+            for(CartEntity cart: listCart){
+                cart.setActive(false);
+                cart.setOrder(order);
+                cartService.saveCart(cart);
+            }
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",null), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 
-    @PostMapping("")
+    @PostMapping("/order")
 //    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<SuccessResponse> saveOrder(@RequestBody AddOrderRequest addOrderRequest, BindingResult errors, HttpServletRequest request) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
@@ -108,7 +166,7 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("")
+    @GetMapping("/order")
     public ResponseEntity<SuccessResponse> getOrderByUser(HttpServletRequest request) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){

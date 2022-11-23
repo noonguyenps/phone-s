@@ -39,7 +39,8 @@ public class CartController {
             Map<String,Object> data = new HashMap<>();
             List<CartResponseFE> cartResponseList = new ArrayList<>();
             for(CartEntity cart : listCart){
-                cartResponseList.add(cartService.getCartResponseFE(cart));
+                if(cart.getActive())
+                    cartResponseList.add(cartService.getCartResponseFE(cart));
             }
             data.put("listCart",cartResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"List Cart",data),HttpStatus.OK);

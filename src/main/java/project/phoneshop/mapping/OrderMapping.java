@@ -6,6 +6,8 @@ import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.order.AddOrderRequest;
 import project.phoneshop.service.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -79,6 +81,29 @@ public class OrderMapping {
         totalPrice += ship.getShipPrice();
         order.setTotal(totalPrice);
         order.setStatusPayment(true);
+        return order;
+    }
+    public static OrderEntity addOrderToEntity(UserEntity user, List<CartEntity> listCart, AddressEntity address, PaymentEntity payment, ShipEntity ship, VoucherEntity voucher, Double total){
+        OrderEntity order = new OrderEntity();
+        order.setUserOrder(user);
+        order.setName("Order");
+        order.setCartOrder(listCart);
+        order.setAddressOrder(address);
+        order.setShipOrder(ship);
+        order.setPaymentOrder(payment);
+        order.setVoucherOrder(voucher);
+        order.setDelStatus(0);
+        LocalDate today = LocalDate.now();
+        order.setCreatedDate(Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        LocalDate expDate = today.plusDays(14);
+        order.setExpectedDate(Date.from(expDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        order.setStatusPayment(false);
+        if(voucher!=null){
+            order.setTotal(total-Double.parseDouble(voucher.getValue())+ ship.getShipPrice());
+        }
+        else {
+            order.setTotal(total+ ship.getShipPrice());
+        }
         return order;
     }
 }
