@@ -136,6 +136,25 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
     }
+    @DeleteMapping("user/cart/delete/{id}")
+    private ResponseEntity deleteCartById(HttpServletRequest request, @PathVariable UUID id){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            try {
+                CartEntity cart = cartService.findByCartId(id);
+                if(cart == null){
+                    return new ResponseEntity(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(),"Cart was not found",null),HttpStatus.NOT_FOUND);
+                }
+                user.getListCart().remove(cart);
+                userService.saveInfo(user);
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Delete cart successfully",null),HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_ACCEPTABLE.value(),"Delete cart failure",null),HttpStatus.NOT_ACCEPTABLE);
+            }
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @PutMapping("/user/cart/choose/all")
     private ResponseEntity chooseAllCart(HttpServletRequest request,@RequestParam boolean status){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
