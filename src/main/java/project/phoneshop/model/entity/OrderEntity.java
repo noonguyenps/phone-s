@@ -18,6 +18,9 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "\"order_id\"")
     private int orderId;
+    @ManyToOne
+    @JoinColumn(name="\"user_order\"")
+    private UserEntity userOrder;
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<CartEntity> cartOrder;
     @Column(name = "\"name\"")
@@ -45,6 +48,9 @@ public class OrderEntity {
     private Date expectedDate;
     @Column(name ="\"status_payment\"")
     private Boolean statusPayment;
+    @ManyToOne
+    @JoinColumn(name="\"voucher_order\"")
+    private VoucherEntity voucherOrder;
 
     public int getOrderId() {
         return orderId;
@@ -132,5 +138,21 @@ public class OrderEntity {
 
     public void setStatusPayment(Boolean statusPayment) {
         this.statusPayment = statusPayment;
+    }
+
+    public UserEntity getUserOrder() {
+        return userOrder;
+    }
+
+    public void setUserOrder(UserEntity userOrder) {
+        this.userOrder = userOrder;
+    }
+
+    public VoucherEntity getVoucherOrder() {
+        return voucherOrder;
+    }
+
+    public void setVoucherOrder(VoucherEntity voucherOrder) {
+        this.voucherOrder = voucherOrder;
     }
 }

@@ -23,7 +23,7 @@ import java.util.*;
 import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class OrderController {
     public static final String SUCCESS_URL = "/api/order/pay/success";

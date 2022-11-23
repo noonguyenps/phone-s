@@ -66,6 +66,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<AddressEntity> listAddress;
     @JsonIgnore
+    @OneToMany(mappedBy = "userOrder",cascade = CascadeType.ALL)
+    private List<OrderEntity> listOrder;
+    @JsonIgnore
     @OneToMany(mappedBy = "userCart",cascade = CascadeType.ALL)
     private List<CartEntity> listCart;
     @JsonIgnore
@@ -246,5 +249,13 @@ public class UserEntity {
 
     public void setFavoriteProducts(List<ProductEntity> favoriteProducts) {
         this.favoriteProducts = favoriteProducts;
+    }
+
+    public List<OrderEntity> getListOrder() {
+        return listOrder;
+    }
+
+    public void setListOrder(List<OrderEntity> listOrder) {
+        this.listOrder = listOrder;
     }
 }

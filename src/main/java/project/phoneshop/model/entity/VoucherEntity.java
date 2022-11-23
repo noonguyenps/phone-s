@@ -7,6 +7,7 @@ import project.phoneshop.model.entity.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,6 +41,9 @@ public class VoucherEntity {
     private Date toDate;
     @Column(name = "expired_date")
     private Date expiredDate;
+    @JsonIgnore
+    @OneToMany(mappedBy = "voucherOrder",cascade = CascadeType.ALL)
+    private List<OrderEntity> listOrder;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
@@ -105,5 +109,13 @@ public class VoucherEntity {
     }
     public void setExpiredDate(Date expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public List<OrderEntity> getListOrder() {
+        return listOrder;
+    }
+
+    public void setListOrder(List<OrderEntity> listOrder) {
+        this.listOrder = listOrder;
     }
 }
