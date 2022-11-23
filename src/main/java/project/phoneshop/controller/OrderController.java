@@ -81,7 +81,7 @@ public class OrderController {
             ShipEntity ship = shipService.findShipById(addNewOrderRequest.getShip());
             if(ship == null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Ship in order is not found",null),HttpStatus.NOT_FOUND);
             VoucherEntity voucher = null;
-            if(!(String.valueOf(addNewOrderRequest.getVoucher()).equals(""))){
+            if(!addNewOrderRequest.isNullVoucher()){
                 VoucherEntity voucherTemp = voucherService.findById(addNewOrderRequest.getVoucher());
                 if(voucherTemp==null){
                     return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher not Found",null),HttpStatus.NOT_FOUND);

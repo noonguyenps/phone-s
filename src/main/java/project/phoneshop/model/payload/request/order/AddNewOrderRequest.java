@@ -16,5 +16,6 @@ public class AddNewOrderRequest {
     private int payment;
     private int ship;
     private UUID voucher;
+    private boolean nullVoucher;
 
 }
