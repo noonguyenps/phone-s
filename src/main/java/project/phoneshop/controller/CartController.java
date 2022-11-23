@@ -93,7 +93,7 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @PutMapping("/user/cart/update/{id}")
-    public ResponseEntity<SuccessResponse> updateToCart(@PathVariable UUID id,HttpServletRequest request, UpdateCartRequest updateCartRequest){
+    public ResponseEntity<SuccessResponse> updateToCart(@PathVariable UUID id,HttpServletRequest request,@RequestBody UpdateCartRequest updateCartRequest){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             CartEntity cartEntity = cartService.findByCartId(id);
