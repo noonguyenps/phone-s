@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
         for(ProductAttributeOptionDetail productAttributeOptionDetail: cart.getProductCart().getProductAttributeOptionDetails()){
             if(cart.getListAttributeOption().contains(productAttributeOptionDetail.getAttributeOption().getId())){
                 price= price+ productAttributeOptionDetail.getValue();
-                option.add(productAttributeOptionDetail.getAttributeOption().getIdType().getName()+ " : "+productAttributeOptionDetail.getAttributeOption().getValue());
+                option.add(" "+productAttributeOptionDetail.getAttributeOption().getIdType().getName()+ ": "+productAttributeOptionDetail.getAttributeOption().getValue());
             }
         }
         String url = "https://res.cloudinary.com/duk2lo18t/image/upload/v1667887284/frontend/R_zzr2lm.png";
