@@ -11,7 +11,9 @@ import project.phoneshop.model.payload.request.ship.AddShipRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.service.ShipService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/ship")
@@ -23,15 +25,9 @@ public class ShipController {
     @GetMapping("/list")
     public ResponseEntity<SuccessResponse> getAllShipType(){
         List<ShipEntity> list = shipService.getAll();
-        SuccessResponse response = new SuccessResponse();
-
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("successful");
-        response.setSuccess(true);
-        for(ShipEntity ship : list){
-            response.getData().put("Ship Type "+ ship.getShipId(),ship.toString());
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        Map<String, Object> data = new HashMap<>();
+        data.put("listShip",list);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List ship",data),HttpStatus.OK);
     }
 
     @GetMapping("{id}")

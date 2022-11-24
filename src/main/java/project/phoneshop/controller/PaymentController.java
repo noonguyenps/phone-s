@@ -11,7 +11,9 @@ import project.phoneshop.model.payload.request.payment.AddPaymentRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.service.PaymentService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/payment")
@@ -26,15 +28,9 @@ public class PaymentController {
     @GetMapping("/list")
     public ResponseEntity<SuccessResponse> getAllPayment(){
         List<PaymentEntity> list = paymentService.getAll();
-        SuccessResponse response = new SuccessResponse();
-
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("successful");
-        response.setSuccess(true);
-        for(PaymentEntity payment : list){
-            response.getData().put("Payment "+ payment.getPaymentId(),payment.getPaymentName());
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        Map<String,Object> data = new HashMap<>();
+        data.put("listPayment",list);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Payment",data),HttpStatus.OK);
     }
 
     @GetMapping("{id}")
