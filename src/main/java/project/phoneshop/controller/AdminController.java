@@ -114,7 +114,8 @@ public class AdminController {
             List<Object> countOrderPerMonth = orderService.countUserPerMonth();
             for(Object countOrder : countOrderPerMonth){
                 totalOrder += Integer.valueOf(((Object[])countOrder)[2].toString());
-                totalRevenueOrder += Integer.valueOf(((Object[])countOrder)[3].toString());
+                double revenueOrderTemp = Double.valueOf(((Object[])countOrder)[3].toString());
+                totalRevenueOrder += (int)Math.round(revenueOrderTemp);
                 if(String.valueOf(((Object[])countOrder)[1]).equals(String.valueOf(LocalDate.now().getYear()))){
                     int i = Integer.parseInt(((Object[]) countOrder)[0].toString()) - 1;
                     orderPerMonth[i] = Integer.parseInt(((Object[])countOrder)[2].toString());
