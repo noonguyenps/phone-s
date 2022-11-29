@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/notification")
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class UserNotificationController {
 
     private final UserNotificationService userNotificationService;
     @Autowired
     AuthorizationHeader authorizationHeader;
-    @GetMapping("")
+    @GetMapping("user/notification")
     public ResponseEntity<SuccessResponse> getUserNotification(HttpServletRequest request) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -42,7 +42,7 @@ public class UserNotificationController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @DeleteMapping("id")
+    @DeleteMapping("user/notification/id")
     public ResponseEntity<SuccessResponse> deleteNotification(HttpServletRequest request,@PathVariable("id")int id) throws Exception{
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){

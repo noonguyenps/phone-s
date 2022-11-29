@@ -22,6 +22,7 @@ public class ProductResponse {
     private double price;
     private double discount;
     private int sold;
+    private int inventory;
     private String brand;
     private String origins;
     private String category;
@@ -30,7 +31,7 @@ public class ProductResponse {
     private Date createAt;
     private int status;
 
-    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status) {
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -43,6 +44,7 @@ public class ProductResponse {
         this.brand = brand;
         this.origins = origins;
         this.img = img;
+        this.inventory = inventory;
         this.listAttributeOption = listAttributeOption;
         this.createAt = createAt;
         this.status =status;
