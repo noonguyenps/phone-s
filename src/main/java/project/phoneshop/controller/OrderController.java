@@ -146,7 +146,14 @@ public class OrderController {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
-            data.put("List Order", user.getListOrder());
+            List<OrderResponse> orderResponseList = new ArrayList<>();
+            for(OrderEntity order:user.getListOrder()){
+                List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+                for(CartEntity cart: order.getCartOrder())
+                    cartResponseFEList.add(cartService.getCartResponseFE(cart));
+                orderResponseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+            }
+            data.put("listOrder",orderResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "List Order", data), HttpStatus.OK);
         }
         else
