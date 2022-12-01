@@ -20,6 +20,7 @@ import project.phoneshop.model.payload.request.order.AddOrderRequest;
 import project.phoneshop.model.payload.request.product.AddNewProductRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.cart.CartResponseFE;
+import project.phoneshop.model.payload.response.order.OrderResponse;
 import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
@@ -127,7 +128,14 @@ public class OrderController {
             if(listOrder.size() == 0)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Order is Empty",null), HttpStatus.FOUND);
             Map<String, Object> data = new HashMap<>();
-            data.put("listOrder",listOrder);
+            List<OrderResponse> orderResponseList = new ArrayList<>();
+            for(OrderEntity order:listOrder){
+                List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+                for(CartEntity cart: order.getCartOrder())
+                    cartResponseFEList.add(cartService.getCartResponseFE(cart));
+                orderResponseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+            }
+            data.put("listOrder",orderResponseList);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "List Order",data), HttpStatus.OK);
         }
         else
@@ -150,7 +158,10 @@ public class OrderController {
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
             OrderEntity order = orderService.findById(id);
-            data.put("Order", order);
+            List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+            for(CartEntity cart: order.getCartOrder())
+                cartResponseFEList.add(cartService.getCartResponseFE(cart));
+            data.put("Order",orderService.getOrderResponse(order,cartResponseFEList));
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Order", data), HttpStatus.OK);
         }
         else

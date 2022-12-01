@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.OrderEntity;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
+import project.phoneshop.model.payload.response.order.OrderResponse;
 import project.phoneshop.repository.OrderRepository;
 import project.phoneshop.service.OrderService;
 
@@ -71,5 +73,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(int id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs){
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setOrderId(order.getOrderId());
+        orderResponse.setCartResponseFEs(cartResponseFEs);
+        orderResponse.setOrderStatus(order.getOrderStatus());
+        orderResponse.setName(order.getName());
+        orderResponse.setAddressOrder(order.getAddressOrder());
+        orderResponse.setPaymentOrder(order.getPaymentOrder());
+        orderResponse.setShipOrder(order.getShipOrder());
+        orderResponse.setTotal(orderResponse.getTotal());
+        orderResponse.setCreatedDate(orderResponse.getCreatedDate());
+        orderResponse.setExpectedDate(order.getExpectedDate());
+        orderResponse.setVoucherOrder(order.getVoucherOrder());
+        return orderResponse;
     }
 }

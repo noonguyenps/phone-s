@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ProductEntity;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
+import project.phoneshop.model.payload.response.order.OrderResponse;
 
 import java.util.List;
 
@@ -24,4 +26,6 @@ public interface OrderService {
     long countOrderPrice();
     double countPayMoney(OrderEntity order);
     List<Object> countUserPerMonth();
+
+    OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs);
 }
