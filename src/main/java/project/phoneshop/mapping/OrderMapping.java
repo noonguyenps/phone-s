@@ -87,7 +87,8 @@ public class OrderMapping {
         OrderEntity order = new OrderEntity();
         order.setUserOrder(user);
         order.setName("Order");
-        order.setCartOrder(listCart);
+        order.setOrderStatus(0);
+//        order.setCartOrder(listCart);
         order.setAddressOrder(address);
         order.setShipOrder(ship);
         order.setPaymentOrder(payment);

@@ -1,6 +1,7 @@
 package project.phoneshop.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import project.phoneshop.model.payload.request.order.AddOrderRequest;
 import project.phoneshop.model.payload.request.product.AddNewProductRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.cart.CartResponseFE;
+import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,9 +96,16 @@ public class OrderController {
                 if(voucher== null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher in order is not found",null),HttpStatus.NOT_FOUND);
             }
             OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
+            int length = 10;
+            boolean useLetters = true;
+            boolean useNumbers = false;
+            String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
+            order.setName(generatedString);
             orderService.save(order);
+            OrderEntity order1 = orderService.findOrderByName(generatedString);
             for(CartEntity cart: listCart){
                 cart.setActive(false);
+                cart.setOrder(order1);
                 cartService.saveCart(cart);
             }
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",null), HttpStatus.OK);
@@ -164,7 +173,25 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-
+    @GetMapping("/admin/order")
+    public ResponseEntity<SuccessResponse> getAllOrder(HttpServletRequest request,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size,
+                                                       @RequestParam(defaultValue = "order_id") String sort){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            if(!listOrderSort().contains(sort))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Properties sort Not found",null), HttpStatus.FOUND);
+            List<OrderEntity> listOrder = orderService.findAllOrder(page, size, sort);
+            if(listOrder.size() == 0)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Order is Empty",null), HttpStatus.FOUND);
+            Map<String, Object> data = new HashMap<>();
+            data.put("listOrder",listOrder);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "List Order",data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/order")
     public ResponseEntity<SuccessResponse> getOrderByUser(HttpServletRequest request) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
@@ -346,4 +373,11 @@ public class OrderController {
 //        }
 //        return totalOrderProduct;
 //    }
+    private List<String> listOrderSort(){
+        List<String> list = new ArrayList<>();
+        list.add("order_id");
+        list.add("created_date");
+        list.add("total");
+        return list;
+    }
 }

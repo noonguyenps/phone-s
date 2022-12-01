@@ -48,6 +48,8 @@ public class OrderEntity {
     private Date expectedDate;
     @Column(name ="\"status_payment\"")
     private Boolean statusPayment;
+    @Column(name ="\"status\"")
+    private int orderStatus;
     @ManyToOne
     @JoinColumn(name="\"voucher_order\"")
     private VoucherEntity voucherOrder;
@@ -140,6 +142,14 @@ public class OrderEntity {
         this.statusPayment = statusPayment;
     }
 
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public UserEntity getUserOrder() {
         return userOrder;
     }
@@ -155,4 +165,5 @@ public class OrderEntity {
     public void setVoucherOrder(VoucherEntity voucherOrder) {
         this.voucherOrder = voucherOrder;
     }
+
 }
