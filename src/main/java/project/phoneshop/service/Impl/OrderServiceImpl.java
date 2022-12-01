@@ -85,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setAddressOrder(order.getAddressOrder());
         orderResponse.setPaymentOrder(order.getPaymentOrder());
         orderResponse.setShipOrder(order.getShipOrder());
-        orderResponse.setTotal(orderResponse.getTotal());
+        orderResponse.setTotal(order.getTotal());
         orderResponse.setCreatedDate(orderResponse.getCreatedDate());
         orderResponse.setExpectedDate(order.getExpectedDate());
         orderResponse.setVoucherOrder(order.getVoucherOrder());
