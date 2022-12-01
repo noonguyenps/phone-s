@@ -42,6 +42,7 @@ public class OrderController {
     private final PaymentService paymentService;
     private final AddressService addressService;
     private final VoucherService voucherService;
+    private final ProductService productService;
 //    private final PaypalService paypalService;
 
     private final DiscountProgramService discountProgramService;
@@ -96,79 +97,19 @@ public class OrderController {
                 if(voucher== null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher in order is not found",null),HttpStatus.NOT_FOUND);
             }
             OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
-            int length = 10;
-            boolean useLetters = true;
-            boolean useNumbers = false;
-            String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
+            String generatedString = RandomStringUtils.random(20, true, false);
             order.setName(generatedString);
             orderService.save(order);
             OrderEntity order1 = orderService.findOrderByName(generatedString);
             for(CartEntity cart: listCart){
                 cart.setActive(false);
                 cart.setOrder(order1);
+                ProductEntity product = cart.getProductCart();
+                product.setInventory(product.getInventory()-cart.getQuantity());
+                productService.saveProduct(product);
                 cartService.saveCart(cart);
             }
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",null), HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/order")
-//    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<SuccessResponse> saveOrder(@RequestBody AddOrderRequest addOrderRequest, BindingResult errors, HttpServletRequest request) throws Exception {
-        UserEntity user = authorizationHeader.AuthorizationHeader(request);
-        if(user != null){
-            try {
-                ShipEntity ship = shipService.findShipById(addOrderRequest.getIdShip());
-                if (ship == null)
-                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Ship not found", null), HttpStatus.NO_CONTENT);
-                PaymentEntity payment = paymentService.getPaymentById(addOrderRequest.getIdPayment());
-                if (payment == null)
-                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Payment not found", null), HttpStatus.NO_CONTENT);
-                AddressEntity address = addressService.findById(addOrderRequest.getIdAddress());
-                if (address == null || address.getUser() != user)
-                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Address not found", null), HttpStatus.NO_CONTENT);
-                if (addOrderRequest.getCartItem().isEmpty())
-                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Cart is empty", null), HttpStatus.NO_CONTENT);
-                else{
-                    List<CartEntity> cartEntities = new ArrayList<>();
-                    for(UUID cartId : addOrderRequest.getCartItem()){
-                        CartEntity cartEntity = cartService.findByCartId(cartId);
-                        if(cartEntity.getUserCart()!=user||!cartEntity.getStatus()||!cartEntity.getActive())
-                            return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_FOUND.value(), "Cart is not found", null), HttpStatus.NOT_FOUND);
-                        if(cartEntity.getProductCart().getInventory()< cartEntity.getQuantity()){
-                            return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_FOUND.value(), "Product quantity is out of inventory", null), HttpStatus.NOT_FOUND);
-                        }
-                        else
-                            cartEntities.add(cartEntity);
-                    }
-                    if (!addOrderRequest.getVoucher().isEmpty()) {
-                        List<String> listType = new ArrayList<>();
-                        List<VoucherEntity> voucherEntities = new ArrayList<>();
-                        for (UUID idVoucher : addOrderRequest.getVoucher()) {
-                            VoucherEntity voucher = voucherService.findById(idVoucher);
-                            if (voucher == null || !voucher.getUserEntities().contains(user))
-                                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_FOUND.value(), "Voucher not found", null), HttpStatus.NOT_FOUND);
-                            else {
-                                if (listType.contains(voucher.getType()))
-                                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.CONFLICT.value(), "Voucher is conflict", null), HttpStatus.CONFLICT);
-                                listType.add(voucher.getType());
-                                voucherEntities.add(voucher);
-                            }
-                        }
-                        OrderEntity order = orderMapping.ModelToEntity(addOrderRequest, user,cartEntities, address, ship, payment, voucherEntities);
-                        orderService.save(order);
-                    } else {
-                        OrderEntity order = orderMapping.ModelToEntity(addOrderRequest, user,cartEntities, address, ship, payment);
-                        orderService.save(order);
-                    }
-                    return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Order successfully",null),HttpStatus.OK);
-                }
-            }
-            catch (Exception e){
-                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage(), null),HttpStatus.NOT_ACCEPTABLE);
-            }
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -192,51 +133,13 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/order")
+    @GetMapping("/user/order")
     public ResponseEntity<SuccessResponse> getOrderByUser(HttpServletRequest request) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
-        if(user != null){
-            Map<String,Object> data = new HashMap<>();
-            data.put("List Order",user.getListCart());
-            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Order",data),HttpStatus.OK);
-//            try {
-//                if (addOrderRequest.getCartItem().isEmpty())
-//                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Cart is empty", null), HttpStatus.NO_CONTENT);
-//                ShipEntity ship = shipService.findShipById(addOrderRequest.getIdShip());
-//                if (ship == null)
-//                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Ship not found", null), HttpStatus.NO_CONTENT);
-//                PaymentEntity payment = paymentService.getPaymentById(addOrderRequest.getIdPayment());
-//                if (payment == null)
-//                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Payment not found", null), HttpStatus.NO_CONTENT);
-//                AddressEntity address = addressService.findById(addOrderRequest.getIdAddress());
-//                if (address == null || address.getUser() != user)
-//                    return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NO_CONTENT.value(), "Address not found", null), HttpStatus.NO_CONTENT);
-//                if (!addOrderRequest.getVoucher().isEmpty()) {
-//                    List<String> listType = new ArrayList<>();
-//                    List<VoucherEntity> voucherEntities = new ArrayList<>();
-//                    for (UUID idVoucher : addOrderRequest.getVoucher()) {
-//                        VoucherEntity voucher = voucherService.findById(idVoucher);
-//                        if (voucher == null || !voucher.getUserEntities().contains(user))
-//                            return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.NOT_FOUND.value(), "Voucher not found", null), HttpStatus.NOT_FOUND);
-//                        else {
-//                            if (listType.contains(voucher.getType()))
-//                                return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.CONFLICT.value(), "Voucher is conflict", null), HttpStatus.CONFLICT);
-//                            listType.add(voucher.getType());
-//                            voucherEntities.add(voucher);
-//                        }
-//                    }
-//                    OrderEntity order = orderMapping.ModelToEntity(addOrderRequest, user, address, ship, payment, voucherEntities);
-//                    orderService.save(order);
-//                    return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Order successfully",null),HttpStatus.OK);
-//                } else {
-//                    OrderEntity order = orderMapping.ModelToEntity(addOrderRequest, user, address, ship, payment);
-//                    orderService.save(order);
-//                    return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Order successfully",null),HttpStatus.OK);
-//                }
-//            }
-//            catch (Exception e){
-//                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_ACCEPTABLE.value(), "Product out of inventory",null),HttpStatus.NOT_ACCEPTABLE);
-//            }
+        if(user != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("List Order", user.getListOrder());
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "List Order", data), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

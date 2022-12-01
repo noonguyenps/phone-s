@@ -86,9 +86,7 @@ public class OrderMapping {
     public static OrderEntity addOrderToEntity(UserEntity user, List<CartEntity> listCart, AddressEntity address, PaymentEntity payment, ShipEntity ship, VoucherEntity voucher, Double total){
         OrderEntity order = new OrderEntity();
         order.setUserOrder(user);
-        order.setName("Order");
         order.setOrderStatus(0);
-//        order.setCartOrder(listCart);
         order.setAddressOrder(address);
         order.setShipOrder(ship);
         order.setPaymentOrder(payment);
