@@ -23,4 +23,6 @@ public interface VoucherService {
     void deleteVoucher(UUID id);
 
     VoucherEntity findByIdAndUser(UUID id, UserEntity user);
+
+    List<VoucherEntity> findAllVoucherBtUser(UserEntity user);
 }

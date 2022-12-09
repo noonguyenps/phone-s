@@ -58,5 +58,9 @@ public class VoucherServiceImpl implements VoucherService {
         List<VoucherEntity> voucherEntityList = voucherRepository.findAllByStatus(true);
         return voucherEntityList;
     }
+    @Override
+    public List<VoucherEntity> findAllVoucherBtUser(UserEntity user){
+        return  voucherRepository.findByUserEntities(user);
+    }
 }
 

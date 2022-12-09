@@ -13,5 +13,6 @@ public interface VoucherRepository extends JpaRepository<VoucherEntity, UUID> {
     List<VoucherEntity> findAllByType(String type);
     List<VoucherEntity> findAllByStatus(boolean status);
     Optional<VoucherEntity> findByIdAndUserEntities(UUID id, UserEntity user);
+    List<VoucherEntity> findByUserEntities(UserEntity user);
 
 }

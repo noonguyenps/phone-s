@@ -136,6 +136,20 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/user/voucher/all")
+    public ResponseEntity<SuccessResponse> getVoucherByUser(HttpServletRequest request){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            Map<String, Object> data = new HashMap<>();
+            List<VoucherEntity> listVoucher = voucherService.findAllVoucherBtUser(user);
+            if(listVoucher.isEmpty())
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "List voucher is Empty",null),HttpStatus.NOT_FOUND);
+            data.put("listVoucher",listVoucher);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List voucher",data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 }
 
 
