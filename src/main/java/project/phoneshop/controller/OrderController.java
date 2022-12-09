@@ -174,6 +174,24 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/user/order/{id}")
+    public ResponseEntity<SuccessResponse> getOrderInUserById(HttpServletRequest request,@PathVariable int id) throws Exception {
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null) {
+            Map<String, Object> data = new HashMap<>();
+            OrderEntity order = orderService.findById(id);
+            if(order.getUserOrder()!=user){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED",null),HttpStatus.UNAUTHORIZED);
+            }
+            List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+            for(CartEntity cart: order.getCartOrder())
+                cartResponseFEList.add(cartService.getCartResponseFE(cart));
+            data.put("order",orderService.getOrderResponse(order,cartResponseFEList));
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Order", data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 //    @GetMapping("/pay/success/{id}")
 //    @ResponseBody
 //    public ResponseEntity<SuccessResponse> paypalSuccess(@PathVariable("id") int id,@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId)
