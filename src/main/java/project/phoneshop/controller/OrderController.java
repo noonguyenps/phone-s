@@ -44,9 +44,6 @@ public class OrderController {
     private final AddressService addressService;
     private final VoucherService voucherService;
     private final ProductService productService;
-//    private final PaypalService paypalService;
-
-    private final DiscountProgramService discountProgramService;
 
     @Autowired
     AuthorizationHeader authorizationHeader;

@@ -15,8 +15,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedMethods("GET","POST","DELETE","PUT","OPTIONS")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:3000/","http://localhost:8080/","https://tiki-web-navy.vercel.app/"
-                        ,"https://gorgeous-pastelito-2fb64c.netlify.app/","https://tiki-ui.vercel.app/","https://phone-s-fe.vercel.app/","https://taka-beige.vercel.app/")
+                        .allowedOrigins("http://localhost:3000/","http://localhost:8080/"
+                        ,"https://tiki-ui.vercel.app/","https://phone-s-fe.vercel.app/","https://taka-beige.vercel.app/")
                         .allowCredentials(true)
                         .maxAge(3600);
             }
