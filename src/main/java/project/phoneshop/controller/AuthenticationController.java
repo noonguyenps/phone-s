@@ -19,6 +19,7 @@ import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
 import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
+import project.phoneshop.model.payload.request.authentication.RefreshTokenRequest;
 import project.phoneshop.model.payload.request.authentication.VerifyPhoneRequest;
 import project.phoneshop.model.payload.request.user.ResetPasswordRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
@@ -111,134 +112,133 @@ public class AuthenticationController {
                 .badRequest()
                 .body(errorResponseMap);
     }
-//    @PostMapping("/refreshtoken")
-//    public ResponseEntity<SuccessResponse> refreshToken(@RequestBody RefreshTokenRequest refreshToken,
-//                                                        HttpServletRequest request, HttpServletResponse resp){
-//        String authorizationHeader = request.getHeader(AUTHORIZATION);
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-//            String accessToken = authorizationHeader.substring("Bearer ".length());
-//
-//            if(!jwtUtils.validateExpiredToken(accessToken)){
-//                throw new BadCredentialsException("access token is not expired");
-//            }
-//
-//            if(jwtUtils.validateExpiredToken(refreshToken.getRefreshToken())){
-//                throw new BadCredentialsException("refresh token is expired");
-//            }
-//
-//            if(refreshToken == null){
-//                throw new BadCredentialsException("refresh token is missing");
-//            }
-//
-//            if(!jwtUtils.getUserNameFromJwtToken(refreshToken
-//                    .getRefreshToken()).equals(jwtUtils.getUserNameFromJwtToken(refreshToken.getRefreshToken()))){
-//                throw new BadCredentialsException("two token are not a pair");
-//            }
-//
-//
-//            AppUserDetail userDetails =  AppUserDetail.build(userService
-//                    .findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(refreshToken.getRefreshToken()))));
-//
-//            accessToken = jwtUtils.generateJwtToken(userDetails);
-//
-//            SuccessResponse response = new SuccessResponse();
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("Login successful");
-//            response.setSuccess(true);
-//
-//            Cookie cookieAccessToken = new Cookie("accessToken", accessToken);
-//
-//            resp.setHeader("Set-Cookie", "test=value; Path=/");
-//            resp.addCookie(cookieAccessToken);
-//
-//            response.getData().put("accessToken",accessToken);
-//            response.getData().put("refreshToken",refreshToken.getRefreshToken());
-//
-//
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//        else
-//        {
-//            throw new BadCredentialsException("access token is missing");
-//        }
-//    }
-//    @PostMapping("/refreshtokencookie")
-//    public ResponseEntity<SuccessResponse> refreshTokenCookie(@CookieValue("refreshToken") String refreshToken, HttpServletRequest request) {
-//        String authorizationHeader = request.getHeader(AUTHORIZATION);
-//        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-//            String accessToken = authorizationHeader.substring("Bearer ".length());
-//
-//            if(!jwtUtils.validateExpiredToken(accessToken)){
-//                throw new BadCredentialsException("access token is not expired");
-//            }
-//
-//            if(jwtUtils.validateExpiredToken(refreshToken)){
-//                throw new BadCredentialsException("refresh token is expired");
-//            }
-//
-//            if(refreshToken == null){
-//                throw new BadCredentialsException("refresh token is missing");
-//            }
-//
-//            if(!jwtUtils.getUserNameFromJwtToken(refreshToken).equals(jwtUtils.getUserNameFromJwtToken(refreshToken))){
-//                throw new BadCredentialsException("two token are not a pair");
-//            }
-//
-//
-//            AppUserDetail userDetails =  AppUserDetail.build(userService
-//                    .findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(refreshToken))));
-//
-//            accessToken = jwtUtils.generateJwtToken(userDetails);
-//
-//            SuccessResponse response = new SuccessResponse();
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("Login successful");
-//            response.setSuccess(true);
-//
-//            response.getData().put("accessToken",accessToken);
-//            response.getData().put("refreshToken",refreshToken);
-//
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }
-//        else
-//        {
-//            throw new BadCredentialsException("access token is missing");
-//        }
-//    }
-//    @GetMapping("/active")
-//    public ResponseEntity<SuccessResponse> activeToken( @RequestParam(defaultValue = "") String key
-//    ) {
-//        if(key == null || key ==""){
-//            throw new BadCredentialsException("key active is not valid");
-//        }
-//
-//        UUID id = UUID.fromString(jwtUtils.getUserNameFromJwtToken(key));
-//        UserEntity user = userService.findById(id);
-//
-//        if(user == null){
-//            throw new RecordNotFoundException("Not found, please register again");
-//        }
-//
-//        if(user.isActive()){
-//            throw new RecordNotFoundException("user already has been activated!");
-//        }
-//
-//        userService.updateActive(user);
-//
-//
-//
-//        SuccessResponse response = new SuccessResponse();
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setMessage("Active successful");
-//        response.setSuccess(true);
-//
-//        response.getData().put("email",user.getEmail());
-//
-//        return new ResponseEntity<SuccessResponse>(response,HttpStatus.OK);
-//    }
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<SuccessResponse> refreshToken(@RequestBody RefreshTokenRequest refreshToken,
+                                                        HttpServletRequest request, HttpServletResponse resp){
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+            String accessToken = authorizationHeader.substring("Bearer ".length());
+
+            if(!jwtUtils.validateExpiredToken(accessToken)){
+                throw new BadCredentialsException("access token is not expired");
+            }
+
+            if(jwtUtils.validateExpiredToken(refreshToken.getRefreshToken())){
+                throw new BadCredentialsException("refresh token is expired");
+            }
+
+            if(refreshToken == null){
+                throw new BadCredentialsException("refresh token is missing");
+            }
+
+            if(!jwtUtils.getUserNameFromJwtToken(refreshToken
+                    .getRefreshToken()).equals(jwtUtils.getUserNameFromJwtToken(refreshToken.getRefreshToken()))){
+                throw new BadCredentialsException("two token are not a pair");
+            }
+
+
+            AppUserDetail userDetails =  AppUserDetail.build(userService
+                    .findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(refreshToken.getRefreshToken()))));
+
+            accessToken = jwtUtils.generateJwtToken(userDetails);
+
+            SuccessResponse response = new SuccessResponse();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Login successful");
+            response.setSuccess(true);
+
+            Cookie cookieAccessToken = new Cookie("accessToken", accessToken);
+
+            resp.setHeader("Set-Cookie", "test=value; Path=/");
+            resp.addCookie(cookieAccessToken);
+
+            response.getData().put("accessToken",accessToken);
+            response.getData().put("refreshToken",refreshToken.getRefreshToken());
+
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        else
+        {
+            throw new BadCredentialsException("access token is missing");
+        }
+    }
+    @PostMapping("/refreshtokencookie")
+    public ResponseEntity<SuccessResponse> refreshTokenCookie(@CookieValue("refreshToken") String refreshToken, HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+            String accessToken = authorizationHeader.substring("Bearer ".length());
+
+            if(!jwtUtils.validateExpiredToken(accessToken)){
+                throw new BadCredentialsException("access token is not expired");
+            }
+
+            if(jwtUtils.validateExpiredToken(refreshToken)){
+                throw new BadCredentialsException("refresh token is expired");
+            }
+
+            if(refreshToken == null){
+                throw new BadCredentialsException("refresh token is missing");
+            }
+
+            if(!jwtUtils.getUserNameFromJwtToken(refreshToken).equals(jwtUtils.getUserNameFromJwtToken(refreshToken))){
+                throw new BadCredentialsException("two token are not a pair");
+            }
+
+
+            AppUserDetail userDetails =  AppUserDetail.build(userService
+                    .findById(UUID.fromString(jwtUtils.getUserNameFromJwtToken(refreshToken))));
+
+            accessToken = jwtUtils.generateJwtToken(userDetails);
+
+            SuccessResponse response = new SuccessResponse();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Login successful");
+            response.setSuccess(true);
+
+            response.getData().put("accessToken",accessToken);
+            response.getData().put("refreshToken",refreshToken);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        else
+        {
+            throw new BadCredentialsException("access token is missing");
+        }
+    }
+    @GetMapping("/active")
+    public ResponseEntity<SuccessResponse> activeToken( @RequestParam(defaultValue = "") String key
+    ) {
+        if(key == null || key ==""){
+            throw new BadCredentialsException("key active is not valid");
+        }
+
+        UUID id = UUID.fromString(jwtUtils.getUserNameFromJwtToken(key));
+        UserEntity user = userService.findById(id);
+
+        if(user == null){
+            throw new RecordNotFoundException("Not found, please register again");
+        }
+
+        if(user.isActive()){
+            throw new RecordNotFoundException("user already has been activated!");
+        }
+
+        userService.updateActive(user);
+
+
+
+        SuccessResponse response = new SuccessResponse();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Active successful");
+        response.setSuccess(true);
+
+        response.getData().put("email",user.getEmail());
+
+        return new ResponseEntity<SuccessResponse>(response,HttpStatus.OK);
+    }
     @GetMapping("/social")
-    public ResponseEntity<SuccessResponse> socialToken(
-                                                       @RequestParam(defaultValue = "") String token,
+    public ResponseEntity<SuccessResponse> socialToken(@RequestParam(defaultValue = "") String token,
                                                        HttpServletResponse resp) {
         if(token == null || token.equals("")){
             throw new BadCredentialsException("token is not valid");

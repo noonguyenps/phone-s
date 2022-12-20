@@ -83,12 +83,12 @@ public class UserServiceImpl implements UserService {
     public List<Object> countUserPerMonth(){
         return userRepository.countUserPerMonth();
     }
-//
-//    @Override
-//    public UserEntity updateActive(UserEntity user) {
-//        user.setActive(true);
-//        return userRepository.save(user);
-//    }
+
+    @Override
+    public UserEntity updateActive(UserEntity user) {
+        user.setActive(true);
+        return userRepository.save(user);
+    }
 //    @Override
 //    public UserEntity setStatus(UserEntity user,Boolean status) {
 //        user.setStatus(status);

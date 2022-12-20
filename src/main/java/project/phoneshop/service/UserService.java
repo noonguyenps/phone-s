@@ -24,6 +24,6 @@ public interface UserService {
     UserEntity findByEmail(String email);
 
     List<Object> countUserPerMonth();
-//    UserEntity updateActive(UserEntity user);
+    UserEntity updateActive(UserEntity user);
 //    UserEntity setStatus(UserEntity user,Boolean status);
 }
