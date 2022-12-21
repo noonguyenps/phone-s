@@ -38,6 +38,15 @@ public class VoucherController {
         data.put("listVoucher",listVoucher);
         return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
+    @GetMapping("/voucher/{id}")
+    public ResponseEntity<SuccessResponse> getVoucherById(@PathVariable UUID id){
+        VoucherEntity voucher = voucherService.findById(id);
+        if(voucher == null || !voucher.isStatus())
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Voucher not found",null), HttpStatus.NOT_FOUND);
+        Map<String, Object>  data = new HashMap<>();
+        data.put("voucher", voucher);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Get voucher Successfully",null), HttpStatus.OK);
+    }
     @PostMapping("/user/get/voucher/{id}")
     public ResponseEntity<SuccessResponse> getVoucher(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
