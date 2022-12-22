@@ -31,7 +31,7 @@ public interface ProductService {
 
     List<ProductEntity> findPaginated(int pageNo, int pageSize, String sort);
 
-    List<ProductEntity> findByProductStatus(int page, int size, boolean status);
+    List<ProductEntity> findByProductStatus(int page, int size, int status);
 
     List<ProductEntity> findProductByCategory(CategoryEntity category, int pageNo, int pageSize, String sort);
 

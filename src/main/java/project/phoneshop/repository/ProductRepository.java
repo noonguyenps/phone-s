@@ -34,8 +34,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
             countQuery = "SELECT * FROM products WHERE LOWER(products.product_name) LIKE %?1%",
             nativeQuery = true)
     Page<ProductEntity> findByKeyword(String keyword, Pageable pageable);
-    @Query(value = "SELECT * FROM products WHERE product_status=?1",
-            countQuery = "SELECT count(*) FROM products WHERE product_status=?1",
+    @Query(value = "SELECT * FROM products WHERE products.product_status=?1",
+            countQuery = "SELECT count(*) FROM products WHERE products.product_status=?1",
             nativeQuery = true)
-    Page<ProductEntity> findAllProductByStatus(boolean status, Pageable pageable);
+    Page<ProductEntity> findAllProductByStatus(int status, Pageable pageable);
 }

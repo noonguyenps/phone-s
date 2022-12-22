@@ -54,7 +54,7 @@ public class ProductController {
     @GetMapping("admin/product/all/status")
     private ResponseEntity<SuccessResponse> showAllProductByStatus(@RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "30") int size,
-                                                                   @RequestParam(defaultValue = "true") boolean status){
+                                                                   @RequestParam(defaultValue = "1") int status){
         List<ProductEntity> listProduct = productService.findByProductStatus(page, size, status);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);

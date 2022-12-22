@@ -89,10 +89,10 @@ public class ProductServiceImpl implements ProductService {
         return pagedResult.toList();
     }
     @Override
-    public List<ProductEntity> findByProductStatus(int page, int size, boolean status){
+    public List<ProductEntity> findByProductStatus(int page, int size, int status){
         Pageable paging = PageRequest.of(page, size);
         Page<ProductEntity> pagedResult = productRepository.findAllProductByStatus(status,paging);
-        return  pagedResult.toList();
+        return pagedResult.toList();
     }
     @Override
     public List<ProductEntity> findProductByCategory(CategoryEntity category, int pageNo, int pageSize, String sort){
