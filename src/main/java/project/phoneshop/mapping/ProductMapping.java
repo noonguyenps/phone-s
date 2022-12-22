@@ -52,6 +52,7 @@ public class ProductMapping {
         product.setPrice(productFromJson.getPrice());
         product.setDescription(productFromJson.getDescription());
         product.setDiscount(productFromJson.getDiscount());
+        product.setStatus(1);
         product.setInventory(productFromJson.getInventory());
         product.setCreate(new Date());
         product.setSellAmount(0);
