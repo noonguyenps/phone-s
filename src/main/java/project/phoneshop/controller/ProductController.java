@@ -57,7 +57,7 @@ public class ProductController {
                                                                    @RequestParam(defaultValue = "1") int status){
         List<ProductEntity> listProduct = productService.findByProductStatus(page, size, status);
         if(listProduct.size() == 0)
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"List Product is Empty",null), HttpStatus.OK);
         List<ProductResponse> listResponse = new ArrayList<>();
         for (ProductEntity product : listProduct)
             listResponse.add(productService.productResponse(product));
