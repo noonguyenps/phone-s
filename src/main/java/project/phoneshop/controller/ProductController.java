@@ -51,6 +51,20 @@ public class ProductController {
         data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
+    @GetMapping("admin/product/all/status")
+    private ResponseEntity<SuccessResponse> showAllProductByStatus(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "30") int size,
+                                                                   @RequestParam(defaultValue = "true") boolean status){
+        List<ProductEntity> listProduct = productService.findByProductStatus(page, size, status);
+        if(listProduct.size() == 0)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
+        Map<String, Object> data = new HashMap<>();
+        data.put("listProduct",listResponse);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
+    }
     @GetMapping("/product/byCategory")
     private ResponseEntity<SuccessResponse> showAllProductByCategory(@RequestParam UUID idCategory,
                                                                      @RequestParam(defaultValue = "0") int page,
