@@ -44,6 +44,7 @@ public class OrderController {
     private final AddressService addressService;
     private final VoucherService voucherService;
     private final ProductService productService;
+    private final UserNotificationService userNotificationService;
 
     @Autowired
     AuthorizationHeader authorizationHeader;
@@ -218,6 +219,37 @@ public class OrderController {
             }
             order.setOrderStatus(status);
             orderService.save(order);
+            String message = "";
+            if(status == 1){
+                UserNotificationEntity notificationEntity = new UserNotificationEntity();
+                notificationEntity.setType("order");
+                notificationEntity.setDateCreate(new Date());
+                notificationEntity.setStatus(1);
+                notificationEntity.setUser(order.getUserOrder());
+                message = "Đơn hàng của bạn đang được vận chuyển";
+                notificationEntity.setMessage(message);
+                userNotificationService.saveNotification(notificationEntity);
+            }
+            else if( status == 2){
+                UserNotificationEntity notificationEntity = new UserNotificationEntity();
+                notificationEntity.setType("order");
+                notificationEntity.setDateCreate(new Date());
+                notificationEntity.setStatus(1);
+                notificationEntity.setUser(order.getUserOrder());
+                message = "Đơn hàng của bạn đã được giao thành công";
+                notificationEntity.setMessage(message);
+                userNotificationService.saveNotification(notificationEntity);
+            }
+            else if( status == 3){
+                UserNotificationEntity notificationEntity = new UserNotificationEntity();
+                notificationEntity.setType("order");
+                notificationEntity.setDateCreate(new Date());
+                notificationEntity.setStatus(1);
+                notificationEntity.setUser(order.getUserOrder());
+                message = "Đơn hàng của bạn bị hủy bởi cửa hàng";
+                notificationEntity.setMessage(message);
+                userNotificationService.saveNotification(notificationEntity);
+            }
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Order", data), HttpStatus.OK);
         }
         else
