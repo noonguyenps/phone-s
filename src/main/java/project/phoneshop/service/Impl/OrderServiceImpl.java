@@ -34,6 +34,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderEntity> findAllOrder(int pageNo, int pageSize, String sort) {
         Pageable paging = null;
+        switch (sort){
+            case "total_up" : paging = PageRequest.of(pageNo, pageSize, Sort.by("total").descending());break;
+            case "total_down" : paging = PageRequest.of(pageNo, pageSize, Sort.by("total").ascending());break;
+            default : paging = PageRequest.of(pageNo, pageSize, Sort.by(sort).descending());
+        }
         paging = PageRequest.of(pageNo, pageSize, Sort.by(sort).descending());
         Page<OrderEntity> pagedResult = orderRepository.findAllOrder(paging);
         return pagedResult.toList();
