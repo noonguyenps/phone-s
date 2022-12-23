@@ -30,4 +30,9 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Integer> {
             countQuery = "SELECT count(*) FROM orders",
             nativeQuery = true)
     Page<OrderEntity> findAllOrder(Pageable pageable);
+
+    @Query(value = "SELECT * FROM orders WHERE orders.status=?1",
+            countQuery = "SELECT count(*) FROM orders WHERE orders.status=?1",
+            nativeQuery = true)
+    Page<OrderEntity> findAllOrderByStatus(int status,Pageable pageable);
 }

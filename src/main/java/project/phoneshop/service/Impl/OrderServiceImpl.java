@@ -44,6 +44,12 @@ public class OrderServiceImpl implements OrderService {
         return pagedResult.toList();
     }
     @Override
+    public List<OrderEntity> findAllOrderByStatus(int status,int pageNo, int pageSize) {
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Page<OrderEntity> pagedResult = orderRepository.findAllOrderByStatus(status,paging);
+        return pagedResult.toList();
+    }
+    @Override
     public OrderEntity findOrderByName(String name){
         return orderRepository.findByName(name);
     }

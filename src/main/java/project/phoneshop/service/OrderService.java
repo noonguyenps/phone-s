@@ -16,6 +16,8 @@ public interface OrderService {
 
     List<OrderEntity> findAllOrder(int pageNo, int pageSize, String sort);
 
+    List<OrderEntity> findAllOrderByStatus(int status, int pageNo, int pageSize);
+
     OrderEntity findOrderByName(String name);
 
     List<OrderEntity> getAll();
