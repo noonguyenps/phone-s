@@ -189,6 +189,41 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @DeleteMapping("user/order/delete/{id}")
+    public ResponseEntity<SuccessResponse> deleteOrderById(HttpServletRequest request, @PathVariable int id){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null) {
+            OrderEntity order = orderService.findById(id);
+            if(order==null){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
+            }
+            if(order.getUserOrder()!=user){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED",null),HttpStatus.UNAUTHORIZED);
+            }
+            order.setOrderStatus(3);
+            orderService.save(order);
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Delete order successfully", null), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @PutMapping("admin/order/change/{id}")
+    public ResponseEntity<SuccessResponse> changeStatusOrder(HttpServletRequest request, @PathVariable int id, @RequestParam(defaultValue = "0") int status){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null) {
+            Map<String, Object> data = new HashMap<>();
+            OrderEntity order = orderService.findById(id);
+            if(order==null){
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
+            }
+            order.setOrderStatus(status);
+            orderService.save(order);
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Order", data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
 //    @GetMapping("/pay/success/{id}")
 //    @ResponseBody
 //    public ResponseEntity<SuccessResponse> paypalSuccess(@PathVariable("id") int id,@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId)
