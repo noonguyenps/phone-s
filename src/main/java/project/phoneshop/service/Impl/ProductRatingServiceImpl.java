@@ -106,6 +106,7 @@ public class ProductRatingServiceImpl implements ProductRatingService {
             }
             else comment.put("userNickName",productRatingCommentEntity.getUser().getNickName());
             comment.put("comment",productRatingCommentEntity.getComment());
+            comments.add(comment);
         }
         response.setComments(comments);
         List<String> urls = new ArrayList<>();
