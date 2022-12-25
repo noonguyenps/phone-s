@@ -278,14 +278,13 @@ public class ProductRatingController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/user/rating/addComment")
+    @PostMapping("/user/rating/addComment/{id}")
     private ResponseEntity<SuccessResponse> addComment(HttpServletRequest request,@PathVariable int id, @RequestBody AddNewRatingComment addNewRatingComment){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             ProductRatingEntity productRating = productRatingService.getRatingById(id);
             if(productRating == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Rating not found",null),HttpStatus.NOT_FOUND);
-            List<ProductRatingCommentEntity> productRatingCommentEntities = productRating.getCommentList();
             ProductRatingCommentEntity productRatingCommentEntity = new ProductRatingCommentEntity();
             productRatingCommentEntity.setComment(addNewRatingComment.getComment());
             productRatingCommentEntity.setUser(user);
@@ -305,4 +304,5 @@ public class ProductRatingController {
         list.add("rating_point_up");
         list.add("rating_point_down");
         return list;
-    }}
+    }
+}
