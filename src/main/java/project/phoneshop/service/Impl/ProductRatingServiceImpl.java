@@ -1,18 +1,22 @@
 package project.phoneshop.service.Impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.*;
+import project.phoneshop.model.payload.response.product.ProductResponse;
+import project.phoneshop.model.payload.response.rating.RatingResponse;
 import project.phoneshop.repository.ProductRatingCommentRepository;
 import project.phoneshop.repository.ProductRatingImageRepository;
 import project.phoneshop.repository.ProductRatingLikeRepository;
 import project.phoneshop.repository.ProductRatingRepository;
 import project.phoneshop.service.ProductRatingService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -25,6 +29,91 @@ public class ProductRatingServiceImpl implements ProductRatingService {
     @Override
     public ProductRatingEntity saveRating(ProductRatingEntity entity) {
         return productRatingRepository.save(entity);
+    }
+    @Override
+    public void  deleteRating(ProductRatingEntity productRating){
+        productRatingRepository.delete(productRating);
+    }
+
+    @Override
+    public List<ProductRatingEntity> findAllPage(int page, int size, String sort) {
+        Pageable paging = null;
+        switch (sort){
+            case "date_up" : paging = PageRequest.of(page, size, Sort.by("date").descending());break;
+            case "date_down" : paging = PageRequest.of(page, size, Sort.by("date").ascending());break;
+            case "rating_point_up" : paging = PageRequest.of(page, size, Sort.by("rating_point").descending());break;
+            case "rating_point_down" : paging = PageRequest.of(page, size, Sort.by("rating_point").ascending());break;
+            default : paging = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        Page<ProductRatingEntity> pagedResult = productRatingRepository.findAllRating(paging);
+        return pagedResult.toList();
+    }
+
+    @Override
+    public List<ProductRatingEntity> findAllPageByRatingPoint(int page, int size, String sort, int point) {
+        Pageable paging = null;
+        switch (sort){
+            case "date_up" : paging = PageRequest.of(page, size, Sort.by("date").descending());break;
+            case "date_down" : paging = PageRequest.of(page, size, Sort.by("date").ascending());break;
+            case "rating_point_up" : paging = PageRequest.of(page, size, Sort.by("rating_point").descending());break;
+            case "rating_point_down" : paging = PageRequest.of(page, size, Sort.by("rating_point").ascending());break;
+            default : paging = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        Page<ProductRatingEntity> pagedResult = productRatingRepository.findAllRatingByRatingPoint(point, paging);
+        return pagedResult.toList();
+    }
+
+    @Override
+    public List<ProductRatingEntity> findAllPageByUser(int page, int size, String sort, UUID userId) {
+        Pageable paging = null;
+        switch (sort){
+            case "date_up" : paging = PageRequest.of(page, size, Sort.by("date").descending());break;
+            case "date_down" : paging = PageRequest.of(page, size, Sort.by("date").ascending());break;
+            case "rating_point_up" : paging = PageRequest.of(page, size, Sort.by("rating_point").descending());break;
+            case "rating_point_down" : paging = PageRequest.of(page, size, Sort.by("rating_point").ascending());break;
+            default : paging = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        Page<ProductRatingEntity> pagedResult = productRatingRepository.findAllRatingByUser(userId, paging);
+        return pagedResult.toList();
+    }
+
+    @Override
+    public List<ProductRatingEntity> findAllPageByProduct(int page, int size, String sort, UUID productId) {
+        Pageable paging = null;
+        switch (sort){
+            case "date_up" : paging = PageRequest.of(page, size, Sort.by("date").descending());break;
+            case "date_down" : paging = PageRequest.of(page, size, Sort.by("date").ascending());break;
+            case "rating_point_up" : paging = PageRequest.of(page, size, Sort.by("rating_point").descending());break;
+            case "rating_point_down" : paging = PageRequest.of(page, size, Sort.by("rating_point").ascending());break;
+            default : paging = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        Page<ProductRatingEntity> pagedResult = productRatingRepository.findAllRatingByProduct(productId, paging);
+        return pagedResult.toList();
+    }
+    @Override
+    public RatingResponse getRatingResponse(ProductRatingEntity productRating, ProductResponse productResponse){
+        RatingResponse response = new RatingResponse();
+        response.setId(productRating.getId());
+        response.setStar(productRating.getRatingPoint());
+        response.setComment(productRating.getMessage());
+        response.setNickname(productRating.getUser().getNickName());
+        response.setProductResponse(productResponse);
+        List<Map<String,Object>> comments = new ArrayList<>();
+        for(ProductRatingCommentEntity productRatingCommentEntity : productRating.getCommentList()){
+            Map<String,Object> comment = new HashMap<>();
+            if(productRatingCommentEntity.getUser().getNickName()==null){
+                comment.put("userNickName","Người dùng S-Phone");
+            }
+            else comment.put("userNickName",productRatingCommentEntity.getUser().getNickName());
+            comment.put("comment",productRatingCommentEntity.getComment());
+        }
+        response.setComments(comments);
+        List<String> urls = new ArrayList<>();
+        for(ProductRatingImageEntity productRatingImageEntity : productRating.getImageList()){
+            urls.add(productRatingImageEntity.getImageLink());
+        }
+        response.setUrls(urls);
+        return response;
     }
 
     @Override

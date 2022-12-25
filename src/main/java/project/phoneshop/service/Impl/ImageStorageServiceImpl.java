@@ -86,7 +86,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public String saveProductRatingImg(MultipartFile file, String fileName) {
         Map r;
         try {
-            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_avatar","public_id","tiki_product_rating/"+fileName));
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","product_rating/"+fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

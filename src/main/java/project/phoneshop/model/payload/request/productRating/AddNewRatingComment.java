@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 public class AddNewRatingComment {
-    @NotNull(message = "id Rating can't empty")
-    private int ratingId;
     @NotEmpty(message = "Comment can't empty")
     private String comment;
 }
