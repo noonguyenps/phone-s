@@ -278,7 +278,7 @@ public class ProductRatingController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping
+    @PostMapping("/user/rating/addComment")
     private ResponseEntity<SuccessResponse> addComment(HttpServletRequest request,@PathVariable int id, @RequestBody AddNewRatingComment addNewRatingComment){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -290,8 +290,7 @@ public class ProductRatingController {
             productRatingCommentEntity.setComment(addNewRatingComment.getComment());
             productRatingCommentEntity.setUser(user);
             productRatingCommentEntity.setProductRating(productRating);
-            productRatingCommentEntities.add(productRatingCommentEntity);
-            productRatingService.deleteRating(productRating);
+            productRatingService.saveComment(productRatingCommentEntity);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Rating comment Successfully",null), HttpStatus.OK);
         }
         else
