@@ -41,7 +41,7 @@ public class ProductController {
                                                            @RequestParam(defaultValue = "product_id") String sort){
         if(!listProSort().contains(sort))
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Properties sort Not found",null), HttpStatus.FOUND);
-        List<ProductEntity> listProduct = productService.findPaginated(page, size, sort);
+        List<ProductEntity> listProduct = productService.findByProductStatus(page, size, 1);
         if(listProduct.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
         List<ProductResponse> listResponse = new ArrayList<>();
