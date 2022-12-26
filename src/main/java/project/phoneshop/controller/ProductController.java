@@ -46,7 +46,25 @@ public class ProductController {
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
         List<ProductResponse> listResponse = new ArrayList<>();
         for (ProductEntity product : listProduct)
-            listResponse.add(productService.productResponse(product));
+            if(product.getStatus()==1) {
+                listResponse.add(productService.productResponse(product));
+            }
+        Map<String, Object> data = new HashMap<>();
+        data.put("listProduct",listResponse);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
+    }
+    @GetMapping("/admin/product/all")
+    private ResponseEntity<SuccessResponse> showAllProductWithAdmin(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "30") int size,
+                                                           @RequestParam(defaultValue = "product_id") String sort){
+        if(!listProSort().contains(sort))
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Properties sort Not found",null), HttpStatus.FOUND);
+        List<ProductEntity> listProduct = productService.findPaginated(page, size, sort);
+        if(listProduct.size() == 0)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Product is Empty",null), HttpStatus.FOUND);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+                listResponse.add(productService.productResponse(product));
         Map<String, Object> data = new HashMap<>();
         data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
