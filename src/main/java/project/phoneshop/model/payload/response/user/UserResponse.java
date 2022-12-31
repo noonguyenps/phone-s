@@ -22,13 +22,13 @@ public class UserResponse {
     private String phone;
     private Date birthDate;
     private String img;
-    private boolean status;
-    private boolean active;
+    private Boolean status;
+    private Boolean active;
     private String country;
     private Date createAt;
     private Date updateAt;
-    private boolean facebookAuth;
-    private boolean googleAuth;
+    private Boolean facebookAuth;
+    private Boolean googleAuth;
     List<AddressEntity> address;
     private double countOrderTotal;
     private int countOrder;

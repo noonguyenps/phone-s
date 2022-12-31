@@ -113,10 +113,4 @@ public class UserServiceImpl implements UserService {
         userResponse.setCountOrder(user.getListOrder().size());
         return userResponse;
     }
-//    @Override
-//    public UserEntity setStatus(UserEntity user,Boolean status) {
-//        user.setStatus(status);
-//        return userRepository.save(user);
-//    }
-
 }
