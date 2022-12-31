@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserResponse(UserEntity user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
-        userResponse.setFullname(user.getFullName());
+        userResponse.setFullName(user.getFullName());
         userResponse.setEmail(user.getEmail());
         userResponse.setGender(user.getGender());
         userResponse.setNickName(user.getNickName());
