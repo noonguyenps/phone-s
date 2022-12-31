@@ -17,6 +17,7 @@ import project.phoneshop.handler.HttpMessageNotReadableException;
 import project.phoneshop.handler.MethodArgumentNotValidException;
 import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.entity.VoucherEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
 import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
 import project.phoneshop.model.payload.request.authentication.RefreshTokenRequest;
@@ -24,16 +25,20 @@ import project.phoneshop.model.payload.request.authentication.VerifyPhoneRequest
 import project.phoneshop.model.payload.request.user.ResetPasswordRequest;
 import project.phoneshop.model.payload.response.ErrorResponseMap;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.user.UserResponse;
 import project.phoneshop.security.DTO.AppUserDetail;
 import project.phoneshop.security.JWT.JwtUtils;
 import project.phoneshop.service.EmailService;
+import project.phoneshop.service.Impl.VoucherServiceImpl;
 import project.phoneshop.service.UserService;
+import project.phoneshop.service.VoucherService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,6 +52,7 @@ public class AuthenticationController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final EmailService emailService;
+    private final VoucherService voucherService;
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -62,7 +68,7 @@ public class AuthenticationController {
             return SendErrorValid("Phone", user.getPhone()+" not found","No account found" );
         }
 
-        UserEntity loginUser=userService.findByPhone(user.getPhone());
+        UserEntity loginUser= userService.findByPhone(user.getPhone());
         if(!passwordEncoder.matches(user.getPassword(),loginUser.getPassword())) {
             return SendErrorValid("password", user.getPassword()+" incorrect","Wrong password" );
         }
@@ -90,7 +96,10 @@ public class AuthenticationController {
 
         response.getData().put("accessToken",accessToken);
         response.getData().put("refreshToken",refreshToken);
-        response.getData().put("user",loginUser);
+        List<VoucherEntity> listVoucher = voucherService.findAllVoucherBtUser(loginUser);
+        UserResponse userResponse = userService.getUserResponse(loginUser);
+        userResponse.setCountVoucher(listVoucher.size());
+        response.getData().put("user",userResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/verification")

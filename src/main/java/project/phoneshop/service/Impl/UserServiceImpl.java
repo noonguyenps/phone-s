@@ -5,9 +5,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.RoleEntity;
 import project.phoneshop.model.entity.UserEntity;
-import project.phoneshop.model.payload.response.CountPerMonth;
+import project.phoneshop.model.payload.response.user.UserResponse;
 import project.phoneshop.repository.RoleRepository;
 import project.phoneshop.repository.UserRepository;
 import project.phoneshop.service.UserService;
@@ -54,12 +55,6 @@ public class UserServiceImpl implements UserService {
     public UserEntity saveInfo(UserEntity user) {
         return userRepository.save(user);
     }
-//
-//    @Override
-//    public Boolean existsByFullName(String fullName) {
-//        return userRepository.existsByFullName(fullName);
-//    }
-//
     @Override
     public UserEntity findByEmail(String email) {
         Optional<UserEntity> user = userRepository.findByEmail(email);
@@ -88,6 +83,35 @@ public class UserServiceImpl implements UserService {
     public UserEntity updateActive(UserEntity user) {
         user.setActive(true);
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse getUserResponse(UserEntity user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setFullname(user.getFullName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setGender(user.getGender());
+        userResponse.setNickName(user.getNickName());
+        userResponse.setPhone(user.getPhone());
+        userResponse.setBirthDate(user.getBirthDate());
+        userResponse.setImg(user.getImg());
+        userResponse.setStatus(user.isStatus());
+        userResponse.setActive(user.isActive());
+        userResponse.setCountry(user.getCountry());
+        userResponse.setCreateAt(user.getCreateAt());
+        userResponse.setUpdateAt(user.getUpdateAt());
+        userResponse.setFacebookAuth(user.getFacebookAuth());
+        userResponse.setGoogleAuth(user.getGoogleAuth());
+        userResponse.setAddress(user.getAddress());
+        userResponse.setCountProductFavorite(user.getFavoriteProducts().size());
+        double orderTotal = 0;
+        for(OrderEntity order: user.getListOrder()){
+            orderTotal += order.getTotal();
+        }
+        userResponse.setCountOrderTotal(orderTotal);
+        userResponse.setCountOrder(user.getListOrder().size());
+        return userResponse;
     }
 //    @Override
 //    public UserEntity setStatus(UserEntity user,Boolean status) {
