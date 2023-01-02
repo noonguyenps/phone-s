@@ -200,7 +200,7 @@ public class OrderController {
                 orderService.changePaymentStatus(Integer.parseInt(id),true);
                 //Process order if payment success
                 data.put("orderId",id);
-                response.sendRedirect(uri.toString()+"/paypal/success?orderId="+id);
+                response.sendRedirect("https://phone-s-fe.vercel.app/payment?success=true");
                 return new ResponseEntity(new SuccessResponse(true,HttpStatus.OK.value(),"Payment success",data),HttpStatus.OK);
             }
         }
@@ -215,7 +215,7 @@ public class OrderController {
     @GetMapping("/order/pay/cancel/{id}")
     public ResponseEntity<Object> cancelPay(@PathVariable String id, HttpServletResponse response) throws IOException {
         orderService.changePaymentStatus(Integer.parseInt(id),false);
-        response.sendRedirect("https://phone-s-fe.vercel.app/");
+        response.sendRedirect("https://phone-s-fe.vercel.app/payment?success=false");
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
     }
     @GetMapping("/admin/order")
