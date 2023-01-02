@@ -163,11 +163,11 @@ public class OrderController {
                 OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
                 String generatedString = RandomStringUtils.random(20, true, false);
                 order.setName(generatedString);
-                String link=paypalService.paypalPayment(order,request);
-                HashMap<String,Object> data=new HashMap<>();
-                data.put("link",link);
                 orderService.save(order);
                 OrderEntity order1 = orderService.findOrderByName(generatedString);
+                String link=paypalService.paypalPayment(order1,request);
+                HashMap<String,Object> data=new HashMap<>();
+                data.put("link",link);
                 for(CartEntity cart: listCart){
                     cart.setActive(false);
                     cart.setOrder(order1);
