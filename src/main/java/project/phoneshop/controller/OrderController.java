@@ -185,7 +185,7 @@ public class OrderController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Failure",null), HttpStatus.OK);
         }
     }
-    @GetMapping("/pay/success/{id}")
+    @GetMapping("/order/pay/success/{id}")
     public ResponseEntity<Object> successPay(@PathVariable("id") String id,
                                              @RequestParam("paymentId") String paymentId,
                                              @RequestParam("redirectURI") String uri,
@@ -212,7 +212,7 @@ public class OrderController {
         }
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/pay/cancel/{id}")
+    @GetMapping("/order/pay/cancel/{id}")
     public ResponseEntity<Object> cancelPay(@PathVariable String id){
         orderService.changePaymentStatus(Integer.parseInt(id),false);
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
