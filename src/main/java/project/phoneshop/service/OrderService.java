@@ -23,6 +23,7 @@ public interface OrderService {
     List<OrderEntity> getAll();
     OrderEntity save(OrderEntity order);
     void delete(int id);
+    void changePaymentStatus(int id,boolean status);
 
     long countOrder();
     long countOrderPrice();

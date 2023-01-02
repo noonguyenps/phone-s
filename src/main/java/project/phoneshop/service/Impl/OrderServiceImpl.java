@@ -86,6 +86,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void changePaymentStatus(int id, boolean status) {
+        Optional<OrderEntity> order = orderRepository.findByOrderId(id);
+        if(!order.isEmpty()){
+            OrderEntity orderEntity = order.get();
+            orderEntity.setStatusPayment(status);
+            orderRepository.save(orderEntity);
+        }
+    }
+
+    @Override
     public OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs){
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setOrderId(order.getOrderId());
