@@ -213,8 +213,9 @@ public class OrderController {
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
     }
     @GetMapping("/order/pay/cancel/{id}")
-    public ResponseEntity<Object> cancelPay(@PathVariable String id){
+    public ResponseEntity<Object> cancelPay(@PathVariable String id, HttpServletResponse response) throws IOException {
         orderService.changePaymentStatus(Integer.parseInt(id),false);
+        response.sendRedirect("https://phone-s-fe.vercel.app/");
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
     }
     @GetMapping("/admin/order")
