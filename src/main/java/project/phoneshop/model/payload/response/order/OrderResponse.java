@@ -29,4 +29,5 @@ public class OrderResponse {
     private PaymentEntity paymentOrder;
     private List<CartResponseFE> cartResponseFEs;
     private VoucherEntity voucherOrder;
+    private boolean paymentStatus;
 }

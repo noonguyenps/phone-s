@@ -99,6 +99,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs){
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setOrderId(order.getOrderId());
+        orderResponse.setPaymentStatus(order.getStatusPayment());
         orderResponse.setCartResponseFEs(cartResponseFEs);
         orderResponse.setOrderStatus(order.getOrderStatus());
         orderResponse.setName(order.getName());
