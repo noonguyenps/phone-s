@@ -278,7 +278,10 @@ public class AuthenticationController {
 
         response.getData().put("accessToken",accessToken);
         response.getData().put("refreshToken",refreshToken);
-        response.getData().put("user",user);
+        List<VoucherEntity> listVoucher = voucherService.findAllVoucherBtUser(user);
+        UserResponse userResponse = userService.getUserResponse(user);
+        userResponse.setCountVoucher(listVoucher.size());
+        response.getData().put("user",userResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/forgetPassword")
