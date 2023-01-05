@@ -127,6 +127,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartEntity findByCartId(UUID cartId) {
         Optional<CartEntity> cartEntity = cartRepository.findById(cartId);
+        if(cartEntity.isEmpty())
+            return null;
         return cartEntity.get();
     }
     @Override
