@@ -205,7 +205,7 @@ public class ProductRatingController {
             CartEntity cart = cartService.findByCartId(id);
             if(cart == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Cart not found",null),HttpStatus.NOT_FOUND);
-            if(cart.getOrder().getOrderStatus()!=3||user.getId().equals(cart.getUserCart().getId()))
+            if(cart.getOrder().getOrderStatus()!=2||user!=cart.getUserCart())
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_ACCEPTABLE.value(), "Can't rating", null), HttpStatus.NOT_ACCEPTABLE);
             ProductRatingEntity productRating = new ProductRatingEntity();
             productRating.setProduct(cart.getProductCart());
