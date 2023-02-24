@@ -30,8 +30,8 @@ public class MomoServiceImpl implements MomoService {
         for(CartEntity cart : orderEntity.getCartOrder()){
             orderInfo += " - " +cart.getProductCart().getName()+" ";
         }
-        String returnURL = "https://phone-s.herokuapp.com/order/momo/pay";
-        String notifyURL = "https://phone-s.herokuapp.com/order/momo/pay";
+        String returnURL = "https://phone-s.herokuapp.com/api/order/momo/pay";
+        String notifyURL = "https://phone-s.herokuapp.com/api/order/momo/pay";
         String callbackToken = "callbackToken";
         String token = "";
 
@@ -52,8 +52,8 @@ public class MomoServiceImpl implements MomoService {
         for(CartEntity cart : orderEntity.getCartOrder()){
             orderInfo += " - " +cart.getProductCart().getName()+" ";
         }
-        String returnURL = "https://phone-s.herokuapp.com/order/momo/pay";
-        String notifyURL = "https://phone-s.herokuapp.com/order/momo/pay";
+        String returnURL = "https://phone-s.herokuapp.com/api/order/momo/pay";
+        String notifyURL = "https://phone-s.herokuapp.com/api/order/momo/pay";
         String callbackToken = "callbackToken";
         String token = "";
 
