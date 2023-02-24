@@ -148,7 +148,7 @@ public class OrderController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),e.getMessage(),null), HttpStatus.OK);
         }
     }
-    @GetMapping("/order/pay/status/{id}")
+    @GetMapping("/user/order/pay/status/{id}")
     public ResponseEntity<SuccessResponse> checkPaymentStatus(@PathVariable("id") String id,
                                                               HttpServletRequest request){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
