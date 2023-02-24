@@ -21,7 +21,7 @@ public class MomoServiceImpl implements MomoService {
     public String createMomoPayment(OrderEntity orderEntity) throws Exception {
         LogUtils.init();
         String requestId = String.valueOf(System.currentTimeMillis());
-        String orderId = String.valueOf(orderEntity.getOrderId());
+        String orderId = String.valueOf(4720000 +orderEntity.getOrderId());
         Long transId = 2L;
         long amount = (long)orderEntity.getTotal();
 
@@ -30,8 +30,8 @@ public class MomoServiceImpl implements MomoService {
         for(CartEntity cart : orderEntity.getCartOrder()){
             orderInfo += " - " +cart.getProductCart().getName()+" ";
         }
-        String returnURL = "https://google.com/";
-        String notifyURL = "https://google.com/";
+        String returnURL = "https://phone-s.herokuapp.com/order/momo/pay";
+        String notifyURL = "https://phone-s.herokuapp.com/order/momo/pay";
         String callbackToken = "callbackToken";
         String token = "";
 
@@ -43,7 +43,7 @@ public class MomoServiceImpl implements MomoService {
     public String createMomoATMPayment(OrderEntity orderEntity) throws Exception {
         LogUtils.init();
         String requestId = String.valueOf(System.currentTimeMillis());
-        String orderId = String.valueOf(orderEntity.getOrderId());
+        String orderId = String.valueOf(4720000 +orderEntity.getOrderId());
         Long transId = 2L;
         long amount = (long)orderEntity.getTotal();
 
@@ -52,13 +52,13 @@ public class MomoServiceImpl implements MomoService {
         for(CartEntity cart : orderEntity.getCartOrder()){
             orderInfo += " - " +cart.getProductCart().getName()+" ";
         }
-        String returnURL = "https://google.com/";
-        String notifyURL = "https://google.com/";
+        String returnURL = "https://phone-s.herokuapp.com/order/momo/pay";
+        String notifyURL = "https://phone-s.herokuapp.com/order/momo/pay";
         String callbackToken = "callbackToken";
         String token = "";
 
         Environment environment = Environment.selectEnv("dev");
-        PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment,"191104720000" + String.valueOf(orderId), requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
+        PaymentResponse captureATMMoMoResponse = CreateOrderMoMo.process(environment,orderId, requestId, Long.toString(amount), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
         return captureATMMoMoResponse.getPayUrl();
     }
     @Override
