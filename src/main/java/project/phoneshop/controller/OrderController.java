@@ -103,6 +103,7 @@ public class OrderController {
             OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
             String generatedString = RandomStringUtils.random(20, true, false);
             order.setName(generatedString);
+            order.setCartOrder(listCart);
             orderService.save(order);
             OrderEntity order1 = orderService.findOrderByName(generatedString);
             for(CartEntity cart: listCart){
