@@ -65,7 +65,7 @@ public class MomoServiceImpl implements MomoService {
     public int getResultCode(int orderId, String requestId) throws Exception {
         LogUtils.init();
         Environment environment = Environment.selectEnv("dev");
-        QueryStatusTransactionResponse queryStatusTransactionResponse = QueryTransactionStatus.process(environment, "19110472000025", requestId);
+        QueryStatusTransactionResponse queryStatusTransactionResponse = QueryTransactionStatus.process(environment, String.valueOf(orderId), requestId);
         return queryStatusTransactionResponse.getResultCode();
     }
 }
