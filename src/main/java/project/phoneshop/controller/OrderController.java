@@ -148,6 +148,23 @@ public class OrderController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),e.getMessage(),null), HttpStatus.OK);
         }
     }
+    @GetMapping("/order/pay/status/{id}")
+    public ResponseEntity<SuccessResponse> checkPaymentStatus(@PathVariable("id") String id,
+                                                              HttpServletRequest request){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            OrderEntity order = orderService.findById(Integer.parseInt(id));
+            if(order==null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Order not found",null),HttpStatus.NOT_FOUND);
+            if(order.getUserOrder()!=user)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Order not found",null),HttpStatus.NOT_FOUND);
+            if(order.getStatusPayment()==true)
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Successfully",null), HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_ACCEPTABLE.value(),"Failure",null), HttpStatus.NOT_ACCEPTABLE);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/order/pay/success/{id}")
     public ResponseEntity<Object> successPay(@PathVariable("id") String id,
                                              @RequestParam("paymentId") String paymentId,
