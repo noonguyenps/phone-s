@@ -43,6 +43,7 @@ public class OrderController {
     private final ShipService shipService;
     private final PaymentService paymentService;
     private final PaypalService paypalService;
+    private final MomoService momoService;
     private final AddressService addressService;
     private final VoucherService voucherService;
     private final ProductService productService;
@@ -185,6 +186,165 @@ public class OrderController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Failure",null), HttpStatus.OK);
         }
     }
+    @PostMapping("/user/order/momo/insert")
+    public ResponseEntity<Object> addMomoOrder(HttpServletRequest request,@RequestBody AddNewOrderRequest addNewOrderRequest){
+        try{
+            UserEntity user= authorizationHeader.AuthorizationHeader(request);
+            if(user!=null){
+                Double total = 0.0;
+                List<CartEntity> listCart = new ArrayList<>();
+                for(CartEntity cart: user.getListCart()){
+                    if(addNewOrderRequest.getListCart().contains(cart.getId())&&cart.getStatus()){
+                        listCart.add(cart);
+                        CartResponseFE cartResponseFE = cartService.getCartResponseFE(cart);
+                        total += cartResponseFE.getPrice();
+                    }
+                }
+                if(listCart.isEmpty()){
+                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "No Cart in order",null),HttpStatus.NOT_FOUND);
+                }
+                AddressEntity address = null;
+                for(AddressEntity addressEntity : user.getListAddress()){
+                    if(addressEntity.getId().equals(addNewOrderRequest.getAddress())){
+                        address = addressEntity;
+                    }
+                }
+                if(address == null){
+                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Address in order not found",null),HttpStatus.NOT_FOUND);
+                }
+                PaymentEntity payment = paymentService.getPaymentById(addNewOrderRequest.getPayment());
+                if(payment==null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Payment in order Not Found",null),HttpStatus.NOT_FOUND);
+                ShipEntity ship = shipService.findShipById(addNewOrderRequest.getShip());
+                if(ship == null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Ship in order is not found",null),HttpStatus.NOT_FOUND);
+                VoucherEntity voucher = null;
+                if(!addNewOrderRequest.isNullVoucher()){
+                    VoucherEntity voucherTemp = voucherService.findById(addNewOrderRequest.getVoucher());
+                    if(voucherTemp==null){
+                        return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher not Found",null),HttpStatus.NOT_FOUND);
+                    }
+                    for(UserEntity user1: voucherTemp.getUserEntities()){
+                        if(user1.getId().equals(user.getId())){
+                            voucher = voucherTemp;
+                        }
+                    }
+                    if(voucher== null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher in order is not found",null),HttpStatus.NOT_FOUND);
+                }
+                OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
+                String generatedString = RandomStringUtils.random(20, true, false);
+                order.setName(generatedString);
+                orderService.save(order);
+                OrderEntity order1 = orderService.findOrderByName(generatedString);
+                String link= momoService.createMomoPayment(order1);
+                HashMap<String,Object> data=new HashMap<>();
+                data.put("link",link);
+                for(CartEntity cart: listCart){
+                    cart.setActive(false);
+                    cart.setOrder(order1);
+                    ProductEntity product = cart.getProductCart();
+                    product.setInventory(product.getInventory() - cart.getQuantity());
+                    productService.saveProduct(product);
+                    cartService.saveCart(cart);
+                }
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",data), HttpStatus.OK);
+            }
+            else
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Failure",null), HttpStatus.OK);
+        }
+    }
+    @PostMapping("/user/order/momo/atm/insert")
+    public ResponseEntity<Object> addMomoOrderATM(HttpServletRequest request,@RequestBody AddNewOrderRequest addNewOrderRequest){
+        try{
+            UserEntity user= authorizationHeader.AuthorizationHeader(request);
+            if(user!=null){
+                Double total = 0.0;
+                List<CartEntity> listCart = new ArrayList<>();
+                for(CartEntity cart: user.getListCart()){
+                    if(addNewOrderRequest.getListCart().contains(cart.getId())&&cart.getStatus()){
+                        listCart.add(cart);
+                        CartResponseFE cartResponseFE = cartService.getCartResponseFE(cart);
+                        total += cartResponseFE.getPrice();
+                    }
+                }
+                if(listCart.isEmpty()){
+                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "No Cart in order",null),HttpStatus.NOT_FOUND);
+                }
+                AddressEntity address = null;
+                for(AddressEntity addressEntity : user.getListAddress()){
+                    if(addressEntity.getId().equals(addNewOrderRequest.getAddress())){
+                        address = addressEntity;
+                    }
+                }
+                if(address == null){
+                    return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Address in order not found",null),HttpStatus.NOT_FOUND);
+                }
+                PaymentEntity payment = paymentService.getPaymentById(addNewOrderRequest.getPayment());
+                if(payment==null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Payment in order Not Found",null),HttpStatus.NOT_FOUND);
+                ShipEntity ship = shipService.findShipById(addNewOrderRequest.getShip());
+                if(ship == null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Ship in order is not found",null),HttpStatus.NOT_FOUND);
+                VoucherEntity voucher = null;
+                if(!addNewOrderRequest.isNullVoucher()){
+                    VoucherEntity voucherTemp = voucherService.findById(addNewOrderRequest.getVoucher());
+                    if(voucherTemp==null){
+                        return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher not Found",null),HttpStatus.NOT_FOUND);
+                    }
+                    for(UserEntity user1: voucherTemp.getUserEntities()){
+                        if(user1.getId().equals(user.getId())){
+                            voucher = voucherTemp;
+                        }
+                    }
+                    if(voucher== null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Voucher in order is not found",null),HttpStatus.NOT_FOUND);
+                }
+                OrderEntity order = OrderMapping.addOrderToEntity(user,listCart,address,payment,ship,voucher,total);
+                String generatedString = RandomStringUtils.random(20, true, false);
+                order.setName(generatedString);
+                order.setCartOrder(listCart);
+                orderService.save(order);
+                OrderEntity order1 = orderService.findOrderByName(generatedString);
+                for(CartEntity cart: listCart){
+                    cart.setActive(false);
+                    cart.setOrder(order1);
+                    ProductEntity product = cart.getProductCart();
+                    product.setInventory(product.getInventory() - cart.getQuantity());
+                    productService.saveProduct(product);
+                    cartService.saveCart(cart);
+                }
+                String link= momoService.createMomoATMPayment(order1);
+                HashMap<String,Object> data=new HashMap<>();
+                data.put("link",link);
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",data), HttpStatus.OK);
+            }
+            else
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),e.getMessage(),null), HttpStatus.OK);
+        }
+    }
+    @GetMapping("/order/momo/pay")
+    public ResponseEntity<Object> payMomoResult(@RequestParam("orderId") String orderId,
+                                                @RequestParam("requestId") String requestId,
+                                                HttpServletResponse response){
+        try{
+            //int orderId1 = Integer.parseInt(orderId) - 4720000;
+            int orderId1=25;
+            OrderEntity orderEntity = orderService.findById(orderId1);
+            if(orderEntity==null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null), HttpStatus.NOT_FOUND);
+            int resultCode = momoService.getResultCode(orderId1,requestId);
+            if(resultCode==0){
+                orderEntity.setStatusPayment(true);
+                orderService.save(orderEntity);
+            }
+            response.sendRedirect("https://phone-s-fe.vercel.app/payment?orderId="+orderId1);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Order Successfully",null), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),e.getMessage(),null), HttpStatus.OK);
+        }
+    }
     @GetMapping("/order/pay/success/{id}")
     public ResponseEntity<Object> successPay(@PathVariable("id") String id,
                                              @RequestParam("paymentId") String paymentId,
@@ -194,13 +354,12 @@ public class OrderController {
         //Execute payment
         try{
             Payment payment=paypalService.executePayment(paymentId,payerId);
-            System.out.println(uri.toString());
             if(payment.getState().equals("approved")){
                 Map<String,Object> data=new HashMap<>();
                 orderService.changePaymentStatus(Integer.parseInt(id),true);
                 //Process order if payment success
                 data.put("orderId",id);
-                response.sendRedirect("https://phone-s-fe.vercel.app/payment?success=true&orderId="+id);
+                response.sendRedirect("https://phone-s-fe.vercel.app/payment&orderId="+id);
                 return new ResponseEntity(new SuccessResponse(true,HttpStatus.OK.value(),"Payment success",data),HttpStatus.OK);
             }
         }
@@ -211,6 +370,11 @@ public class OrderController {
             return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/order/momo/pay/failure/{id}")
+    public ResponseEntity<Object> failureMomoPay(@PathVariable("id") String id){
+        System.out.println("fail");
+        return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"a",null),HttpStatus.OK);
     }
     @GetMapping("/order/pay/cancel/{id}")
     public ResponseEntity<Object> cancelPay(@PathVariable String id, HttpServletResponse response) throws IOException {
