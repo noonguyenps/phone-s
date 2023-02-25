@@ -16,6 +16,8 @@ public class AttributeEntity {
     private String name;
     @OneToMany(mappedBy = "idType",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<AttributeOptionEntity> values;
+    @OneToMany(mappedBy = "idTypeDetail",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<AttributeDetailEntity> detailEntities;
     public AttributeEntity() {
     }
 
@@ -43,5 +45,11 @@ public class AttributeEntity {
         this.values = values;
     }
 
+    public List<AttributeDetailEntity> getDetailEntities() {
+        return detailEntities;
+    }
 
+    public void setDetailEntities(List<AttributeDetailEntity> detailEntities) {
+        this.detailEntities = detailEntities;
+    }
 }

@@ -56,6 +56,9 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productAttribute",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ProductAttributeOptionDetail> productAttributeOptionDetails;
 
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<AttributeDetailEntity> detailEntities;
+
     public ProductEntity(BrandEntity productBrand, CategoryEntity productCategory, String name, Double price, String description, Integer inventory) {
         this.productBrand = productBrand;
         this.productCategory = productCategory;
@@ -181,6 +184,14 @@ public class ProductEntity {
 
     public void setProductAttributeOptionDetails(List<ProductAttributeOptionDetail> productAttributeOptionDetails) {
         this.productAttributeOptionDetails = productAttributeOptionDetails;
+    }
+
+    public List<AttributeDetailEntity> getDetailEntities() {
+        return detailEntities;
+    }
+
+    public void setDetailEntities(List<AttributeDetailEntity> detailEntities) {
+        this.detailEntities = detailEntities;
     }
 }
 

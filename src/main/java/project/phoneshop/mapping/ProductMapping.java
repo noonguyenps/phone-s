@@ -1,10 +1,8 @@
 package project.phoneshop.mapping;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import project.phoneshop.model.entity.*;
-import project.phoneshop.model.payload.request.product.AddNewProductRequest;
-import project.phoneshop.model.payload.request.product.AddProductRequest;
-import project.phoneshop.model.payload.request.product.ProductFromJson;
-import project.phoneshop.model.payload.request.product.UpdateProductRequest;
+import project.phoneshop.model.payload.request.product.*;
 
 import java.util.*;
 
@@ -75,6 +73,53 @@ public class ProductMapping {
             i++;
         }
         product.setProductAttributeOptionDetails(listAttributeOptionDetail);
+        return product;
+    }
+
+    public  static ProductEntity addJsonProductToEntity(AddProductV2Request productFromJson, CategoryEntity category, BrandEntity brand, Set<AttributeOptionEntity> listAttributeOption, Set<AttributeEntity> listAttribute){
+        ProductEntity product = new ProductEntity();
+        product.setName(productFromJson.getName());
+        product.setProductBrand(brand);
+        product.setProductCategory(category);
+        product.setPrice(productFromJson.getPrice());
+        product.setDescription(productFromJson.getDescription());
+        product.setDiscount(productFromJson.getDiscount());
+        product.setStatus(1);
+        product.setInventory(productFromJson.getInventory());
+        product.setCreate(new Date());
+        product.setSellAmount(0);
+        List<ImageProductEntity> listImageProduct = new ArrayList<>();
+        for(String url : productFromJson.getImgUrl()){
+            ImageProductEntity img = new ImageProductEntity();
+            img.setUrl(url);
+            listImageProduct.add(img);
+            img.setProduct(product);
+        }
+        List<ProductAttributeOptionDetail> listAttributeOptionDetail = new ArrayList<>();
+        product.setImageProductEntityList(listImageProduct);
+        int i = 0;
+        for(AttributeOptionEntity attributeOption : listAttributeOption){
+            ProductAttributeOptionDetail productAttributeOptionDetail = new ProductAttributeOptionDetail();
+            productAttributeOptionDetail.setValue(productFromJson.getValues().get(i));
+            productAttributeOptionDetail.setAttributeOption(attributeOption);
+            productAttributeOptionDetail.setProductAttribute(product);
+            listAttributeOptionDetail.add(productAttributeOptionDetail);
+            i++;
+        }
+        product.setProductAttributeOptionDetails(listAttributeOptionDetail);
+        List<AttributeDetailEntity> attributeDetailEntityList = new ArrayList<>();
+        int j = 0;
+        for(AttributeEntity attribute : listAttribute){
+            AttributeDetailEntity attributeDetailEntity = new AttributeDetailEntity();
+            String generatedString = RandomStringUtils.random(20, true, false);
+            attributeDetailEntity.setId(generatedString);
+            attributeDetailEntity.setValue(productFromJson.getDetailValues().get(i));
+            attributeDetailEntity.setIdTypeDetail(attribute);
+            attributeDetailEntity.setProduct(product);
+            attributeDetailEntityList.add(attributeDetailEntity);
+            j++;
+        }
+        product.setDetailEntities(attributeDetailEntityList);
         return product;
     }
 }

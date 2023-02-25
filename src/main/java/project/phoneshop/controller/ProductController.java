@@ -9,10 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.ProductMapping;
 import project.phoneshop.model.entity.*;
-import project.phoneshop.model.payload.request.product.AddNewProductRequest;
-import project.phoneshop.model.payload.request.product.AddProductRequest;
-import project.phoneshop.model.payload.request.product.ProductFromJson;
-import project.phoneshop.model.payload.request.product.UpdateProductRequest;
+import project.phoneshop.model.payload.request.product.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
@@ -241,6 +238,39 @@ public class ProductController {
                     listAttributeOption.add(attributeOption);
             }
             ProductEntity product = ProductMapping.addJsonProductToEntity(productReq,category,brand,listAttributeOption);
+            productService.saveProduct(product);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Product Successfully",null), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @PostMapping("/admin/product/insert/v2")
+    private ResponseEntity<SuccessResponse> insertProductV2(HttpServletRequest request,@RequestBody AddProductV2Request productReq){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            BrandEntity brand = brandService.findById(productReq.getBrand());
+            if(brand == null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Brand is Not Found",null), HttpStatus.NOT_FOUND);
+            CategoryEntity category = categoryService.findById(productReq.getCategory());
+            if(category == null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Category is Not Found",null), HttpStatus.NOT_FOUND);
+            Set<AttributeOptionEntity> listAttributeOption = new HashSet<>();
+            for (String attributeId: productReq.getAttribute()){
+                AttributeOptionEntity attributeOption = attributeService.findByIdAttributeOption(attributeId);
+                if(attributeOption == null)
+                    new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Attribute Options is Not Found",null), HttpStatus.NOT_FOUND);
+                else
+                    listAttributeOption.add(attributeOption);
+            }
+            Set<AttributeEntity> listAttribute = new HashSet<>();
+            for (String attributeId: productReq.getAttributeDetails()){
+                AttributeEntity attribute = attributeService.findById(attributeId);
+                if(attribute == null)
+                    new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Attribute is Not Found",null), HttpStatus.NOT_FOUND);
+                else
+                    listAttribute.add(attribute);
+            }
+            ProductEntity product = ProductMapping.addJsonProductToEntity(productReq,category,brand,listAttributeOption,listAttribute);
             productService.saveProduct(product);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Add Product Successfully",null), HttpStatus.OK);
         }
