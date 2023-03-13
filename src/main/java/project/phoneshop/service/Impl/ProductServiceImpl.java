@@ -194,19 +194,9 @@ public class ProductServiceImpl implements ProductService {
             option.put("values",temp);
             listAttributeOption.add(option);
         }
-//
-//
-//        for(ProductAttributeOptionDetail productAttributeOptionDetail : product.getProductAttributeOptionDetails()){
-//            Map<String, Object> attributeOption = new HashMap<>();
-//            attributeOption.put("id",productAttributeOptionDetail.getAttributeOption().getId());
-//            attributeOption.put("name",productAttributeOptionDetail.getAttributeOption().getValue());
-//            attributeOption.put("idType",productAttributeOptionDetail.getAttributeOption().getIdType().getId());
-//            attributeOption.put("nameType",productAttributeOptionDetail.getAttributeOption().getIdType().getName());
-//            attributeOption.put("compareValue",productAttributeOptionDetail.getValue());
-//            listAttributeOption.add(attributeOption);
-//        }
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
+
         return new ProductResponse(
                 product.getId(),
                 url,
@@ -223,6 +213,7 @@ public class ProductServiceImpl implements ProductService {
                 list,
                 listAttributeOption,
                 product.getCreate(),
-                product.getStatus());
+                product.getStatus(),
+                product.getDetailEntities());
     }
 }

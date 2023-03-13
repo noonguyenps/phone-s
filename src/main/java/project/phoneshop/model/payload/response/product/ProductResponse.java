@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import project.phoneshop.model.entity.AttributeDetailEntity;
 import project.phoneshop.model.entity.AttributeOptionEntity;
 import project.phoneshop.model.entity.ProductAttributeOptionDetail;
 
@@ -30,6 +31,7 @@ public class ProductResponse {
     private Set<Map<String,Object>> listAttributeOption;
     private Date createAt;
     private int status;
+    private List<AttributeDetailEntity> attributeDetailEntityList;
 
     public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status) {
         this.id = id;
@@ -48,5 +50,24 @@ public class ProductResponse {
         this.listAttributeOption = listAttributeOption;
         this.createAt = createAt;
         this.status =status;
+    }
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status, List<AttributeDetailEntity> attributeDetailEntityList) {
+        this.id = id;
+        this.image = image;
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.rate = rate;
+        this.price = price;
+        this.discount = discount;
+        this.sold = sold;
+        this.brand = brand;
+        this.origins = origins;
+        this.img = img;
+        this.inventory = inventory;
+        this.listAttributeOption = listAttributeOption;
+        this.createAt = createAt;
+        this.status =status;
+        this.attributeDetailEntityList = attributeDetailEntityList;
     }
 }
