@@ -138,6 +138,7 @@ public class AuthenticationController {
         Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
 
         resp.setHeader("Set-Cookie", "test=value; Path=/");
+
         resp.addCookie(cookieAccessToken);
         resp.addCookie(cookieRefreshToken);
 
