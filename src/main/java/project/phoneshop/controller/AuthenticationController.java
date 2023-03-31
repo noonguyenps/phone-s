@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.HttpMessageNotReadableException;
 import project.phoneshop.handler.MethodArgumentNotValidException;
 import project.phoneshop.handler.RecordNotFoundException;
+import project.phoneshop.model.entity.RoleEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.entity.VoucherEntity;
 import project.phoneshop.model.payload.request.authentication.PhoneLoginRequest;
@@ -82,6 +83,52 @@ public class AuthenticationController {
         String refreshToken=jwtUtils.generateRefreshJwtToken(userDetail);
 
         System.out.println(jwtUtils.getUserNameFromJwtToken(accessToken));
+        SuccessResponse response = new SuccessResponse();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Login successful");
+        response.setSuccess(true);
+
+        Cookie cookieAccessToken = new Cookie("accessToken", accessToken);
+        Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
+
+        resp.setHeader("Set-Cookie", "test=value; Path=/");
+        resp.addCookie(cookieAccessToken);
+        resp.addCookie(cookieRefreshToken);
+
+        response.getData().put("accessToken",accessToken);
+        response.getData().put("refreshToken",refreshToken);
+        List<VoucherEntity> listVoucher = voucherService.findAllVoucherBtUser(loginUser);
+        UserResponse userResponse = userService.getUserResponse(loginUser);
+        userResponse.setCountVoucher(listVoucher.size());
+        response.getData().put("user",userResponse);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/login/admin")
+    public ResponseEntity<SuccessResponse> loginAdmin(@RequestBody @Valid PhoneLoginRequest user, BindingResult errors, HttpServletResponse resp) {
+        if(errors.hasErrors()) {
+            return null;
+        }
+        if(!userService.existsByPhone(user.getPhone())) {
+            return SendErrorValid("Phone", user.getPhone()+" not found","No account found" );
+        }
+
+        UserEntity loginUser= userService.findByPhone(user.getPhone());
+        if(!passwordEncoder.matches(user.getPassword(),loginUser.getPassword())) {
+            return SendErrorValid("password", user.getPassword()+" incorrect","Wrong password" );
+        }
+        for(RoleEntity role : loginUser.getRoles()){
+            if(!role.getName().equals("ADMIN"))
+                return SendErrorValid("Phone", user.getPhone()+" not found","No account found" );
+        }
+        Authentication authentication=authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginUser.getId().toString(),user.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AppUserDetail userDetail= (AppUserDetail) authentication.getPrincipal();
+
+        String accessToken = jwtUtils.generateJwtToken(userDetail);
+        String refreshToken=jwtUtils.generateRefreshJwtToken(userDetail);
+
         SuccessResponse response = new SuccessResponse();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Login successful");
