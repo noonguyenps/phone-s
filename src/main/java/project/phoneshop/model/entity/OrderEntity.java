@@ -1,5 +1,6 @@
 package project.phoneshop.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.NoArgsConstructor;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -53,6 +54,10 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name="\"voucher_order\"")
     private VoucherEntity voucherOrder;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "orderShipping",cascade = CascadeType.ALL)
+    private List<ShippingEntity> shippingEntities;
 
     public int getOrderId() {
         return orderId;
@@ -166,4 +171,11 @@ public class OrderEntity {
         this.voucherOrder = voucherOrder;
     }
 
+    public List<ShippingEntity> getShippingEntities() {
+        return shippingEntities;
+    }
+
+    public void setShippingEntities(List<ShippingEntity> shippingEntities) {
+        this.shippingEntities = shippingEntities;
+    }
 }

@@ -77,6 +77,10 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "\"user_id\""),
             inverseJoinColumns = @JoinColumn(name = "\"product_id\""))
     private List<ProductEntity> favoriteProducts;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userOrderShipping",cascade = CascadeType.ALL)
+    private List<ShippingEntity> shippingEntities;
     public UserEntity() {
     }
     public UserEntity(String phone,String password){
@@ -257,5 +261,13 @@ public class UserEntity {
 
     public void setListOrder(List<OrderEntity> listOrder) {
         this.listOrder = listOrder;
+    }
+
+    public List<ShippingEntity> getShippingEntities() {
+        return shippingEntities;
+    }
+
+    public void setShippingEntities(List<ShippingEntity> shippingEntities) {
+        this.shippingEntities = shippingEntities;
     }
 }

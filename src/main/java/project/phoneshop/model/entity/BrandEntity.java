@@ -1,5 +1,6 @@
 package project.phoneshop.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
@@ -11,6 +12,13 @@ import java.util.UUID;
 @Table(name = "\"brands\"")
 public class BrandEntity {
     @Id
+    @GeneratedValue(
+            generator = "UUID"
+    )
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(name = "\"brand_id\"")
     private UUID id;
     @Column(name = "\"brand_name\"")
