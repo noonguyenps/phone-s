@@ -31,4 +31,6 @@ public interface OrderService {
     List<Object> countUserPerMonth();
 
     OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs);
+
+    OrderEntity findShipping(int orderId, String secretKey);
 }

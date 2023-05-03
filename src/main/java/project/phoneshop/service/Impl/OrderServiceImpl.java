@@ -112,4 +112,8 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setVoucherOrder(order.getVoucherOrder());
         return orderResponse;
     }
+    @Override
+    public OrderEntity findShipping(int orderId, String secretKey){
+        return orderRepository.findByOrderIdAndSecretKey(orderId,secretKey);
+    }
 }
