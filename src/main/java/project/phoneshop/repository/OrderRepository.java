@@ -36,5 +36,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Integer> {
             nativeQuery = true)
     Page<OrderEntity> findAllOrderByStatus(int status,Pageable pageable);
 
-    OrderEntity findByOrderIdAndSecretKey(int orderId,String secretKey);
+//    OrderEntity findByOrderIdAndSecretKey(int orderId,String secretKey);
 }

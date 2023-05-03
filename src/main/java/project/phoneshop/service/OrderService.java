@@ -32,5 +32,5 @@ public interface OrderService {
 
     OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs);
 
-    OrderEntity findShipping(int orderId, String secretKey);
+//    OrderEntity findShipping(int orderId, String secretKey);
 }

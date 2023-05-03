@@ -22,21 +22,21 @@ public class ShippingServiceImpl implements ShippingService {
         return shippingEntities;
     }
 
-    @Override
-    public ShippingEntity getInfoShipping(UUID id){
-        Optional<ShippingEntity> shipping = shippingRepository.findById(id);
-        if(shipping.isEmpty())
-            return null;
-        else
-            return shipping.get();
-    }
+//    @Override
+//    public ShippingEntity getInfoShipping(UUID id){
+//        Optional<ShippingEntity> shipping = shippingRepository.findById(id);
+//        if(shipping.isEmpty())
+//            return null;
+//        else
+//            return shipping.get();
+//    }
 
-    @Override
-    public ShippingEntity getInfoShippingByOrderId(int id){
-        Optional<ShippingEntity> shipping = shippingRepository.findByOrderId(id);
-        if(shipping.isEmpty())
-            return null;
-        else
-            return shipping.get();
-    }
+//    @Override
+//    public ShippingEntity getInfoShippingByOrderId(int id){
+//        Optional<ShippingEntity> shipping = shippingRepository.findByOrderId(id);
+//        if(shipping.isEmpty())
+//            return null;
+//        else
+//            return shipping.get();
+//    }
 }

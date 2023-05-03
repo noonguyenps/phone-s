@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface ShippingService {
     List<ShippingEntity> getAllShipping();
 
-    ShippingEntity getInfoShipping(UUID id);
-
-    ShippingEntity getInfoShippingByOrderId(int id);
+//    ShippingEntity getInfoShipping(UUID id);
+//
+//    ShippingEntity getInfoShippingByOrderId(int id);
 }

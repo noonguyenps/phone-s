@@ -33,19 +33,19 @@ public class ShippingController {
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
 
-    @GetMapping("shipping/{id}")
-    public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
-        OrderEntity orderEntity = orderService.findShipping(id,secretKey);
-        if(orderEntity==null){
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
-        }
-        else {
-            ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity.getOrderId());
-            Map<String,Object> data = new HashMap<>();
-            data.put("shipping",shipping);
-            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "shipping",data),HttpStatus.OK);
-        }
-    }
+//    @GetMapping("shipping/{id}")
+//    public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
+//        OrderEntity orderEntity = orderService.findShipping(id,secretKey);
+//        if(orderEntity==null){
+//            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
+//        }
+//        else {
+//            ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity.getOrderId());
+//            Map<String,Object> data = new HashMap<>();
+//            data.put("shipping",shipping);
+//            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "shipping",data),HttpStatus.OK);
+//        }
+//    }
 
 //    @PostMapping("/create")
 //    public ResponseEntity<SuccessResponse> createShipType(@RequestBody AddShipRequest request){
