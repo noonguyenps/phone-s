@@ -51,6 +51,9 @@ public class OrderEntity {
     private Boolean statusPayment;
     @Column(name ="\"status\"")
     private int orderStatus;
+    @JsonIgnore
+    @Column(name ="\"secret_key\"")
+    private String secretKey;
     @ManyToOne
     @JoinColumn(name="\"voucher_order\"")
     private VoucherEntity voucherOrder;
@@ -177,5 +180,13 @@ public class OrderEntity {
 
     public void setShippingEntities(List<ShippingEntity> shippingEntities) {
         this.shippingEntities = shippingEntities;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 }

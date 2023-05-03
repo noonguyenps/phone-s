@@ -1,5 +1,6 @@
 package project.phoneshop.mapping;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import project.phoneshop.model.entity.*;
@@ -97,6 +98,8 @@ public class OrderMapping {
         LocalDate expDate = today.plusDays(14);
         order.setExpectedDate(Date.from(expDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         order.setStatusPayment(false);
+        String key = RandomStringUtils.random(20, true, true);
+        order.setSecretKey(key);
         if(voucher!=null){
             order.setTotal(total-Double.parseDouble(voucher.getValue())+ ship.getShipPrice());
         }

@@ -28,6 +28,12 @@ public class ShippingEntity {
     private String shipperID;
     @Column(name = "\"shipper_phone\"")
     private String shipperPhone;
+    @Column(name = "\"image_1\"")
+    private String image1;
+    @Column(name = "\"image_2\"")
+    private String image2;
+    @Column(name = "\"image_3\"")
+    private String image3;
     @Column(name = "\"state\"")
     private int state;
     @Column(name = "\"create_at\"")
@@ -40,6 +46,7 @@ public class ShippingEntity {
     @ManyToOne
     @JoinColumn(name="\"order_id\"")
     private OrderEntity orderShipping;
+
 
     public ShippingEntity() {
     }
@@ -126,5 +133,29 @@ public class ShippingEntity {
 
     public void setOrderShipping(OrderEntity orderShipping) {
         this.orderShipping = orderShipping;
+    }
+
+    public String getImage1() {
+        return image1;
+    }
+
+    public void setImage1(String image1) {
+        this.image1 = image1;
+    }
+
+    public String getImage2() {
+        return image2;
+    }
+
+    public void setImage2(String image2) {
+        this.image2 = image2;
+    }
+
+    public String getImage3() {
+        return image3;
+    }
+
+    public void setImage3(String image3) {
+        this.image3 = image3;
     }
 }
