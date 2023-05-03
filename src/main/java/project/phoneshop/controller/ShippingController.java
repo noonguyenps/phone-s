@@ -5,26 +5,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.phoneshop.mapping.ShipMapping;
+import project.phoneshop.mapping.ShippingMapping;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ShipEntity;
 import project.phoneshop.model.entity.ShippingEntity;
+import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.ship.AddShipRequest;
+import project.phoneshop.model.payload.request.shipping.AddShippingRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
-import project.phoneshop.service.OrderService;
-import project.phoneshop.service.ShipService;
-import project.phoneshop.service.ShippingService;
+import project.phoneshop.service.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
 public class ShippingController {
     private final ShippingService shippingService;
+    private final ImageStorageService imageStorageService;
     private final OrderService orderService;
+    private final ShippingMapping shippingMapping;
+    private final UserService userService;
     @GetMapping("admin/shipping/list")
     public ResponseEntity<SuccessResponse> getAllShipping(){
         List<ShippingEntity> list = shippingService.getAllShipping();
@@ -33,67 +41,62 @@ public class ShippingController {
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
 
-//    @GetMapping("shipping/{id}")
-//    public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
-//        OrderEntity orderEntity = orderService.findShipping(id,secretKey);
-//        if(orderEntity==null){
-//            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
-//        }
-//        else {
-//            ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity.getOrderId());
-//            Map<String,Object> data = new HashMap<>();
-//            data.put("shipping",shipping);
-//            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "shipping",data),HttpStatus.OK);
-//        }
-//    }
+    @GetMapping("shipping/{id}")
+    public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
+        OrderEntity orderEntity = orderService.findShipping(id,secretKey);
+        if(orderEntity==null){
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
+        }
+        else {
+            ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity);
+            Map<String,Object> data = new HashMap<>();
+            data.put("shipping",shipping);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "shipping",data),HttpStatus.OK);
+        }
+    }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<SuccessResponse> createShipType(@RequestBody AddShipRequest request){
-//
-//
-//        ShipEntity ship = shipMapping.modelToEntity(request);
-//        SuccessResponse response = new SuccessResponse();
-//        try {
-//            shipService.create(ship);
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("add ship type successful");
-//            response.setSuccess(true);
-//            response.getData().put("Ship Type",ship.toString());
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<SuccessResponse> updateShipType(@RequestBody AddShipRequest request,@PathVariable("id") int id){
-//
-//
-//        ShipEntity ship = shipMapping.updateToEntity(request,id);
-//        SuccessResponse response = new SuccessResponse();
-//        try {
-//            shipService.update(ship);
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setMessage("update ship type successful");
-//            response.setSuccess(true);
-//            response.getData().put("Ship Type",ship.toString());
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<SuccessResponse> deleteShipTypeById(@PathVariable("id")int id) throws Exception{
-//        SuccessResponse response = new SuccessResponse();
-//        try {
-//            shipService.delete(id);
-//            response.setMessage("Delete ship type success");
-//            response.setStatus(HttpStatus.OK.value());
-//            response.setSuccess(true);
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }catch (Exception e){
-//            throw new Exception(e.getMessage() + "\nDelete Ship type fail");
-//        }
-//    }
+    @PostMapping("/admin/shipping/create")
+    public ResponseEntity<SuccessResponse> createShip(@RequestBody AddShippingRequest request){
+        UserEntity user = userService.findById(request.getUser());
+        if(user==null)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not Found",null),HttpStatus.NOT_FOUND);
+        OrderEntity order= orderService.findById(request.getOrder());
+        if(order==null){
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
+        }
+        ShippingEntity shipping = shippingMapping.requestToEntity(request,order,user);
+        shippingService.create(shipping);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Insert successfully",null),HttpStatus.OK);
+    }
+
+    @PutMapping("/shipping/update/{id}")
+    public ResponseEntity<SuccessResponse> updateShipType(@PathVariable("id") int id,@RequestParam String secretKey,@RequestParam String img1,@RequestParam String img2,@RequestParam String img3){
+        OrderEntity orderEntity = orderService.findShipping(id,secretKey);
+        if(orderEntity==null){
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
+        }
+        else {
+            ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity);
+            shipping.setImage1(img1);
+            shipping.setImage2(img2);
+            shipping.setImage3(img3);
+            shipping.setState(2);
+            shippingService.create(shipping);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Add Image Successfully",null),HttpStatus.OK);
+        }
+    }
+    @PostMapping(value = "/shipping/uploadImg/{id}")
+    public ResponseEntity<SuccessResponse> uploadImgShipping(@PathVariable("id") int id,@RequestParam String secretKey, @RequestPart(required = true) MultipartFile file){
+        if(!imageStorageService.isImageFile(file))
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        UUID uuid = UUID.randomUUID();
+        LocalDate date = LocalDate.now();
+        String url = imageStorageService.saveShippingImg(file, date.toString()+"/"+String.valueOf(uuid));
+        if(url.equals(""))
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Upload Image Failure",null), HttpStatus.NOT_FOUND);
+        Map<String, Object> data = new HashMap<>();
+        data.put("url",url);
+        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Upload Logo Successfully",data), HttpStatus.OK);
+    }
+
 }

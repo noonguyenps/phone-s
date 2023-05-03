@@ -18,6 +18,8 @@ public interface ImageStorageService {
 
     String saveProductImg(MultipartFile file, String fileName);
 
+    String saveShippingImg(MultipartFile file, String fileName);
+
     String saveImgProduct(MultipartFile file, String fileName);
 
     void destroyProductImg(UUID fileName);

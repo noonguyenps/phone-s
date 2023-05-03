@@ -62,6 +62,16 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         return (String) r.get("secure_url");
     }
     @Override
+    public String saveShippingImg(MultipartFile file, String fileName){
+        Map r;
+        try {
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","sphone_shipping/"+fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return (String) r.get("secure_url");
+    }
+    @Override
     public String saveImgProduct(MultipartFile file, String fileName){
         Map r;
         try {

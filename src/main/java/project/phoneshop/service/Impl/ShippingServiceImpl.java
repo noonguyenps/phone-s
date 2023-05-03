@@ -2,13 +2,13 @@ package project.phoneshop.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ShippingEntity;
 import project.phoneshop.repository.ShippingRepository;
 import project.phoneshop.service.ShippingService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -22,6 +22,11 @@ public class ShippingServiceImpl implements ShippingService {
         return shippingEntities;
     }
 
+    @Override
+    public void create(ShippingEntity shipping) {
+        shippingRepository.save(shipping);
+    }
+
 //    @Override
 //    public ShippingEntity getInfoShipping(UUID id){
 //        Optional<ShippingEntity> shipping = shippingRepository.findById(id);
@@ -31,12 +36,12 @@ public class ShippingServiceImpl implements ShippingService {
 //            return shipping.get();
 //    }
 
-//    @Override
-//    public ShippingEntity getInfoShippingByOrderId(int id){
-//        Optional<ShippingEntity> shipping = shippingRepository.findByOrderId(id);
-//        if(shipping.isEmpty())
-//            return null;
-//        else
-//            return shipping.get();
-//    }
+    @Override
+    public ShippingEntity getInfoShippingByOrderId(OrderEntity order){
+        Optional<ShippingEntity> shipping = shippingRepository.findByOrderShipping(order);
+        if(shipping.isEmpty())
+            return null;
+        else
+            return shipping.get();
+    }
 }
