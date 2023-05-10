@@ -51,7 +51,7 @@ public class ShippingController {
         else {
             ShippingEntity shipping = shippingService.getInfoShippingByOrderId(orderEntity);
             Map<String,Object> data = new HashMap<>();
-            data.put("shipping",shipping);
+            data.put("shipping",shippingService.entity2Response(shipping));
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "shipping",data),HttpStatus.OK);
         }
     }
@@ -83,7 +83,7 @@ public class ShippingController {
             shipping.setImage3(img3);
             shipping.setState(2);
             shippingService.create(shipping);
-            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Add Image Successfully",null),HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update Image Successfully",null),HttpStatus.OK);
         }
     }
     @PostMapping(value = "/shipping/uploadImg/{id}")
