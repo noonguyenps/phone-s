@@ -64,7 +64,7 @@ public class ShippingServiceImpl implements ShippingService {
         for(CartEntity cart: shipping.getOrderShipping().getCartOrder()){
             ShippingResponse.Cart cart1 = new ShippingResponse.Cart();
             cart1.setProductName(cart.getProductCart().getName());
-            cart1.setProductImage(String.valueOf(cart.getProductCart().getImageProductEntityList().get(0)));
+            cart1.setProductImage(String.valueOf(cart.getProductCart().getImageProductEntityList().get(0).getUrl()));
             cart1.setQuantity(cart.getQuantity());
             carts.add(cart1);
         }
