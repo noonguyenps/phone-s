@@ -15,14 +15,12 @@ import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.ship.AddShipRequest;
 import project.phoneshop.model.payload.request.shipping.AddShippingRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.shipping.ShippingResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("api")
@@ -37,7 +35,10 @@ public class ShippingController {
     public ResponseEntity<SuccessResponse> getAllShipping(){
         List<ShippingEntity> list = shippingService.getAllShipping();
         Map<String, Object> data = new HashMap<>();
-        data.put("listShipping",list);
+        List<ShippingResponse> shippingResponses = new ArrayList<>();
+        for (ShippingEntity shipping: list)
+            shippingResponses.add(shippingService.entity2Response(shipping));
+        data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
 
@@ -70,7 +71,7 @@ public class ShippingController {
     }
 
     @PutMapping("/shipping/update/{id}")
-    public ResponseEntity<SuccessResponse> updateShipType(@PathVariable("id") int id,@RequestParam String secretKey,@RequestParam String img1,@RequestParam String img2,@RequestParam String img3){
+    public ResponseEntity<SuccessResponse> updateShipType(@PathVariable("id") int id,@RequestParam String secretKey,@RequestParam String img1,@RequestParam(required = false) String img2,@RequestParam(required = false) String img3){
         OrderEntity orderEntity = orderService.findShipping(id,secretKey);
         if(orderEntity==null){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
