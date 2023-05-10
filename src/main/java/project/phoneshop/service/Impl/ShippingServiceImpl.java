@@ -9,6 +9,7 @@ import project.phoneshop.model.payload.response.shipping.ShippingResponse;
 import project.phoneshop.repository.ShippingRepository;
 import project.phoneshop.service.ShippingService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,12 +60,15 @@ public class ShippingServiceImpl implements ShippingService {
         shippingResponse.setImage3(shippingResponse.getImage3());
         shippingResponse.setState(shipping.getState());
         shippingResponse.setOrderID(shipping.getOrderShipping().getOrderId());
+        List<ShippingResponse.Cart> carts =  new ArrayList<>();
         for(CartEntity cart: shipping.getOrderShipping().getCartOrder()){
             ShippingResponse.Cart cart1 = new ShippingResponse.Cart();
             cart1.setProductName(cart.getProductCart().getName());
             cart1.setProductImage(String.valueOf(cart.getProductCart().getImageProductEntityList().get(0)));
             cart1.setQuantity(cart.getQuantity());
+            carts.add(cart1);
         }
+        shippingResponse.setCarts(carts);
         shippingResponse.setOrderName(shipping.getOrderShipping().getName());
         shippingResponse.setCustomerName(shipping.getOrderShipping().getAddressOrder().getFullName());
         shippingResponse.setCustomerPhone(shipping.getOrderShipping().getAddressOrder().getPhoneNumber());
