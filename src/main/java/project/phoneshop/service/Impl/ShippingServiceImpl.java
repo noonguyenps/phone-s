@@ -53,6 +53,7 @@ public class ShippingServiceImpl implements ShippingService {
         shippingResponse.setId(shipping.getId());
         shippingResponse.setShipperName(shipping.getShipperName());
         shippingResponse.setShipperPhone(shippingResponse.getShipperPhone());
+        shippingResponse.setShipperID(shipping.getShipperID());
         shippingResponse.setImage1(shippingResponse.getImage1());
         shippingResponse.setImage2(shippingResponse.getImage2());
         shippingResponse.setImage3(shippingResponse.getImage3());
