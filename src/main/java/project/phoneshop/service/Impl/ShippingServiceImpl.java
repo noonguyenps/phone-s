@@ -53,11 +53,11 @@ public class ShippingServiceImpl implements ShippingService {
         ShippingResponse shippingResponse = new ShippingResponse();
         shippingResponse.setId(shipping.getId());
         shippingResponse.setShipperName(shipping.getShipperName());
-        shippingResponse.setShipperPhone(shippingResponse.getShipperPhone());
+        shippingResponse.setShipperPhone(shipping.getShipperPhone());
         shippingResponse.setShipperID(shipping.getShipperID());
-        shippingResponse.setImage1(shippingResponse.getImage1());
-        shippingResponse.setImage2(shippingResponse.getImage2());
-        shippingResponse.setImage3(shippingResponse.getImage3());
+        shippingResponse.setImage1(shipping.getImage1());
+        shippingResponse.setImage2(shipping.getImage2());
+        shippingResponse.setImage3(shipping.getImage3());
         shippingResponse.setState(shipping.getState());
         shippingResponse.setOrderID(shipping.getOrderShipping().getOrderId());
         List<ShippingResponse.Cart> carts =  new ArrayList<>();
