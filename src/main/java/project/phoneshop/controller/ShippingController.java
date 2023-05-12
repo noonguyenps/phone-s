@@ -45,7 +45,7 @@ public class ShippingController {
     @GetMapping("shipping/{id}")
     public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
         OrderEntity orderEntity = orderService.findShipping(id,secretKey);
-        if(orderEntity==null){
+        if(orderEntity==null||orderEntity.getOrderStatus()!=1){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
         }
         else {
@@ -73,7 +73,7 @@ public class ShippingController {
     @PutMapping("/shipping/update/{id}")
     public ResponseEntity<SuccessResponse> updateShipType(@PathVariable("id") int id,@RequestParam String secretKey,@RequestParam String img1,@RequestParam(required = false) String img2,@RequestParam(required = false) String img3){
         OrderEntity orderEntity = orderService.findShipping(id,secretKey);
-        if(orderEntity==null){
+        if(orderEntity==null||orderEntity.getOrderStatus()!=1){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
         }
         else {
@@ -83,6 +83,9 @@ public class ShippingController {
             shipping.setImage3(img3);
             shipping.setState(2);
             shippingService.create(shipping);
+            orderEntity.setStatusPayment(true);
+            orderEntity.setOrderStatus(2);
+            orderService.save(orderEntity);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update Image Successfully",null),HttpStatus.OK);
         }
     }
