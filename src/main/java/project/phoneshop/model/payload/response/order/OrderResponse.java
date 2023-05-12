@@ -30,4 +30,5 @@ public class OrderResponse {
     private List<CartResponseFE> cartResponseFEs;
     private VoucherEntity voucherOrder;
     private boolean paymentStatus;
+    private String secretKey;
 }

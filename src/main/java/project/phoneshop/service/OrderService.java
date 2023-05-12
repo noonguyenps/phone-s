@@ -32,5 +32,7 @@ public interface OrderService {
 
     OrderResponse getOrderResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs);
 
+    OrderResponse getOrderAdminResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs);
+
     OrderEntity findShipping(int orderId, String secretKey);
 }

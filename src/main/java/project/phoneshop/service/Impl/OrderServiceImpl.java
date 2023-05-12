@@ -113,6 +113,24 @@ public class OrderServiceImpl implements OrderService {
         return orderResponse;
     }
     @Override
+    public OrderResponse getOrderAdminResponse(OrderEntity order, List<CartResponseFE> cartResponseFEs){
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setOrderId(order.getOrderId());
+        orderResponse.setPaymentStatus(order.getStatusPayment());
+        orderResponse.setCartResponseFEs(cartResponseFEs);
+        orderResponse.setOrderStatus(order.getOrderStatus());
+        orderResponse.setName(order.getName());
+        orderResponse.setAddressOrder(order.getAddressOrder());
+        orderResponse.setPaymentOrder(order.getPaymentOrder());
+        orderResponse.setShipOrder(order.getShipOrder());
+        orderResponse.setTotal(order.getTotal());
+        orderResponse.setCreatedDate(order.getCreatedDate());
+        orderResponse.setExpectedDate(order.getExpectedDate());
+        orderResponse.setVoucherOrder(order.getVoucherOrder());
+        orderResponse.setSecretKey(order.getSecretKey());
+        return orderResponse;
+    }
+    @Override
     public OrderEntity findShipping(int orderId, String secretKey){
         return orderRepository.findByOrderIdAndSecretKey(orderId,secretKey);
     }

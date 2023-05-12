@@ -298,7 +298,7 @@ public class OrderController {
             List<CartResponseFE> cartResponseFEList = new ArrayList<>();
             for(CartEntity cart: order.getCartOrder())
                 cartResponseFEList.add(cartService.getCartResponseFE(cart));
-            data.put("Order",orderService.getOrderResponse(order,cartResponseFEList));
+            data.put("Order",orderService.getOrderAdminResponse(order,cartResponseFEList));
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Order", data), HttpStatus.OK);
         }
         else
