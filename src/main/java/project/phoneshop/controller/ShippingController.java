@@ -88,8 +88,8 @@ public class ShippingController {
     }
     @PostMapping(value = "/shipping/uploadImg/{id}")
     public ResponseEntity<SuccessResponse> uploadImgShipping(@PathVariable("id") int id,@RequestParam String secretKey, @RequestPart(required = true) MultipartFile file){
-        if(!imageStorageService.isImageFile(file))
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+//        if(!imageStorageService.isImageFile(file))
+//            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         UUID uuid = UUID.randomUUID();
         LocalDate date = LocalDate.now();
         String url = imageStorageService.saveShippingImg(file, date.toString()+"/"+String.valueOf(uuid));
