@@ -13,6 +13,5 @@ public class AddShippingRequest {
     String shipperName;
     String vnID;
     String phone;
-    UUID user;
     int order;
 }

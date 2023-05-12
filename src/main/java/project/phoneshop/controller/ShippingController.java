@@ -58,13 +58,13 @@ public class ShippingController {
 
     @PostMapping("/admin/shipping/create")
     public ResponseEntity<SuccessResponse> createShip(@RequestBody AddShippingRequest request){
-        UserEntity user = userService.findById(request.getUser());
-        if(user==null)
-            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not Found",null),HttpStatus.NOT_FOUND);
         OrderEntity order= orderService.findById(request.getOrder());
         if(order==null){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
         }
+        UserEntity user = order.getUserOrder();
+        if(user==null)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not Found",null),HttpStatus.NOT_FOUND);
         ShippingEntity shipping = shippingMapping.requestToEntity(request,order,user);
         shippingService.create(shipping);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Insert successfully",null),HttpStatus.OK);
