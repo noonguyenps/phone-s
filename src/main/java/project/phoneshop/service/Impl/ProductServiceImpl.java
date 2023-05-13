@@ -156,7 +156,7 @@ public class ProductServiceImpl implements ProductService {
             pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), arrOfStr[1].toLowerCase(), paging);
         }
         else{
-            pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), "novalue", paging);
+            pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), "hfladsfjskjafkkjsadf", paging);
         }
         return pageResult.toList();
     }
