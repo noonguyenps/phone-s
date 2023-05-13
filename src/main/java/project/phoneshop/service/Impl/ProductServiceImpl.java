@@ -163,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
     public static String removeAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(temp).replaceAll("");
+        return pattern.matcher(temp).replaceAll("").replace('đ','d').replace('Đ','D');
     }
     @Override
     public List<ProductEntity> searchByBrand(BrandEntity brand){
