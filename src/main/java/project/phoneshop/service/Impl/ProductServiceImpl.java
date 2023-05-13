@@ -150,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
             default : paging = PageRequest.of(pageNo, pageSize, Sort.by(sort).descending());
         }
         keyword = removeAccent(keyword);
-        String[] arrOfStr = keyword.split(" ",2);
+        String[] arrOfStr = keyword.split(" ");
         Page<ProductEntity> pageResult;
         if(arrOfStr.length > 1){
             pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), arrOfStr[1].toLowerCase(), paging);
