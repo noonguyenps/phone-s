@@ -15,7 +15,9 @@ import project.phoneshop.repository.ProductRepository;
 import project.phoneshop.service.ProductRatingService;
 import project.phoneshop.service.ProductService;
 
+import java.text.Normalizer;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -147,8 +149,15 @@ public class ProductServiceImpl implements ProductService {
             case "product_price_down" : paging = PageRequest.of(pageNo, pageSize, Sort.by("product_price").ascending());break;
             default : paging = PageRequest.of(pageNo, pageSize, Sort.by(sort).descending());
         }
-        Page<ProductEntity> pageResult = productRepository.findByKeyword(keyword.toLowerCase(),paging);
+        keyword = removeAccent(keyword);
+        String[] arrOfStr = keyword.split(" ",2);
+        Page<ProductEntity> pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(),arrOfStr[1].toLowerCase(),paging);
         return pageResult.toList();
+    }
+    public static String removeAccent(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
     }
     @Override
     public List<ProductEntity> searchByBrand(BrandEntity brand){
