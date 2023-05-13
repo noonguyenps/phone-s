@@ -31,7 +31,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
             nativeQuery = true)
     Page<ProductEntity> findByAttributes(List<UUID> categoryIds, List<String>attribute, Pageable pageable);
     @Query(value = "SELECT * FROM products WHERE LOWER(converttvkdau(products.product_name)) LIKE '%?1%' OR LOWER(converttvkdau(products.product_name)) LIKE '%?2%' AND products.product_status=1",
-            countQuery = "ELECT * FROM products WHERE LOWER(converttvkdau(products.product_name)) LIKE '%?1%' OR LOWER(converttvkdau(products.product_name)) LIKE '%?2%' AND products.product_status=1",
+            countQuery = "SELECT * FROM products WHERE LOWER(converttvkdau(products.product_name)) LIKE '%?1%' OR LOWER(converttvkdau(products.product_name)) LIKE '%?2%' AND products.product_status=1",
             nativeQuery = true)
     Page<ProductEntity> findByKeyword(String keyword1, String keyword2, Pageable pageable);
     @Query(value = "SELECT * FROM products WHERE products.product_status=?1",
