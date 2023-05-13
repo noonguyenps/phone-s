@@ -151,14 +151,14 @@ public class ProductServiceImpl implements ProductService {
         }
         keyword = removeAccent(keyword);
         String[] arrOfStr = keyword.split(" ",2);
+        Page<ProductEntity> pageResult;
         if(arrOfStr.length > 1){
-            Page<ProductEntity> pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(),arrOfStr[1].toLowerCase(),paging);
-            return pageResult.toList();
+            pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), arrOfStr[1].toLowerCase(), paging);
         }
         else{
-            Page<ProductEntity> pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(),"",paging);
-            return pageResult.toList();
+            pageResult = productRepository.findByKeyword(arrOfStr[0].toLowerCase(), "null", paging);
         }
+        return pageResult.toList();
     }
     public static String removeAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
