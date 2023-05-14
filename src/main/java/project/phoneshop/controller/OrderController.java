@@ -68,7 +68,7 @@ public class OrderController {
                 if(addNewOrderRequest.getListCart().contains(cart.getId())&&cart.getStatus()){
                     listCart.add(cart);
                     CartResponseFE cartResponseFE = cartService.getCartResponseFE(cart);
-                    total += cartResponseFE.getPrice();
+                    total += cartResponseFE.getPrice()*cartResponseFE.getQuantity();
                 }
             }
             if(listCart.isEmpty()){
