@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.AuthorizationHeader;
+import project.phoneshop.mapping.UserMapping;
 import project.phoneshop.mapping.UserNotificationMapping;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.entity.UserNotificationEntity;
 import project.phoneshop.model.payload.request.notification.AddNotificationRequest;
+import project.phoneshop.model.payload.request.user.AddNewUserRequest;
 import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.service.OrderService;
@@ -20,6 +22,7 @@ import project.phoneshop.service.UserNotificationService;
 import project.phoneshop.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
@@ -91,6 +94,20 @@ public class AdminController {
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @PostMapping("/manager/create")
+    public ResponseEntity<SuccessResponse> createManagerAccount(@RequestBody @Valid AddNewUserRequest request) {
+        UserEntity user= UserMapping.registerToEntity(request);
+        if(userService.existsByPhone(user.getPhone()))
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.CONFLICT.value(),"Create Failure! Phone number is exist",null), HttpStatus.CONFLICT);;
+        try{
+            userService.saveUser(user,"MANAGER");
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Create Successfully",null), HttpStatus.OK);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_ACCEPTABLE.value(),"Create Failure",null), HttpStatus.NOT_ACCEPTABLE);
     }
     @GetMapping("statistic")
     public ResponseEntity<SuccessResponse> getStatistic(HttpServletRequest request){

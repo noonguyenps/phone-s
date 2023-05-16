@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserEntity saveUser(UserEntity user, String roleName) {
-        Optional<RoleEntity> role=roleRepository.findByName("USER");
+        Optional<RoleEntity> role=roleRepository.findByName(roleName);
         if(user.getRoles()==null){
             Set<RoleEntity> RoleSet=new HashSet<>();
             RoleSet.add(role.get());

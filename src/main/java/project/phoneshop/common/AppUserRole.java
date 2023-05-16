@@ -10,7 +10,8 @@ import static project.phoneshop.common.UserPermission.*;
 
 public enum AppUserRole {
     USER(Sets.newHashSet(USER_READ, USER_WRITE)),
-    ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE));
+    ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE,MANAGER_READ, MANAGER_WRITE)),
+    MANAGER(Sets.newHashSet(MANAGER_READ, MANAGER_WRITE));
 
     private final Set<UserPermission> permissions;
 
@@ -26,7 +27,6 @@ public enum AppUserRole {
         Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toSet());
-        //permissions.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return permissions;
     }
 }

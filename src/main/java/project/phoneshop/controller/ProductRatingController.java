@@ -62,7 +62,7 @@ public class ProductRatingController {
         data.put("listRating",ratingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
-    @GetMapping(value = "/admin/rating/all")
+    @GetMapping(value = "/manager/rating/all")
     public ResponseEntity<SuccessResponse> getAllRating(HttpServletRequest request,
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "30") int size,
@@ -107,7 +107,7 @@ public class ProductRatingController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping(value = "/admin/rating/all/star")
+    @GetMapping(value = "/manager/rating/all/star")
     public ResponseEntity<SuccessResponse> getAllRatingByStar(HttpServletRequest request,
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "30") int size,
@@ -131,7 +131,7 @@ public class ProductRatingController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping(value = "/admin/rating/all/product")
+    @GetMapping(value = "/manager/rating/all/product")
     public ResponseEntity<SuccessResponse> getAllRatingByProduct(HttpServletRequest request,
                                                               @RequestParam(defaultValue = "0") int page,
                                                               @RequestParam(defaultValue = "30") int size,
@@ -155,7 +155,7 @@ public class ProductRatingController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping(value = "/admin/rating/all/user")
+    @GetMapping(value = "/manager/rating/all/user")
     public ResponseEntity<SuccessResponse> getAllRatingByUser(HttpServletRequest request,
                                                                  @RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "30") int size,
@@ -265,7 +265,7 @@ public class ProductRatingController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @DeleteMapping("/admin/product/rating/delete/{id}")
+    @DeleteMapping("/manager/product/rating/delete/{id}")
     private ResponseEntity<SuccessResponse> deleteProductRatingAdmin(HttpServletRequest request,@PathVariable int id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){

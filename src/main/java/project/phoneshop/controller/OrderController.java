@@ -201,7 +201,7 @@ public class OrderController {
         response.sendRedirect("https://phone-s-fe.vercel.app/payment/"+id);
         return new ResponseEntity(new SuccessResponse(true,HttpStatus.BAD_REQUEST.value(),"Payment failure",null),HttpStatus.BAD_REQUEST);
     }
-    @GetMapping("/admin/order")
+    @GetMapping("/manager/order")
     public ResponseEntity<SuccessResponse> getAllOrder(HttpServletRequest request,
                                                        @RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "10") int size,
@@ -227,7 +227,7 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/admin/order/status")
+    @GetMapping("/manager/order/status")
     public ResponseEntity<SuccessResponse> getAllOrderByStatus(HttpServletRequest request,
                                                        @RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "10") int size,
@@ -289,7 +289,7 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/admin/order/{id}")
+    @GetMapping("/manager/order/{id}")
     public ResponseEntity<SuccessResponse> getOrderById(HttpServletRequest request,@PathVariable int id) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null) {
@@ -340,7 +340,7 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PutMapping("admin/order/change/{id}")
+    @PutMapping("/manager/order/change/{id}")
     public ResponseEntity<SuccessResponse> changeStatusOrder(HttpServletRequest request, @PathVariable int id, @RequestParam(defaultValue = "0") int status){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null) {

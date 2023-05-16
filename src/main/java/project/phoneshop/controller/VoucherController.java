@@ -64,7 +64,7 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/admin/voucher/all")
+    @GetMapping("/manager/voucher/all")
     public ResponseEntity<SuccessResponse> showAllVoucher(HttpServletRequest request) {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -78,7 +78,7 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/add/voucher/insert")
+    @PostMapping("/manager/add/voucher/insert")
     private ResponseEntity<SuccessResponse> insertVoucher(HttpServletRequest request,@RequestBody VoucherEntity newVoucher){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -91,7 +91,7 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PutMapping("/admin/voucher/update/{id}")
+    @PutMapping("/manager/voucher/update/{id}")
     private ResponseEntity<SuccessResponse> updateVoucher(HttpServletRequest request, @PathVariable UUID id, @RequestBody UpdateVoucherRequest updateVoucherRequest) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -106,7 +106,7 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @DeleteMapping("/admin/voucher/{id}")
+    @DeleteMapping("/manager/voucher/{id}")
     @ResponseBody
     public ResponseEntity<SuccessResponse> deleteVoucher(HttpServletRequest request,@PathVariable UUID id,@RequestParam String message) {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
@@ -125,7 +125,7 @@ public class VoucherController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/send/voucher/{id}")
+    @PostMapping("/manager/send/voucher/{id}")
     public ResponseEntity<SuccessResponse> sendVoucher(HttpServletRequest request,@PathVariable UUID id,@RequestParam UUID idUser){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){

@@ -32,6 +32,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final ImageStorageService imageStorageService;
     private final AttributeService attributeService;
+    //Get All Product Active in SPhone
     @GetMapping("/product/all")
     private ResponseEntity<SuccessResponse> showAllProduct(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "30") int size,
@@ -50,7 +51,8 @@ public class ProductController {
         data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
-    @GetMapping("/admin/product/all")
+    //Get All Product in SPhone
+    @GetMapping("/manager/product/all")
     private ResponseEntity<SuccessResponse> showAllProductWithAdmin(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "30") int size,
                                                            @RequestParam(defaultValue = "product_id") String sort){
@@ -66,7 +68,7 @@ public class ProductController {
         data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
-    @GetMapping("admin/product/all/status")
+    @GetMapping("/manager/product/all/status")
     private ResponseEntity<SuccessResponse> showAllProductByStatus(@RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "30") int size,
                                                                    @RequestParam(defaultValue = "1") int status){
@@ -171,7 +173,7 @@ public class ProductController {
         data.put("product",productService.productResponse(product));
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
-    @PostMapping("/admin/product/insert")
+    @PostMapping("/manager/product/insert")
     private ResponseEntity<SuccessResponse> insertProduct(HttpServletRequest request, @RequestBody AddNewProductRequest addNewProductRequest){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -184,7 +186,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/product/insert/all")
+    @PostMapping("/manager/product/insert/all")
     private ResponseEntity<SuccessResponse> insertProductJson(HttpServletRequest request,
                                                               @RequestBody ProductFromJson productReq){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
@@ -219,7 +221,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/product/insert/v1")
+    @PostMapping("/manager/product/insert/v1")
     private ResponseEntity<SuccessResponse> insertProduct(HttpServletRequest request,@RequestBody AddProductRequest productReq){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -244,7 +246,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/product/insert/v2")
+    @PostMapping("/manager/product/insert/v2")
     private ResponseEntity<SuccessResponse> insertProductV2(HttpServletRequest request,@RequestBody AddProductV2Request productReq){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -284,7 +286,7 @@ public class ProductController {
         data.put("countProduct",countProduct);
         return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Count Product",data),HttpStatus.OK);
     }
-    @PutMapping("/admin/product/update/{id}")
+    @PutMapping("/manager/product/update/{id}")
     public ResponseEntity<SuccessResponse> updateProduct(HttpServletRequest request, @PathVariable UUID id, @RequestBody UpdateProductRequest updateProductRequest){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -306,7 +308,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @DeleteMapping("/admin/product/delete/{id}")
+    @DeleteMapping("/manager/product/delete/{id}")
     public ResponseEntity<SuccessResponse> deleteProductById(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -320,7 +322,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping("/admin/product/addAttribute/{id}")
+    @PostMapping("/manager/product/addAttribute/{id}")
     public ResponseEntity<SuccessResponse> addAttribute(HttpServletRequest request,@PathVariable UUID id,@RequestBody List<String> listAttributeOptions){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -334,7 +336,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @DeleteMapping("/admin/product/deleteOption/{id}")
+    @DeleteMapping("/manager/product/deleteOption/{id}")
     public ResponseEntity<SuccessResponse> deleteAttribute(HttpServletRequest request,@PathVariable UUID id,@RequestBody List<String> listAttribute){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -348,7 +350,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping(value = "/admin/product/upload", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/manager/product/upload", consumes = {"multipart/form-data"})
     public ResponseEntity<SuccessResponse> uploadListImgProduct(HttpServletRequest request,@RequestPart(required = true) List<MultipartFile> multipleFiles){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
@@ -369,7 +371,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @PostMapping(value = "/admin/product/uploadImg")
+    @PostMapping(value = "/manager/product/uploadImg")
     public ResponseEntity<SuccessResponse> uploadImgProduct(HttpServletRequest request,@RequestPart(required = true) MultipartFile file){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
