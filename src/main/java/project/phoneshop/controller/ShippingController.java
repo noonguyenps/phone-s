@@ -56,7 +56,7 @@ public class ShippingController {
         }
     }
 
-    @PostMapping("/admin/shipping/create")
+    @PostMapping("/manager/shipping/create")
     public ResponseEntity<SuccessResponse> createShip(@RequestBody AddShippingRequest request){
         OrderEntity order= orderService.findById(request.getOrder());
         if(order==null){
