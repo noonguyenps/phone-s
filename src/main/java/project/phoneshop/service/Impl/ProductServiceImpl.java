@@ -209,6 +209,15 @@ public class ProductServiceImpl implements ProductService {
             option.put("values",temp);
             listAttributeOption.add(option);
         }
+        Set<Map<String,Object>> listAttributeOptionDetails = new HashSet<>();
+        for(AttributeDetailEntity attributeDetail : product.getDetailEntities()){
+            Map<String,Object> option =  new HashMap<>();
+            option.put("idType",attributeDetail.getIdTypeDetail().getId());
+            option.put("id",attributeDetail.getId());
+            option.put("value",attributeDetail.getValue());
+            option.put("name",attributeDetail.getIdTypeDetail().getName());
+            listAttributeOptionDetails.add(option);
+        }
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
 
@@ -229,6 +238,6 @@ public class ProductServiceImpl implements ProductService {
                 listAttributeOption,
                 product.getCreate(),
                 product.getStatus(),
-                product.getDetailEntities());
+                listAttributeOptionDetails);
     }
 }
