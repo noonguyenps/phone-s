@@ -113,7 +113,7 @@ public class ProductMapping {
             AttributeDetailEntity attributeDetailEntity = new AttributeDetailEntity();
             String generatedString = RandomStringUtils.random(20, true, false);
             attributeDetailEntity.setId(generatedString);
-            attributeDetailEntity.setValue(productFromJson.getDetailValues().get(i));
+            attributeDetailEntity.setValue(productFromJson.getDetailValues().get(j));
             attributeDetailEntity.setIdTypeDetail(attribute);
             attributeDetailEntity.setProduct(product);
             attributeDetailEntityList.add(attributeDetailEntity);
