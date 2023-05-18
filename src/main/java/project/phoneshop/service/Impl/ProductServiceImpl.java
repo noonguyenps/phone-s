@@ -220,7 +220,10 @@ public class ProductServiceImpl implements ProductService {
         }
         Double rate = productRatingService.getRateByProductId(product.getId());
         if(rate == null)rate = 0.0;
-
+        CategoryEntity categoryTemp = product.getProductCategory();
+        while (categoryTemp.getParent().getId().compareTo(UUID.fromString("00000000-0000-0000-0000-000000000000"))!=0){
+            categoryTemp = categoryTemp.getParent();
+        }
         return new ProductResponse(
                 product.getId(),
                 url,
@@ -238,6 +241,7 @@ public class ProductServiceImpl implements ProductService {
                 listAttributeOption,
                 product.getCreate(),
                 product.getStatus(),
-                listAttributeOptionDetails);
+                listAttributeOptionDetails,
+                categoryTemp.getId());
     }
 }

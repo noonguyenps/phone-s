@@ -32,8 +32,9 @@ public class ProductResponse {
     private Date createAt;
     private int status;
     private Set<Map<String,Object>> attributeDetailEntityList;
+    private UUID categoryRoot;
 
-    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status) {
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status, UUID categoryRoot) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -51,7 +52,7 @@ public class ProductResponse {
         this.createAt = createAt;
         this.status =status;
     }
-    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status, Set<Map<String,Object>> attributeDetailEntityList) {
+    public ProductResponse(UUID id, String image, String name, String description, String category, double rate, double price, double discount, int sold, int inventory,String brand, String origins, List<String> img, Set<Map<String,Object>> listAttributeOption,Date createAt, int status, Set<Map<String,Object>> attributeDetailEntityList, UUID categoryRoot) {
         this.id = id;
         this.image = image;
         this.name = name;
@@ -69,5 +70,6 @@ public class ProductResponse {
         this.createAt = createAt;
         this.status =status;
         this.attributeDetailEntityList = attributeDetailEntityList;
+        this.categoryRoot = categoryRoot;
     }
 }
