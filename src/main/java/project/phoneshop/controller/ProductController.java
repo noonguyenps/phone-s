@@ -279,7 +279,7 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/product/count/1")
+    @GetMapping("/product/category/Price")
     public ResponseEntity<SuccessResponse> getCountProductaa(){
         Map<String, Object> data = new HashMap<>();
         List<Object> countProduct = productService.getTotalByCategory();

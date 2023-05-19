@@ -138,7 +138,28 @@ public class AdminController {
                     orderPerMonth[i] = Integer.parseInt(((Object[])countOrder)[2].toString());
                 }
             }
+            List<Object> categoryPrice = productService.getTotalByCategory();
+            List<Map<String,Object>> listCategoryPrice = new ArrayList<>();
+            for(Object a : categoryPrice){
+                boolean stop = false;
+                for(Map<String,Object> b: listCategoryPrice){
+                    if(b.get("name").equals(((Object[])a)[0].toString())){
+                        double temp = (double) b.get("value");
+                        b.put("value",temp + Double.parseDouble(((Object[])a)[1].toString()));
+                        stop = true;
+                        break;
+                    }
+                }
+                if(!stop){
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("name",((Object[])a)[0].toString());
+                    map.put("value",Double.parseDouble(((Object[])a)[1].toString()));
+                    listCategoryPrice.add(map);
+                }
+            }
+
             double revenue = orderService.countOrderPrice();
+            data.put("categoryPrice",listCategoryPrice);
             data.put("userPerMonth",userPerMonth);
             data.put("orderPerMonth",orderPerMonth);
             data.put("countProducts",countProduct);
