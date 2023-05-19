@@ -126,14 +126,13 @@ public class CategoryController {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             CategoryEntity category = categoryService.findById(id);
-            SuccessResponse response=new SuccessResponse();
             if(category == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Category not found",null), HttpStatus.NOT_FOUND);
             if(parentId.compareTo(UUID.fromString("00000000-0000-0000-0000-000000000000"))==0){
                 category.setName(newCategory.getName());
                 category.setParent(null);
                 categoryService.saveCategory(category);
-                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Update Category Successfully", null), HttpStatus.OK);
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Update Category Root Successfully", null), HttpStatus.OK);
             }
             if(categoryService.findById(parentId) == null)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Category parent not found",null), HttpStatus.FOUND);
