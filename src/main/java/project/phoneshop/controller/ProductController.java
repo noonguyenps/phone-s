@@ -279,31 +279,6 @@ public class ProductController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping("/product/category/Price")
-    public ResponseEntity<SuccessResponse> getCountProductaa(){
-        Map<String, Object> data = new HashMap<>();
-        List<Object> countProduct = productService.getTotalByCategory();
-        List<Map<String,Object>> listCategoryPrice = new ArrayList<>();
-        for(Object a : countProduct){
-            boolean stop = false;
-            for(Map<String,Object> b: listCategoryPrice){
-                if(b.get("name").equals(((Object[])a)[0].toString())){
-                    double temp = (double) b.get("value");
-                    b.put("value",temp + Double.parseDouble(((Object[])a)[1].toString()));
-                    stop = true;
-                    break;
-                }
-            }
-            if(!stop){
-                Map<String,Object> map = new HashMap<>();
-                map.put("name",((Object[])a)[0].toString());
-                map.put("value",Double.parseDouble(((Object[])a)[1].toString()));
-                listCategoryPrice.add(map);
-            }
-        }
-        data.put("categoryPrice",listCategoryPrice);
-        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Category Price",data),HttpStatus.OK);
-    }
     @GetMapping("/product/count")
     public ResponseEntity<SuccessResponse> getCountProduct(){
         Map<String, Object> data = new HashMap<>();
