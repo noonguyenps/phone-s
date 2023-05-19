@@ -110,9 +110,9 @@ public class CategoryController {
             List<CategoryResponse> categoryResponseList = new ArrayList<>();
             for(CategoryEntity category : listCategory)
                 if (category.getParent() == null)
-                    categoryResponseList.add(new CategoryResponse(category.getId(), category.getName(), null));
+                    categoryResponseList.add(new CategoryResponse(category.getId(), category.getName(), null, null));
                 else
-                    categoryResponseList.add(new CategoryResponse(category.getId(), category.getName(), category.getParent().getId()));
+                    categoryResponseList.add(new CategoryResponse(category.getId(), category.getName(), category.getParent().getId(), category.getParent().getName()));
             Map<String, Object> data = new HashMap<>();
             data.put("listCategory",categoryResponseList);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
