@@ -18,10 +18,10 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Integer> {
             countQuery = "SELECT * FROM products WHERE LOWER(products.product_name) LIKE %?1%",
             nativeQuery = true)
     OrderEntity getOderByUser(UserEntity user);
-    @Query(value = "SELECT SUM(orders.total) FROM orders",
-            countQuery = "SELECT SUM(orders.total) FROM orders",
+    @Query(value = "SELECT SUM(orders.total) FROM orders WHERE status=2",
+            countQuery = "SELECT SUM(orders.total) FROM orders WHERE status=2",
             nativeQuery = true)
-    int countPrice();
+    double countPrice();
 
     @Query(value = "select extract(month from created_date) as mon,extract(year from created_date) as yyyy,count(order_id) as summ, sum(total) from orders group by 1,2",
     nativeQuery = true)

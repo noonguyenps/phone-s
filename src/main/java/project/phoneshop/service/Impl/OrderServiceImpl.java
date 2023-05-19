@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public long countOrderPrice() {
+    public double countOrderPrice() {
         return orderRepository.countPrice();
     }
 

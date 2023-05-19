@@ -24,9 +24,8 @@ public interface OrderService {
     OrderEntity save(OrderEntity order);
     void delete(int id);
     void changePaymentStatus(int id,boolean status);
-
     long countOrder();
-    long countOrderPrice();
+    double countOrderPrice();
     double countPayMoney(OrderEntity order);
     List<Object> countUserPerMonth();
 

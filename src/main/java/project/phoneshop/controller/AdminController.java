@@ -138,12 +138,13 @@ public class AdminController {
                     orderPerMonth[i] = Integer.parseInt(((Object[])countOrder)[2].toString());
                 }
             }
+            double revenue = orderService.countOrderPrice();
             data.put("userPerMonth",userPerMonth);
             data.put("orderPerMonth",orderPerMonth);
             data.put("countProducts",countProduct);
             data.put("countUser",totalUser);
             data.put("countOrder",totalOrder);
-            data.put("countRevenue",totalRevenueOrder);
+            data.put("countRevenue",revenue);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Statistic",data),HttpStatus.OK);
         }
         else
