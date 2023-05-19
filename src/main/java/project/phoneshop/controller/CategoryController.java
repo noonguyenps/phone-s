@@ -22,7 +22,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-//    private final AttributeService attributeService;
     private final UserService userService;
     @Autowired
     AuthorizationHeader authorizationHeader;
@@ -33,20 +32,9 @@ public class CategoryController {
         for (CategoryEntity categoryEntity : list){
             Map<String,Object> response = new HashMap<>();
             response.put("id",categoryEntity.getId());
-            response.put("slug","bach-hoa-online");
             response.put("name",categoryEntity.getName());
-            Map<String, Object> rangePrice = new HashMap<>();
-            rangePrice.put("min",0);
-            rangePrice.put("max",1000000000);
-            rangePrice.put("slug","price");
-            List<Map<String, Object>> values = new ArrayList<>();
-            Map<String, Object> value = new HashMap<>();
-            value.put("display_value","Dưới 40.000");
-            value.put("value","0,40000");
-            values.add(value);
-            response.put("rangePrice",rangePrice);
-            response.put("values",values);
-            response.put("properties", new ArrayList<>());
+            response.put("parentId",categoryEntity.getParent().getId());
+            response.put("parentName",categoryEntity.getParent().getName());
             listCategory.add(response);
         }
         return listCategory;
