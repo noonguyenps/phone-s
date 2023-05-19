@@ -180,6 +180,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.count();
     }
     @Override
+    public List<Object> getTotalByCategory(){
+        return productRepository.sumTotalPerCategory();
+    }
+    @Override
     public ProductResponse productResponse(ProductEntity product){
         List<ImageProductEntity> imageProductEntityList = imageProductRepository.findByProduct(product);
         List<String> list = new ArrayList<>();

@@ -1,5 +1,6 @@
 package project.phoneshop.repository;
 
+import org.hibernate.annotations.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import project.phoneshop.model.entity.CategoryEntity;
 import project.phoneshop.model.entity.ProductEntity;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @EnableJpaRepositories
@@ -38,4 +40,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
             countQuery = "SELECT count(*) FROM products WHERE products.product_status=?1",
             nativeQuery = true)
     Page<ProductEntity> findAllProductByStatus(int status, Pageable pageable);
+    @Query(value = "select category_name, total\n" +
+            "from category, (select b.order_id ,b.total,\"get_category_parent_root\"(products.category_id) from (select a.order_id ,a.total,carts.cart_id,carts.product_id from (select * from public.orders where status=2) as a, public.carts where a.order_id = carts.order_id) as b, products where products.product_id = b.product_id) as c\n" +
+            "where get_category_parent_root=category.category_id",
+            nativeQuery = true)
+    List<Object> sumTotalPerCategory();
 }

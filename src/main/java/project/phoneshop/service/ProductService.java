@@ -47,5 +47,7 @@ public interface ProductService {
 
     long countProduct();
 
+    List<Object> getTotalByCategory();
+
     ProductResponse productResponse(ProductEntity product);
 }
