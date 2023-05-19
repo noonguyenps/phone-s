@@ -33,8 +33,6 @@ public class CategoryController {
             Map<String,Object> response = new HashMap<>();
             response.put("id",categoryEntity.getId());
             response.put("name",categoryEntity.getName());
-            response.put("parentId",categoryEntity.getParent().getId());
-            response.put("parentName",categoryEntity.getParent().getName());
             listCategory.add(response);
         }
         return listCategory;
