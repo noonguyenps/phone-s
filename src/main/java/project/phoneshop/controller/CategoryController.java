@@ -43,20 +43,15 @@ public class CategoryController {
         List<Map<String,Object>> listCategory = new ArrayList<>();
         Map<String,Object> response = new HashMap<>();
         response.put("id",category.getId());
-        response.put("slug","bach-hoa-online");
         response.put("name",category.getName());
-        Map<String, Object> rangePrice = new HashMap<>();
-        rangePrice.put("min",0);
-        rangePrice.put("max",1000000000);
-        rangePrice.put("slug","price");
-        List<Map<String, Object>> values = new ArrayList<>();
-        Map<String, Object> value = new HashMap<>();
-        value.put("display_value","Dưới 40.000");
-        value.put("value","0,40000");
-        values.add(value);
-        response.put("rangePrice",rangePrice);
-        response.put("values",values);
-        response.put("properties", new ArrayList<>());
+        if(category.getParent()!=null){
+            response.put("parentId",category.getParent().getId());
+            response.put("parentName",category.getParent().getName());
+        }
+        else {
+            response.put("parentId",null);
+            response.put("parentName",null);
+        }
         listCategory.add(response);
         return listCategory;
     }
