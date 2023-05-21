@@ -40,4 +40,5 @@ public class ShippingResponseV2 {
     String province;
     double total;
     boolean statusPayment;
+    int statusOrder;
 }

@@ -17,6 +17,7 @@ import project.phoneshop.model.payload.request.ship.AddShipRequest;
 import project.phoneshop.model.payload.request.shipping.AddShippingRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.shipping.ShippingResponse;
+import project.phoneshop.model.payload.response.shipping.ShippingResponseV2;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,9 +51,9 @@ public class ShippingController {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         List<ShippingEntity> list = shippingService.getAllShippingByShipper(user,page,size);
         Map<String, Object> data = new HashMap<>();
-        List<ShippingResponse> shippingResponses = new ArrayList<>();
+        List<ShippingResponseV2> shippingResponses = new ArrayList<>();
         for (ShippingEntity shipping: list)
-            shippingResponses.add(shippingService.entity2Response(shipping));
+            shippingResponses.add(shippingService.shippingResponse(shipping));
         data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }

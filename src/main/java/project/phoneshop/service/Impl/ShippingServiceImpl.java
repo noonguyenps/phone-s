@@ -128,6 +128,7 @@ public class ShippingServiceImpl implements ShippingService {
         shippingResponse.setProvince(shipping.getOrderShipping().getAddressOrder().getProvince());
         shippingResponse.setTotal(shipping.getOrderShipping().getTotal());
         shippingResponse.setStatusPayment(shipping.getOrderShipping().getStatusPayment());
+        shippingResponse.setStatusOrder(shipping.getOrderShipping().getOrderStatus());
         return shippingResponse;
     }
 }
