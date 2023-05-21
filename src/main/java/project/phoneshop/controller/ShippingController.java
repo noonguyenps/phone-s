@@ -45,6 +45,29 @@ public class ShippingController {
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
 
+    @GetMapping("shipper/shipping/list")
+    public ResponseEntity<SuccessResponse> getAllShippingByShipper(HttpServletRequest request, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        List<ShippingEntity> list = shippingService.getAllShippingByShipper(user,page,size);
+        Map<String, Object> data = new HashMap<>();
+        List<ShippingResponse> shippingResponses = new ArrayList<>();
+        for (ShippingEntity shipping: list)
+            shippingResponses.add(shippingService.entity2Response(shipping));
+        data.put("listShipping",shippingResponses);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
+    }
+
+    @GetMapping("shipper/shipping/{id}")
+    public ResponseEntity<SuccessResponse> getShippingById(HttpServletRequest request, @PathVariable UUID id){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        ShippingEntity shipping = shippingService.findById(id);
+        if(shipping.getUserOrderShipping()!= user)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Shipping not found",null),HttpStatus.NOT_FOUND);
+        Map<String, Object> data = new HashMap<>();
+        data.put("shipping",shippingService.shippingResponse(shipping));
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
+    }
+
     @GetMapping("shipping/{id}")
     public ResponseEntity<SuccessResponse> getShippingById(@PathVariable("id")int id, @RequestParam String secretKey){
         OrderEntity orderEntity = orderService.findShipping(id,secretKey);

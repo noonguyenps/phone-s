@@ -12,7 +12,7 @@ public enum AppUserRole {
     USER(Sets.newHashSet(USER_READ, USER_WRITE)),
     ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE,MANAGER_READ, MANAGER_WRITE)),
     MANAGER(Sets.newHashSet(MANAGER_READ, MANAGER_WRITE, USER_READ, USER_WRITE)),
-    SHIPPER(Sets.newHashSet(SHIPPER_READ,SHIPPER_WRITE));
+    SHIPPER(Sets.newHashSet(SHIPPER_READ,SHIPPER_WRITE,USER_READ, USER_WRITE));
 
     private final Set<UserPermission> permissions;
 
