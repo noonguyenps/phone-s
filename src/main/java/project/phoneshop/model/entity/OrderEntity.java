@@ -59,8 +59,8 @@ public class OrderEntity {
     private VoucherEntity voucherOrder;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "orderShipping",cascade = CascadeType.ALL)
-    private List<ShippingEntity> shippingEntities;
+    @OneToOne(mappedBy = "orderShipping",cascade = CascadeType.ALL)
+    private ShippingEntity shippingEntity;
 
     public int getOrderId() {
         return orderId;
@@ -174,12 +174,12 @@ public class OrderEntity {
         this.voucherOrder = voucherOrder;
     }
 
-    public List<ShippingEntity> getShippingEntities() {
-        return shippingEntities;
+    public ShippingEntity getShippingEntities() {
+        return shippingEntity;
     }
 
-    public void setShippingEntities(List<ShippingEntity> shippingEntities) {
-        this.shippingEntities = shippingEntities;
+    public void setShippingEntities(ShippingEntity shippingEntity) {
+        this.shippingEntity = shippingEntity;
     }
 
     public String getSecretKey() {

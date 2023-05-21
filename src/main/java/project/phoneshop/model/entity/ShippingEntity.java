@@ -41,9 +41,9 @@ public class ShippingEntity {
     @Column(name = "\"update_at\"")
     private Date update;
     @ManyToOne
-    @JoinColumn(name="\"user_order\"")
+    @JoinColumn(name="\"user_shipping\"")
     private UserEntity userOrderShipping;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="\"order_id\"")
     private OrderEntity orderShipping;
 

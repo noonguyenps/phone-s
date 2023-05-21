@@ -109,6 +109,20 @@ public class AdminController {
         }
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_ACCEPTABLE.value(),"Create Failure",null), HttpStatus.NOT_ACCEPTABLE);
     }
+    @PostMapping("/shipper/create")
+    public ResponseEntity<SuccessResponse> createShipperAccount(@RequestBody @Valid AddNewUserRequest request) {
+        UserEntity user= UserMapping.registerToEntity(request);
+        if(userService.existsByPhone(user.getPhone()))
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.CONFLICT.value(),"Create Failure! Phone number is exist",null), HttpStatus.CONFLICT);;
+        try{
+            userService.saveUser(user,"SHIPPER");
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Create Successfully",null), HttpStatus.OK);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_ACCEPTABLE.value(),"Create Failure",null), HttpStatus.NOT_ACCEPTABLE);
+    }
     @GetMapping("statistic")
     public ResponseEntity<SuccessResponse> getStatistic(HttpServletRequest request){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
