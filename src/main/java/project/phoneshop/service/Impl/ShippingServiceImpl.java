@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.CartEntity;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ShippingEntity;
+import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.shipping.ShippingResponse;
 import project.phoneshop.repository.ShippingRepository;
 import project.phoneshop.service.ShippingService;
@@ -28,6 +29,16 @@ public class ShippingServiceImpl implements ShippingService {
     @Override
     public void create(ShippingEntity shipping) {
         shippingRepository.save(shipping);
+    }
+
+    @Override
+    public ShippingEntity findByShipper(UserEntity user, OrderEntity order) {
+        Optional<ShippingEntity> shipping = shippingRepository.findByUserOrderShippingAndOrderShipping(user,order);
+        if(shipping.isEmpty()){
+            return null;
+        }else {
+            return shipping.get();
+        }
     }
 
 //    @Override

@@ -17,15 +17,14 @@ public interface UserService {
     //    UserEntity findByFullName(String fullname);
     UserEntity findById(UUID id);
     List<UserEntity> getAllUser(int page, int size);
+    List<UserEntity> getAllManager(int page, int size);
+    List<UserEntity> getAllShipper(int page, int size);
     UserEntity saveUser(UserEntity user,String roleName);
-//    Boolean existsByFullName(String fullname);
     UserEntity findByPhone(String phone);
     Boolean existsByPhone(String phone);
     UserEntity saveInfo(UserEntity user);
     UserEntity findByEmail(String email);
-
     List<Object> countUserPerMonth();
     UserEntity updateActive(UserEntity user);
     UserResponse getUserResponse(UserEntity user);
-//    UserEntity setStatus(UserEntity user,Boolean status);
 }

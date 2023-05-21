@@ -1,17 +1,24 @@
 package project.phoneshop.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import project.phoneshop.model.entity.UserEntity;
-import project.phoneshop.model.payload.response.CountPerMonth;
-
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @EnableJpaRepositories
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
+    @Query(value = "SELECT * FROM user_role s, roles r, users u WHERE s.role_id = r.id AND u.user_id=s.user_id AND r.name='SHIPPER'",
+    countQuery = "SELECT * FROM user_role s, roles r, users u WHERE s.role_id = r.id AND u.user_id=s.user_id AND r.name='SHIPPER'",
+    nativeQuery = true)
+    Page<UserEntity> findAllShipper(Pageable pageable);
+    @Query(value = "SELECT * FROM user_role s, roles r, users u WHERE s.role_id = r.id AND u.user_id=s.user_id AND r.name='MANAGER'",
+            nativeQuery = true)
+    Page<UserEntity> findAllManager(Pageable pageable);
     Optional<UserEntity> findByEmail(String email);
     Boolean existsByPhone(String phone);
     Optional<UserEntity> findByPhone(String phone);

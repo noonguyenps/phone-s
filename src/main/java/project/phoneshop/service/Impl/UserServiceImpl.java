@@ -38,6 +38,19 @@ public class UserServiceImpl implements UserService {
         Pageable paging = PageRequest.of(page, size);
         return userRepository.findAll(paging).toList();
     }
+
+    @Override
+    public List<UserEntity> getAllManager(int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return userRepository.findAllManager(paging).toList();
+    }
+
+    @Override
+    public List<UserEntity> getAllShipper(int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        return userRepository.findAllShipper(paging).toList();
+    }
+
     @Override
     public UserEntity saveUser(UserEntity user, String roleName) {
         Optional<RoleEntity> role=roleRepository.findByName(roleName);

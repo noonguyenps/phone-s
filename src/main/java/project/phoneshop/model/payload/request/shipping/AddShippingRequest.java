@@ -10,8 +10,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 public class AddShippingRequest {
-    String shipperName;
-    String vnID;
-    String phone;
+    UUID shipperID;
     int order;
 }

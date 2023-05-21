@@ -2,6 +2,7 @@ package project.phoneshop.service;
 
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ShippingEntity;
+import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.shipping.ShippingResponse;
 
 import java.util.List;
@@ -12,8 +13,8 @@ public interface ShippingService {
 
     void create(ShippingEntity shipping);
 
-//    ShippingEntity getInfoShipping(UUID id);
-//
+    ShippingEntity findByShipper(UserEntity user, OrderEntity order);
+
     ShippingEntity getInfoShippingByOrderId(OrderEntity order);
 
     ShippingResponse entity2Response(ShippingEntity shipping);

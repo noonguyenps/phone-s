@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.ShipMapping;
 import project.phoneshop.mapping.ShippingMapping;
 import project.phoneshop.model.entity.OrderEntity;
@@ -31,6 +32,8 @@ public class ShippingController {
     private final OrderService orderService;
     private final ShippingMapping shippingMapping;
     private final UserService userService;
+    @Autowired
+    AuthorizationHeader authorizationHeader;
     @GetMapping("admin/shipping/list")
     public ResponseEntity<SuccessResponse> getAllShipping(){
         List<ShippingEntity> list = shippingService.getAllShipping();
@@ -62,10 +65,10 @@ public class ShippingController {
         if(order==null){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
         }
-        UserEntity user = order.getUserOrder();
+        UserEntity user = userService.findById(request.getShipperID());
         if(user==null)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not Found",null),HttpStatus.NOT_FOUND);
-        ShippingEntity shipping = shippingMapping.requestToEntity(request,order,user);
+        ShippingEntity shipping = shippingMapping.requestToEntity(order,user);
         shippingService.create(shipping);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Insert successfully",null),HttpStatus.OK);
     }
@@ -89,10 +92,46 @@ public class ShippingController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update Image Successfully",null),HttpStatus.OK);
         }
     }
+
+    @PutMapping("/shipper/update/{id}")
+    public ResponseEntity<SuccessResponse> updateShipping(HttpServletRequest request,@PathVariable("id") int id,@RequestParam String img1,@RequestParam(required = false) String img2,@RequestParam(required = false) String img3){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        OrderEntity orderEntity = orderService.findById(id);
+        ShippingEntity shipping = shippingService.findByShipper(user,orderEntity);
+        if(orderEntity==null||orderEntity.getOrderStatus()!=1){
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
+        }
+        else {
+            shipping.setImage1(img1);
+            shipping.setImage2(img2);
+            shipping.setImage3(img3);
+            shipping.setState(2);
+            shippingService.create(shipping);
+            orderEntity.setStatusPayment(true);
+            orderEntity.setOrderStatus(2);
+            orderService.save(orderEntity);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update Image Successfully",null),HttpStatus.OK);
+        }
+    }
+
+
     @PostMapping(value = "/shipping/uploadImg/{id}")
     public ResponseEntity<SuccessResponse> uploadImgShipping(@PathVariable("id") int id,@RequestParam String secretKey, @RequestPart(required = true) MultipartFile file){
-//        if(!imageStorageService.isImageFile(file))
-//            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),"The file is not an image",null), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        UUID uuid = UUID.randomUUID();
+        LocalDate date = LocalDate.now();
+        String url = imageStorageService.saveShippingImg(file, date.toString()+"/"+String.valueOf(uuid));
+        if(url.equals(""))
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(),"Upload Image Failure",null), HttpStatus.NOT_FOUND);
+        Map<String, Object> data = new HashMap<>();
+        data.put("url",url);
+        return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Upload Logo Successfully",data), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/shipper/uploadImg/{id}")
+    public ResponseEntity<SuccessResponse> uploadImgShippingV2(HttpServletRequest request,@PathVariable("id") int id, @RequestPart(required = true) MultipartFile file){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not found",null),HttpStatus.NOT_FOUND);
         UUID uuid = UUID.randomUUID();
         LocalDate date = LocalDate.now();
         String url = imageStorageService.saveShippingImg(file, date.toString()+"/"+String.valueOf(uuid));

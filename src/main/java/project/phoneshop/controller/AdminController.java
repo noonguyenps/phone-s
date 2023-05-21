@@ -53,6 +53,30 @@ public class AdminController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @GetMapping("/manager/all")
+    public ResponseEntity<SuccessResponse> getAllManager(HttpServletRequest request, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "20")int size){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            List<UserEntity> list = userService.getAllManager(page,size);
+            Map<String,Object> data = new HashMap<>();
+            data.put("listManager",list);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Manager",data),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/shipper/all")
+    public ResponseEntity<SuccessResponse> getAllShipper(HttpServletRequest request, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "20")int size){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            List<UserEntity> list = userService.getAllShipper(page,size);
+            Map<String,Object> data = new HashMap<>();
+            data.put("listShipper",list);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Shipper",data),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/user/{id}")
     public ResponseEntity<SuccessResponse> getUserByID(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);

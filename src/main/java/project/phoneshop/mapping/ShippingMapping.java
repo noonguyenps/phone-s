@@ -13,15 +13,12 @@ import java.util.Date;
 @Component
 public class ShippingMapping {
 
-    public ShippingEntity requestToEntity(AddShippingRequest shippingRequest, OrderEntity orderEntity, UserEntity user){
+    public ShippingEntity requestToEntity(OrderEntity orderEntity, UserEntity user){
         ShippingEntity shipping = new ShippingEntity();
         shipping.setOrderShipping(orderEntity);
         shipping.setUserOrderShipping(user);
-        shipping.setShipperID(shippingRequest.getVnID());
-        shipping.setShipperName(shippingRequest.getShipperName());
         shipping.setCreate(new Date());
         shipping.setUpdate(new Date());
-        shipping.setShipperPhone(shippingRequest.getPhone());
         shipping.setState(1);
         return shipping;
     }
