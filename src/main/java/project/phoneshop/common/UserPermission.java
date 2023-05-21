@@ -6,7 +6,10 @@ public enum UserPermission {
     ADMIN_READ("admin:read"),
     ADMIN_WRITE("admin:write"),
     MANAGER_READ("manager:read"),
-    MANAGER_WRITE("manager:write");
+    MANAGER_WRITE("manager:write"),
+
+    SHIPPER_READ("shipper:read"),
+    SHIPPER_WRITE("shipper:write");
     private final String permission;
 
     UserPermission(String permission) {

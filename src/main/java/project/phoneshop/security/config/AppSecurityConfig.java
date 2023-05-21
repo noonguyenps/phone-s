@@ -59,6 +59,7 @@ public class AppSecurityConfig  {
                 .antMatchers(HttpMethod.GET,"/api/user/**").hasAnyAuthority(UserPermission.USER_READ.getPermission())
                 .antMatchers("/api/admin/**").hasAnyAuthority(UserPermission.ADMIN_READ.getPermission(),UserPermission.ADMIN_WRITE.getPermission())
                 .antMatchers("/api/manager/**").hasAnyAuthority(UserPermission.MANAGER_READ.getPermission(),UserPermission.MANAGER_WRITE.getPermission())
+                .antMatchers("/api/shipper/**").hasAnyAuthority(UserPermission.SHIPPER_READ.getPermission(),UserPermission.SHIPPER_WRITE.getPermission())
                 .antMatchers("/**").permitAll()
                 .and()
                 .oauth2Login()
