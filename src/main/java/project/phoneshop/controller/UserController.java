@@ -210,13 +210,13 @@ public class UserController {
         }
     }
     @PutMapping("/profile/changePhonePassword")
-    public ResponseEntity<SuccessResponse> updatePhonePassword(HttpServletRequest request, UpdatePhonePassword updatePhonePassword){
+    public ResponseEntity<SuccessResponse> updatePhonePassword(HttpServletRequest request,@RequestBody UpdatePhonePassword updatePhonePassword){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user==null)
             throw new BadCredentialsException("User not found");
         else{
             if (user.getPassword()==null){
-                if(!userService.existsByPhone(updatePhonePassword.getPhone())){
+                if(userService.existsByPhone(updatePhonePassword.getPhone())){
                     return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(), "Phone number is exist",null),HttpStatus.FOUND);
                 }
                 if(updatePhonePassword.getPassword().equals(updatePhonePassword.getRetypePassword())){
