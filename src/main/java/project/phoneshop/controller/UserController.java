@@ -209,4 +209,22 @@ public class UserController {
             return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.FOUND.value(), "User exist password", null), HttpStatus.FOUND);
         }
     }
+    @PutMapping("/profile/changePhonePassword")
+    public ResponseEntity<SuccessResponse> updatePhonePassword(HttpServletRequest request, UpdatePhonePassword updatePhonePassword){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            if (user.getPassword()==null){
+                if(updatePhonePassword.getPassword().equals(updatePhonePassword.getRetypePassword())){
+                    user.setPassword(passwordEncoder.encode(updatePhonePassword.getPassword()));
+                    user.setPhone(updatePhonePassword.getPhone());
+                    userService.saveInfo(user);
+                    return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Update Successfully", null), HttpStatus.OK);
+                }
+            }
+
+        }
+        return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.FOUND.value(), "Update Failure", null), HttpStatus.FOUND);
+    }
 }
