@@ -25,8 +25,8 @@ public class AddressMapping {
         address.setAddressDetail(addressInfo.getAddressDetail());
         address.setCompanyName(addressInfo.getCompanyName());
         address.setCommune(addressInfo.getCommune());
-        address.setProvince(address.getProvince());
-        address.setDistrict(address.getDistrict());
+        address.setProvince(addressInfo.getProvince());
+        address.setDistrict(addressInfo.getDistrict());
         address.setAddressType(addressType);
         return address;
     }

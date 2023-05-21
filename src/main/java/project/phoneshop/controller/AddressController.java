@@ -76,7 +76,6 @@ public class AddressController {
         if(user==null)
             throw new BadCredentialsException("User not found");
         else{
-            SuccessResponse response = new SuccessResponse();
             AddressEntity address = addressService.findById(id);
             AddressTypeEntity addressType = addressService.findByTid(infoAddressRequest.getAddressType());
             address = AddressMapping.UpdateAddressEntity(address,infoAddressRequest,addressType);
