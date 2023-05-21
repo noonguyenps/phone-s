@@ -107,7 +107,8 @@ public class UserServiceImpl implements UserService {
         userResponse.setCountProductFavorite(user.getFavoriteProducts().size());
         double orderTotal = 0;
         for(OrderEntity order: user.getListOrder()){
-            orderTotal += order.getTotal();
+            if(order.getOrderStatus()==2||order.getStatusPayment())
+                orderTotal += order.getTotal();
         }
         userResponse.setCountOrderTotal(orderTotal);
         userResponse.setCountOrder(user.getListOrder().size());
