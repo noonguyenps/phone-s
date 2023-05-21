@@ -203,12 +203,10 @@ public class UserController {
         if(user==null)
             throw new BadCredentialsException("User not found");
         else{
-            if(user.getPassword().equals("")) {
-                Map<String, Object> data = new HashMap<>();
-                data.put("password", user.getPassword());
-                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Query wishlist successfully", data), HttpStatus.OK);
+            if(user.getPassword()==null) {
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "User no password", null), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Query wishlist successfully", null), HttpStatus.OK);
+            return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.FOUND.value(), "User exist password", null), HttpStatus.FOUND);
         }
     }
 }
