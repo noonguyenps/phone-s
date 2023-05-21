@@ -198,14 +198,17 @@ public class UserController {
         }
     }
     @GetMapping("/phone/check")
-    public ResponseEntity<SuccessResponse> checkPhone(HttpServletRequest request,@RequestParam UUID productId) throws Exception{
+    public ResponseEntity<SuccessResponse> checkPhone(HttpServletRequest request) throws Exception{
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user==null)
             throw new BadCredentialsException("User not found");
         else{
-            Map<String,Object> data = new HashMap<>();
-            data.put("password",user.getPassword());
-            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Query wishlist successfully",data), HttpStatus.OK);
+            if(user.getPassword().isEmpty()) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("password", user.getPassword());
+                return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Query wishlist successfully", data), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Query wishlist successfully", null), HttpStatus.OK);
         }
     }
 }
