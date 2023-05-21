@@ -146,10 +146,6 @@ public class CategoryController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    public static void main(String argv[]){
-        UUID id = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        System.out.println(id.compareTo(UUID.fromString("00000000-0000-0000-0000-000000000000")));
-    }
     @DeleteMapping("admin/category/{id}")
     public ResponseEntity<SuccessResponse> deleteCategory(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);

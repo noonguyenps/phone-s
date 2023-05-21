@@ -252,16 +252,34 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @GetMapping("/user/order")
-    public ResponseEntity<SuccessResponse> getOrderByUser(HttpServletRequest request) throws Exception {
+    public ResponseEntity<SuccessResponse> getOrderByUser(HttpServletRequest request,
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size,
+                                                          @RequestParam(defaultValue = "order_id") String sort) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
             List<OrderResponse> orderResponseList = new ArrayList<>();
+            if(!listOrderSort().contains(sort))
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Sort not found",null),HttpStatus.NOT_FOUND);
+            switch (sort){
+                case "total_down":user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal).reversed());break;
+                case "total_up": user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal));break;
+                case "created_date": user.getListOrder().sort(Comparator.comparing(OrderEntity::getCreatedDate));break;
+                case "order_id": user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId));break;
+            }
+            user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId));
+            int i = 0;
             for(OrderEntity order:user.getListOrder()){
-                List<CartResponseFE> cartResponseFEList = new ArrayList<>();
-                for(CartEntity cart: order.getCartOrder())
-                    cartResponseFEList.add(cartService.getCartResponseFE(cart));
-                orderResponseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+                if(i>page*size&&i<(page+1)*size){
+                    List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+                    for(CartEntity cart: order.getCartOrder())
+                        cartResponseFEList.add(cartService.getCartResponseFE(cart));
+                    orderResponseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+                }
+                i++;
+                if(orderResponseList.size()==size)
+                    break;
             }
             data.put("listOrder",orderResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "List Order", data), HttpStatus.OK);
