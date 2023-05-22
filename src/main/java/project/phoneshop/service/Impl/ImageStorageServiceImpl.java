@@ -34,7 +34,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public String saveAvatar(MultipartFile file, String fileName){
         Map r;
         try {
-            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_avatar","public_id","tiki_avatar/"+fileName));
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_avatar","public_id","sphone_avatar/"+fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -44,7 +44,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public String saveLogo(MultipartFile file, String fileName){
         Map r;
         try {
-            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_avatar","public_id","tiki_logo/"+fileName));
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_avatar","public_id","sphone_logo/"+fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,7 +55,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public String saveProductImg(MultipartFile file, String fileName){
         Map r;
         try {
-            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","tiki_product/"+fileName));
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","sphone_product/"+fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,7 +75,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public String saveImgProduct(MultipartFile file, String fileName){
         Map r;
         try {
-            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","tiki_product/"+fileName));
+            r = this.cloudinary().uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto","upload_preset","img_product","public_id","sphone_product/"+fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +86,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         Map r;
         try {
             r = ObjectUtils.asMap("invalidate", true );
-            this.cloudinary().api().deleteResourcesByPrefix("tiki_product/"+String.valueOf(fileName),r);
+            this.cloudinary().api().deleteResourcesByPrefix("sphone_product/"+String.valueOf(fileName),r);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
