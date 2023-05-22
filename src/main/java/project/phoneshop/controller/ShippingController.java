@@ -45,7 +45,18 @@ public class ShippingController {
         data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
-
+    @GetMapping("manager/shipper/all")
+    public ResponseEntity<SuccessResponse> getAllShipper(HttpServletRequest request, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "20")int size){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            List<UserEntity> list = userService.getAllShipper(page,size);
+            Map<String,Object> data = new HashMap<>();
+            data.put("listShipper",list);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Shipper",data),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("shipper/shipping/list")
     public ResponseEntity<SuccessResponse> getAllShippingByShipper(HttpServletRequest request, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
