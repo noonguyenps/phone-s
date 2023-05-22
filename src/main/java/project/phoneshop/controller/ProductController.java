@@ -12,7 +12,7 @@ import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.product.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.brand.BrandExcelExporter;
-import project.phoneshop.model.payload.response.brand.ProductExcelExporter;
+import project.phoneshop.model.payload.response.product.ProductExcelExporter;
 import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
