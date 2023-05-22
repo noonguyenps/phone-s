@@ -12,12 +12,17 @@ import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.brand.AddNewBrandRequest;
 import project.phoneshop.model.payload.request.brand.UpdateBrandRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.brand.BrandExcelExporter;
 import project.phoneshop.service.AddressService;
 import project.phoneshop.service.BrandService;
 import project.phoneshop.service.ImageStorageService;
 import project.phoneshop.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -155,5 +160,18 @@ public class BrandController {
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/admin/brand/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=brand_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        List<BrandEntity> listBrand = brandService.findAll(0,1000);
+        BrandExcelExporter excelExporter = new BrandExcelExporter(listBrand);
+        excelExporter.export(response);
     }
 }
