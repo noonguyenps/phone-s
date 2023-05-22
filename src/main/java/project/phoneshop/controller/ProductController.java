@@ -11,7 +11,6 @@ import project.phoneshop.mapping.ProductMapping;
 import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.product.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
-import project.phoneshop.model.payload.response.brand.BrandExcelExporter;
 import project.phoneshop.model.payload.response.product.ProductExcelExporter;
 import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
@@ -24,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequestMapping("/api")
@@ -292,7 +290,7 @@ public class ProductController {
         data.put("countProduct",countProduct);
         return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Count Product",data),HttpStatus.OK);
     }
-    @GetMapping("/admin/product/export/excel")
+    @GetMapping("/manager/product/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
