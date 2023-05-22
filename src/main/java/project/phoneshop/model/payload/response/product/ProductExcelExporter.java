@@ -1,4 +1,4 @@
-package project.phoneshop.model.payload.response.brand;
+package project.phoneshop.model.payload.response.product;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import project.phoneshop.model.entity.BrandEntity;
 import project.phoneshop.model.entity.ProductEntity;
 
 import javax.servlet.ServletOutputStream;
@@ -56,6 +55,8 @@ public class ProductExcelExporter {
             cell.setCellValue((Boolean) value);
         }else if (value instanceof UUID) {
             cell.setCellValue(String.valueOf((UUID) value));
+        }else if (value instanceof Double) {
+            cell.setCellValue((Double) value);
         }else {
             cell.setCellValue((String) value);
         }
