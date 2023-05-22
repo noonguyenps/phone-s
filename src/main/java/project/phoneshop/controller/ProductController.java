@@ -11,10 +11,16 @@ import project.phoneshop.mapping.ProductMapping;
 import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.product.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.brand.BrandExcelExporter;
+import project.phoneshop.model.payload.response.brand.ProductExcelExporter;
 import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -285,6 +291,19 @@ public class ProductController {
         long countProduct = productService.countProduct();
         data.put("countProduct",countProduct);
         return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(),"Count Product",data),HttpStatus.OK);
+    }
+    @GetMapping("/admin/product/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=product_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        List<ProductEntity> listProduct = productService.findAllProduct();
+        ProductExcelExporter excelExporter = new ProductExcelExporter(listProduct);
+        excelExporter.export(response);
     }
     @PutMapping("/manager/product/update/{id}")
     public ResponseEntity<SuccessResponse> updateProduct(HttpServletRequest request, @PathVariable UUID id, @RequestBody UpdateProductRequest updateProductRequest){
