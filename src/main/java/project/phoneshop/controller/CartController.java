@@ -77,7 +77,7 @@ public class CartController {
                 return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "List attribute option not found",null),HttpStatus.NOT_FOUND);
             }
             for(CartEntity cartEntity: user.getListCart()){
-                if(cartEntity.getProductCart() == product && cartEntity.getListAttributeOption().equals(addNewCartRequest.getListAttribute())){
+                if(cartEntity.getProductCart() == product && cartEntity.getListAttributeOption().equals(new HashSet<String>(addNewCartRequest.getListAttribute()))){
                     List<CartEntity> listCart = cartService.getCartByProduct(user,product);
                     for(CartEntity cart: listCart){
                         cartEntity.setQuantity(cartEntity.getQuantity()+addNewCartRequest.getQuantity());
