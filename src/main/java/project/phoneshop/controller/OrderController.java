@@ -127,6 +127,32 @@ public class OrderController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @PostMapping("/user/order/payment/{id}")
+    private ResponseEntity<SuccessResponse> paymentOrder(HttpServletRequest request, @PathVariable int id, @RequestParam(defaultValue = "1") int paymentId) throws Exception {
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        OrderEntity order = orderService.findById(id);
+        if(user != null){
+            if(order==null)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
+            if(order.getUserOrder()!=user)
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
+            if(!order.getStatusPayment())
+                return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order was paid",null),HttpStatus.NOT_FOUND);
+            PaymentEntity payment = paymentService.getPaymentById(paymentId);
+            if(payment==null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Payment in order Not Found",null),HttpStatus.NOT_FOUND);
+            HashMap<String,Object> data=new HashMap<>();
+            String link = "";
+            switch (payment.getPaymentId()){
+                case 2 : link=paypalService.paypalPayment(order,request);break;
+                case 3 : link= momoService.createMomoPayment(order);break;
+                case 4 : link= momoService.createMomoATMPayment(order);break;
+            }
+            data.put("url",link);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Payment Order Successfully",data), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/order/momo/pay")
     public ResponseEntity<Object> payMomoResult(@RequestParam("orderId") String orderId,
                                                 @RequestParam("requestId") String requestId,
