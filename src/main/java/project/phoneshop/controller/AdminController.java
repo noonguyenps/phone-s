@@ -9,18 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.UserMapping;
 import project.phoneshop.mapping.UserNotificationMapping;
-import project.phoneshop.model.entity.AddressEntity;
-import project.phoneshop.model.entity.OrderEntity;
-import project.phoneshop.model.entity.UserEntity;
-import project.phoneshop.model.entity.UserNotificationEntity;
+import project.phoneshop.model.entity.*;
 import project.phoneshop.model.payload.request.notification.AddNotificationRequest;
 import project.phoneshop.model.payload.request.user.AddNewUserRequest;
 import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.model.payload.response.SuccessResponse;
-import project.phoneshop.service.OrderService;
-import project.phoneshop.service.ProductService;
-import project.phoneshop.service.UserNotificationService;
-import project.phoneshop.service.UserService;
+import project.phoneshop.model.payload.response.cart.CartResponseFE;
+import project.phoneshop.model.payload.response.order.OrderResponse;
+import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -38,6 +34,7 @@ public class AdminController {
     private final UserNotificationService userNotificationService;
     private final ProductService productService;
     private final OrderService orderService;
+    private final CartService cartService;
     @Autowired
     UserNotificationMapping userNotificationMapping;
     @Autowired
@@ -91,6 +88,28 @@ public class AdminController {
             Map<String,Object> data = new HashMap<>();
             data.put("addressList", list);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List address",data), HttpStatus.OK);
+        }
+    }
+    @GetMapping("/user/order/{id}")
+    @ResponseBody
+    public ResponseEntity<SuccessResponse> getUserOrders(HttpServletRequest request, @PathVariable UUID id) throws Exception{
+        UserEntity user = userService.findById(id);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            List<OrderEntity> list = user.getListOrder();
+            List<OrderResponse> responseList = new ArrayList<>();
+            if (list.isEmpty())
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List address is Empty",null), HttpStatus.OK);
+            for(OrderEntity order:list){
+                List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+                for(CartEntity cart: order.getCartOrder())
+                    cartResponseFEList.add(cartService.getCartResponseFE(cart));
+                responseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+            }
+            Map<String,Object> data = new HashMap<>();
+            data.put("listOrder",responseList);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Order",data), HttpStatus.OK);
         }
     }
     @GetMapping("/user/{id}")
