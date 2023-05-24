@@ -136,7 +136,7 @@ public class OrderController {
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
             if(order.getUserOrder()!=user)
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order not found",null),HttpStatus.NOT_FOUND);
-            if(!order.getStatusPayment())
+            if(order.getStatusPayment())
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order was paid",null),HttpStatus.NOT_FOUND);
             PaymentEntity payment = paymentService.getPaymentById(paymentId);
             if(payment==null) return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Payment in order Not Found",null),HttpStatus.NOT_FOUND);
