@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.UserMapping;
 import project.phoneshop.mapping.UserNotificationMapping;
+import project.phoneshop.model.entity.AddressEntity;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.entity.UserNotificationEntity;
@@ -76,6 +77,21 @@ public class AdminController {
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/user/address/{id}")
+    @ResponseBody
+    public ResponseEntity<SuccessResponse> getUserAddress(HttpServletRequest request, @PathVariable UUID id) throws Exception{
+        UserEntity user = userService.findById(id);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            List<AddressEntity> list = user.getAddress();
+            if (list.isEmpty())
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List address is Empty",null), HttpStatus.OK);
+            Map<String,Object> data = new HashMap<>();
+            data.put("addressList", list);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List address",data), HttpStatus.OK);
+        }
     }
     @GetMapping("/user/{id}")
     public ResponseEntity<SuccessResponse> getUserByID(HttpServletRequest request,@PathVariable UUID id){
