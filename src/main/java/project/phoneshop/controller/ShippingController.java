@@ -1,7 +1,9 @@
 package project.phoneshop.controller;
 
+import com.lowagie.text.DocumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,16 @@ import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.ship.AddShipRequest;
 import project.phoneshop.model.payload.request.shipping.AddShippingRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
+import project.phoneshop.model.payload.response.shipping.ShippingPDFExporter;
 import project.phoneshop.model.payload.response.shipping.ShippingResponse;
 import project.phoneshop.model.payload.response.shipping.ShippingResponseV2;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -44,6 +51,21 @@ public class ShippingController {
             shippingResponses.add(shippingService.entity2Response(shipping));
         data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
+    }
+    @GetMapping("/shipping/export/pdf/{id}")
+    public void exportToPDF(HttpServletResponse response,@PathVariable UUID id) throws DocumentException, IOException, JSONException {
+        ShippingEntity shipping = shippingService.findById(id);
+        if(shipping!=null) {
+            response.setContentType("application/pdf");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+            response.setHeader(headerKey, headerValue);
+            ShippingPDFExporter exporter = new ShippingPDFExporter(shipping);
+            exporter.export(response);
+        }
     }
     @GetMapping("manager/shipper/all")
     public ResponseEntity<SuccessResponse> getAllShipper(HttpServletRequest request, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "20")int size){

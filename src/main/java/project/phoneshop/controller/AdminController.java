@@ -112,6 +112,28 @@ public class AdminController {
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Order",data), HttpStatus.OK);
         }
     }
+    @GetMapping("/pdf/order/{id}")
+    @ResponseBody
+    public ResponseEntity<SuccessResponse> getPDFByOrder(HttpServletRequest request, @PathVariable UUID id) throws Exception{
+        UserEntity user = userService.findById(id);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
+        else{
+            List<OrderEntity> list = user.getListOrder();
+            List<OrderResponse> responseList = new ArrayList<>();
+            if (list.isEmpty())
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List address is Empty",null), HttpStatus.OK);
+            for(OrderEntity order:list){
+                List<CartResponseFE> cartResponseFEList = new ArrayList<>();
+                for(CartEntity cart: order.getCartOrder())
+                    cartResponseFEList.add(cartService.getCartResponseFE(cart));
+                responseList.add(orderService.getOrderResponse(order,cartResponseFEList));
+            }
+            Map<String,Object> data = new HashMap<>();
+            data.put("listOrder",responseList);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List Order",data), HttpStatus.OK);
+        }
+    }
     @GetMapping("/user/{id}")
     public ResponseEntity<SuccessResponse> getUserByID(HttpServletRequest request,@PathVariable UUID id){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
