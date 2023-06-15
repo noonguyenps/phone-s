@@ -52,7 +52,7 @@ public class ShippingController {
         data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
-    @GetMapping("/shipping/export/pdf/{id}")
+    @GetMapping("/admin/shipping/export/pdf/{id}")
     public void exportToPDF(HttpServletResponse response,@PathVariable UUID id) throws DocumentException, IOException, JSONException {
         ShippingEntity shipping = shippingService.findById(id);
         if(shipping!=null) {
@@ -61,7 +61,7 @@ public class ShippingController {
             String currentDateTime = dateFormatter.format(new Date());
 
             String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+            String headerValue = "attachment; filename=shipping_" + currentDateTime +"_"+shipping.getId()+ ".pdf";
             response.setHeader(headerKey, headerValue);
             ShippingPDFExporter exporter = new ShippingPDFExporter(shipping);
             exporter.export(response);
@@ -151,11 +151,10 @@ public class ShippingController {
     }
 
     @PutMapping("/shipper/update/{id}")
-    public ResponseEntity<SuccessResponse> updateShipping(HttpServletRequest request,@PathVariable("id") int id,@RequestParam String img1,@RequestParam(required = false) String img2,@RequestParam(required = false) String img3){
+    public ResponseEntity<SuccessResponse> updateShipping(HttpServletRequest request,@PathVariable("id") UUID id,@RequestParam String img1,@RequestParam(required = false) String img2,@RequestParam(required = false) String img3){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
-        OrderEntity orderEntity = orderService.findById(id);
-        ShippingEntity shipping = shippingService.findByShipper(user,orderEntity);
-        if(orderEntity==null||orderEntity.getOrderStatus()!=1){
+        ShippingEntity shipping = shippingService.findById(id);
+        if(shipping.getOrderShipping().getOrderStatus()!=1||shipping.getUserOrderShipping()!=user){
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Order Not Found",null),HttpStatus.NOT_FOUND);
         }
         else {
@@ -164,6 +163,7 @@ public class ShippingController {
             shipping.setImage3(img3);
             shipping.setState(2);
             shippingService.create(shipping);
+            OrderEntity orderEntity = shipping.getOrderShipping();
             orderEntity.setStatusPayment(true);
             orderEntity.setOrderStatus(2);
             orderService.save(orderEntity);
