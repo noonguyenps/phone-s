@@ -185,9 +185,12 @@ public class ShippingController {
     }
 
     @PostMapping(value = "/shipper/uploadImg/{id}")
-    public ResponseEntity<SuccessResponse> uploadImgShippingV2(HttpServletRequest request,@PathVariable("id") int id, @RequestPart(required = true) MultipartFile file){
+    public ResponseEntity<SuccessResponse> uploadImgShippingV2(HttpServletRequest request,@PathVariable("id") UUID id, @RequestPart(required = true) MultipartFile file){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user==null)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not found",null),HttpStatus.NOT_FOUND);
+        ShippingEntity shipping = shippingService.findById(id);
+        if(user!=shipping.getUserOrderShipping())
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "User not found",null),HttpStatus.NOT_FOUND);
         UUID uuid = UUID.randomUUID();
         LocalDate date = LocalDate.now();
