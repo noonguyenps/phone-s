@@ -177,8 +177,8 @@ public class BrandController {
         BrandExcelExporter excelExporter = new BrandExcelExporter(listBrand);
         excelExporter.export(response);
     }
-    @GetMapping("/product/key/{keyword}")
-    private ResponseEntity<SuccessResponse> showAllProductByKeyword(@PathVariable String keyword,
+    @GetMapping("/brand/key/{keyword}")
+    private ResponseEntity<SuccessResponse> showAllBrandByKeyword(@PathVariable String keyword,
                                                                     @RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "30") int size,
                                                                     @RequestParam(defaultValue = "product_id") String sort){
