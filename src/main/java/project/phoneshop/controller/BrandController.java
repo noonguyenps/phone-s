@@ -181,13 +181,13 @@ public class BrandController {
     private ResponseEntity<SuccessResponse> showAllBrandByKeyword(@PathVariable String keyword,
                                                                     @RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "30") int size,
-                                                                    @RequestParam(defaultValue = "product_id") String sort){
+                                                                    @RequestParam(defaultValue = "brand_id") String sort){
 
         List<BrandEntity> listBrand = brandService.findBrandByKeyword(keyword,page,size,sort);
         if(listBrand.size() == 0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Brand is Empty",null), HttpStatus.FOUND);
         Map<String,Object> data = new HashMap<>();
-        data.put("listProduct",listBrand);
+        data.put("listBrand",listBrand);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
 
