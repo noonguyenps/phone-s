@@ -202,4 +202,16 @@ public class ShippingController {
         return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "Upload Logo Successfully",data), HttpStatus.OK);
     }
 
+
+    private List<String> listProSort(){
+        List<String> list = new ArrayList<>();
+        list.add("product_id");
+        list.add("product_price_up");
+        list.add("product_price_down");
+        list.add("product_sell_amount");
+        list.add("create_at");
+        list.add("product_discount");
+        return list;
+    }
+
 }

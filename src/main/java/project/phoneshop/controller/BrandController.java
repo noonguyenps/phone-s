@@ -8,11 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.mapping.BrandMapping;
 import project.phoneshop.model.entity.BrandEntity;
+import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.request.brand.AddNewBrandRequest;
 import project.phoneshop.model.payload.request.brand.UpdateBrandRequest;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.brand.BrandExcelExporter;
+import project.phoneshop.model.payload.response.brand.BrandResponse;
+import project.phoneshop.model.payload.response.product.ProductResponse;
 import project.phoneshop.service.AddressService;
 import project.phoneshop.service.BrandService;
 import project.phoneshop.service.ImageStorageService;
@@ -174,4 +177,18 @@ public class BrandController {
         BrandExcelExporter excelExporter = new BrandExcelExporter(listBrand);
         excelExporter.export(response);
     }
+    @GetMapping("/product/key/{keyword}")
+    private ResponseEntity<SuccessResponse> showAllProductByKeyword(@PathVariable String keyword,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "30") int size,
+                                                                    @RequestParam(defaultValue = "product_id") String sort){
+
+        List<BrandEntity> listBrand = brandService.findBrandByKeyword(keyword,page,size,sort);
+        if(listBrand.size() == 0)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"List Brand is Empty",null), HttpStatus.FOUND);
+        Map<String,Object> data = new HashMap<>();
+        data.put("listProduct",listBrand);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
+    }
+
 }
