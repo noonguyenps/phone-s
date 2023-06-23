@@ -157,7 +157,7 @@ public class AdminController {
             UserEntity userEntity = userService.findById(id);
             if(userEntity == null)
                 return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "user not found",null),HttpStatus.NOT_FOUND);
-            RoleEntity roleEntity = roleService.findById(id);
+            RoleEntity roleEntity = roleService.findById(roleId);
             if(roleEntity == null)
                 return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "Role not found",null),HttpStatus.NOT_FOUND);
             Set<RoleEntity> roleEntities = new HashSet<>();
