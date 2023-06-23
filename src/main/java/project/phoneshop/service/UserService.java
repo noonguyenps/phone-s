@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.model.payload.response.user.UserResponse;
+import project.phoneshop.model.payload.response.user.UserResponseAdmin;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,4 +28,6 @@ public interface UserService {
     List<Object> countUserPerMonth();
     UserEntity updateActive(UserEntity user);
     UserResponse getUserResponse(UserEntity user);
+
+    UserResponseAdmin getUserResponseAdmin(UserEntity user);
 }

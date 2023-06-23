@@ -142,7 +142,7 @@ public class AdminController {
             if(userEntity == null)
                 return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "user not found",null),HttpStatus.NOT_FOUND);
             Map<String,Object> data = new HashMap<>();
-            data.put("user",userEntity);
+            data.put("user",userService.getUserResponseAdmin(userEntity));
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"User",data),HttpStatus.OK);
         }
         else

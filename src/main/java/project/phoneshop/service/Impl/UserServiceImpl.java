@@ -9,6 +9,7 @@ import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.RoleEntity;
 import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.user.UserResponse;
+import project.phoneshop.model.payload.response.user.UserResponseAdmin;
 import project.phoneshop.repository.RoleRepository;
 import project.phoneshop.repository.UserRepository;
 import project.phoneshop.service.UserService;
@@ -125,6 +126,38 @@ public class UserServiceImpl implements UserService {
         }
         userResponse.setCountOrderTotal(orderTotal);
         userResponse.setCountOrder(user.getListOrder().size());
+        return userResponse;
+    }
+    @Override
+    public UserResponseAdmin getUserResponseAdmin(UserEntity user) {
+        UserResponseAdmin userResponse = new UserResponseAdmin();
+        userResponse.setId(user.getId());
+        userResponse.setFullName(user.getFullName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setGender(user.getGender());
+        userResponse.setNickName(user.getNickName());
+        userResponse.setPhone(user.getPhone());
+        userResponse.setBirthDate(user.getBirthDate());
+        userResponse.setImg(user.getImg());
+        userResponse.setStatus(user.isStatus());
+        userResponse.setActive(user.isActive());
+        userResponse.setCountry(user.getCountry());
+        userResponse.setCreateAt(user.getCreateAt());
+        userResponse.setUpdateAt(user.getUpdateAt());
+        userResponse.setFacebookAuth(user.getFacebookAuth());
+        userResponse.setGoogleAuth(user.getGoogleAuth());
+        userResponse.setAddress(user.getAddress());
+        userResponse.setCountProductFavorite(user.getFavoriteProducts().size());
+        double orderTotal = 0;
+        for(OrderEntity order: user.getListOrder()){
+            if(order.getOrderStatus()==2||order.getStatusPayment())
+                orderTotal += order.getTotal();
+        }
+        userResponse.setCountOrderTotal(orderTotal);
+        userResponse.setCountOrder(user.getListOrder().size());
+        for (RoleEntity role : user.getRoles()){
+            userResponse.setRole(role.getName());
+        }
         return userResponse;
     }
 }
