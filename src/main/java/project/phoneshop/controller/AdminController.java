@@ -150,6 +150,25 @@ public class AdminController {
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+    @PutMapping("/user/edit/role/{id}")
+    public ResponseEntity<SuccessResponse> editUserRole(HttpServletRequest request,@PathVariable UUID id, @RequestParam UUID roleId){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            UserEntity userEntity = userService.findById(id);
+            if(userEntity == null)
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "user not found",null),HttpStatus.NOT_FOUND);
+            RoleEntity roleEntity = roleService.findById(id);
+            if(roleEntity == null)
+                return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.NOT_FOUND.value(), "Role not found",null),HttpStatus.NOT_FOUND);
+            Set<RoleEntity> roleEntities = new HashSet<>();
+            roleEntities.add(roleEntity);
+            userEntity.setRoles(roleEntities);
+            userService.saveInfo(userEntity);
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Update Success",null),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/role/all")
     public ResponseEntity<SuccessResponse> getAllRole(HttpServletRequest request){
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
