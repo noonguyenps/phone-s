@@ -157,6 +157,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setCountOrder(user.getListOrder().size());
         for (RoleEntity role : user.getRoles()){
             userResponse.setRole(role.getName());
+            userResponse.setRoleId(role.getId());
         }
         return userResponse;
     }

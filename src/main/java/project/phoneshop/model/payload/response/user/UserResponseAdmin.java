@@ -35,5 +35,6 @@ public class UserResponseAdmin {
     private int countOrder;
     private int countVoucher;
     private int countProductFavorite;
+    private UUID roleId;
     private String role;
 }
