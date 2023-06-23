@@ -16,6 +16,7 @@ import project.phoneshop.model.payload.response.CountPerMonth;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.model.payload.response.order.OrderResponse;
+import project.phoneshop.model.payload.response.role.RoleResponse;
 import project.phoneshop.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,7 +155,12 @@ public class AdminController {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null){
             Map<String,Object> data = new HashMap<>();
-            data.put("roles",roleService.getAllRoles());
+            List<RoleEntity> roleEntities = roleService.getAllRoles();
+            List<RoleResponse> responseList = new ArrayList<>();
+            for (RoleEntity role: roleEntities){
+                responseList.add(roleService.getRoleResponse(role));
+            }
+            data.put("roles",responseList);
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Roles",data),HttpStatus.OK);
         }
         else
