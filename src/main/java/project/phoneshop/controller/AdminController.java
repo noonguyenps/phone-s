@@ -35,6 +35,7 @@ public class AdminController {
     private final ProductService productService;
     private final OrderService orderService;
     private final CartService cartService;
+    private final RoleService roleService;
     @Autowired
     UserNotificationMapping userNotificationMapping;
     @Autowired
@@ -144,6 +145,17 @@ public class AdminController {
             Map<String,Object> data = new HashMap<>();
             data.put("user",userService.getUserResponseAdmin(userEntity));
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"User",data),HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+    @GetMapping("/role/all")
+    public ResponseEntity<SuccessResponse> getAllRole(HttpServletRequest request){
+        UserEntity user = authorizationHeader.AuthorizationHeader(request);
+        if(user != null){
+            Map<String,Object> data = new HashMap<>();
+            data.put("roles",roleService.getAllRoles());
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Roles",data),HttpStatus.OK);
         }
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
