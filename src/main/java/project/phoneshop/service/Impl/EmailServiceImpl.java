@@ -77,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         msg.setSubject("SPhone Reset password");
         msg.setContent("<!DOCTYPE html>\n" +
-                        "<html lang=\"vi\">\n" +
+                        "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"vi\" xml:lang=\"vi\">\n" +
                         "  <head>\n" +
                         "    <meta charset=\"utf-8\" />\n" +
                         "    <meta name=\"viewport\" content=\"width=device-width\" />\n" +
