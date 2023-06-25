@@ -10,6 +10,5 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @Data
 public class ReActiveRequest {
-    @NotEmpty
-    String email;
+    String data;
 }

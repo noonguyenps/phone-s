@@ -387,18 +387,23 @@ public class AuthenticationController {
         if (request == null) {
             throw new HttpMessageNotReadableException("Missing field");
         }
-        if(userService.findByEmail(request.getEmail())==null){
-            throw new HttpMessageNotReadableException("Email is not Registered");
+        if(userService.findByEmail(request.getData())==null&&userService.findByPhone(request.getData())==null){
+            throw new HttpMessageNotReadableException("Email or Phone is not Registered");
         }
-        UserEntity user=userService.findByEmail(request.getEmail());
+        UserEntity user=userService.findByEmail(request.getData());
+        UserEntity user1 = userService.findByPhone(request.getData());
         try{
-            emailService.sendmail(user);
+            if(user!=null){
+                emailService.sendmail(user);
+            }
+            if(user1!=null){
+                emailService.sendmail(user1);
+            }
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Send email with new password successfully",null),HttpStatus.OK);
         }
         catch (Exception ex){
             throw  new Exception(ex.toString());
         }
-
     }
     @PostMapping("/resetPassword")
     public ResponseEntity<SuccessResponse> resetPassword(@RequestParam(defaultValue = "") String token, @RequestBody @Valid ResetPasswordRequest req,

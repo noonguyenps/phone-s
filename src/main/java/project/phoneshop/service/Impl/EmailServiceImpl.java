@@ -76,7 +76,19 @@ public class EmailServiceImpl implements EmailService {
         msg.setFrom(new InternetAddress("phone.s.shop.2412@gmail.com", false));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         msg.setSubject("Reset password");
-        msg.setContent("Click link to reset password: "+ host+"?token="+jwtUtils.generateEmailJwtToken(user.getEmail()), "text/html");
+        msg.setContent("<!DOCTYPE html>\n" +
+                "<html lang=\"en-US\">\n" +
+                "  <head>\n" +
+                "    <meta charset=\"utf-8\" />\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width\" />\n" +
+                "    <title>My test page</title>\n" +
+                "  </head>\n" +
+                "  <body>\n" +
+                "    <img src=\"images/firefox-icon.png\" alt=\"My test image\" />\n" +
+                "  </body>\n" +
+                "</html>"
+//                "Click link to reset password: "+ host+"?token="+jwtUtils.generateEmailJwtToken(user.getEmail())
+                , "text/html");
         msg.setSentDate(new Date());
         Transport.send(msg);
     }
