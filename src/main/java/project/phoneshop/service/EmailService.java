@@ -12,5 +12,7 @@ public interface EmailService {
     public void sendForgetPasswordMessage(UserEntity user);
 
     void sendmail(UserEntity user) throws AddressException, MessagingException, IOException;
+
+    void sendmailVerification(UserEntity user, String email) throws AddressException, MessagingException, IOException;
 }
 

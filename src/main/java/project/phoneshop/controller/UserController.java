@@ -7,15 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.phoneshop.handler.AuthorizationHeader;
+import project.phoneshop.handler.HttpMessageNotReadableException;
+import project.phoneshop.handler.MethodArgumentNotValidException;
 import project.phoneshop.mapping.UserMapping;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
+import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
 import project.phoneshop.model.payload.request.user.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.product.ProductResponse;
+import project.phoneshop.service.EmailService;
 import project.phoneshop.service.ImageStorageService;
 import project.phoneshop.service.ProductService;
 import project.phoneshop.service.UserService;
@@ -38,6 +43,7 @@ public class UserController {
     private final ImageStorageService imageStorageService;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final ProductService productService;
+    private final EmailService emailService;
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse> registerAccount(@RequestBody @Valid AddNewUserRequest request) {
         UserEntity user= UserMapping.registerToEntity(request);
@@ -229,5 +235,27 @@ public class UserController {
 
         }
         return new ResponseEntity<>(new SuccessResponse(false, HttpStatus.FOUND.value(), "Update Failure", null), HttpStatus.FOUND);
+    }
+    @PostMapping("/verification/email")
+    public ResponseEntity<SuccessResponse> verificationEmail(HttpServletRequest request,@RequestBody @Valid ReActiveRequest reRequest, BindingResult errors) throws Exception{
+        if (errors.hasErrors()) {
+            throw new MethodArgumentNotValidException(errors);
+        }
+        if (request == null) {
+            throw new HttpMessageNotReadableException("Missing field");
+        }
+        if(userService.findByEmail(reRequest.getData())!=null){
+            throw new HttpMessageNotReadableException("Email is Existed");
+        }
+        UserEntity user=authorizationHeader.AuthorizationHeader(request);
+        try{
+            if(user!=null){
+                emailService.sendmailVerification(user,reRequest.getData());
+            }
+            return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Send email successfully",null),HttpStatus.OK);
+        }
+        catch (Exception ex){
+            throw  new Exception(ex.toString());
+        }
     }
 }

@@ -12,9 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import project.phoneshop.security.DTO.AppUserDetail;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -101,6 +99,16 @@ public class JwtUtils {
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
         String email_token = JWT.create()
                 .withSubject(username)
+                .withExpiresAt(new Date(System.currentTimeMillis()+ 600000))
+                .sign(algorithm);
+        return email_token;
+    }
+
+    public String generateVerificationEmailJwtToken(String username, UUID id) {
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
+        String email_token = JWT.create()
+                .withSubject(username)
+                .withClaim("id", Collections.singletonList(id))
                 .withExpiresAt(new Date(System.currentTimeMillis()+ 600000))
                 .sign(algorithm);
         return email_token;
