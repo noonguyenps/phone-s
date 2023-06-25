@@ -428,5 +428,21 @@ public class AuthenticationController {
             throw new BadCredentialsException("New password doesn't match confirm password");
         }
     }
+    @GetMapping("/confirm/email")
+    public ResponseEntity<SuccessResponse> confirmEmail(@RequestParam(defaultValue = "") String token, HttpServletResponse response) throws Exception{
+        if(token == null || token.equals("")){
+            throw new BadCredentialsException("token is not valid");
+        }
+        String email= jwtUtils.getUserNameFromJwtToken(token);
+        String id = jwtUtils.getIdFromJwtToken(token);
+        UserEntity user = userService.findById(UUID.fromString(id));
+        if(user == null){
+            throw new RecordNotFoundException("User not found, please check again");
+        }
+        user.setEmail(email);
+        userService.saveInfo(user);
+        response.sendRedirect("https://phone-s-fe.vercel.app/customer/account/edit");
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update email successfully",null),HttpStatus.OK);
+    }
 }
 

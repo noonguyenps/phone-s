@@ -142,7 +142,7 @@ public class EmailServiceImpl implements EmailService {
                         "                <div style=\"width: 700px; border-radius: 2%; background-color: rgb(250, 250, 250); padding: 10px;margin: 10px;\">\n" +
                         "                    <h1>Verification Email</h1>\n" +
                         "                    <h4>Hello. We, S-Phone customer service have received your confirm email request. Click the link below to confirm your email.</h4>\n" +
-                        "                    <a href=\"https://phone-s.herokuapp.com/api/user/confirm/email?token="+jwtUtils.generateVerificationEmailJwtToken(email,user.getId())+"\"><div style=\"width: 150px; height: 50px; border-radius: 1rem; background-color: rgb(98, 130, 219); padding: 10px;margin: 10px;\">\n" +
+                        "                    <a href=\"https://phone-s.herokuapp.com/api/auth/confirm/email?token="+jwtUtils.generateVerificationEmailJwtToken(email,user.getId())+"\"><div style=\"width: 150px; height: 50px; border-radius: 1rem; background-color: rgb(98, 130, 219); padding: 10px;margin: 10px;\">\n" +
                         "                        <p>Verification</p>\n" +
                         "                    </div>\n" +
                         "                    \n" +
