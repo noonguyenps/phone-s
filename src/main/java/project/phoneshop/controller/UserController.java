@@ -28,6 +28,7 @@ import project.phoneshop.service.ProductService;
 import project.phoneshop.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -261,7 +262,7 @@ public class UserController {
         }
     }
     @PostMapping("/confirm/email")
-    public ResponseEntity<SuccessResponse> confirmEmail(@RequestParam(defaultValue = "") String token) throws Exception{
+    public ResponseEntity<SuccessResponse> confirmEmail(@RequestParam(defaultValue = "") String token, HttpServletResponse response) throws Exception{
         if(token == null || token.equals("")){
             throw new BadCredentialsException("token is not valid");
         }
@@ -273,6 +274,7 @@ public class UserController {
         }
         user.setEmail(email);
         userService.saveInfo(user);
+        response.sendRedirect("https://phone-s-fe.vercel.app/customer/account/edit");
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update email successfully",null),HttpStatus.OK);
     }
 }
