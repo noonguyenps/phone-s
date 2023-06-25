@@ -2,6 +2,7 @@ package project.phoneshop.security.JWT;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -81,6 +82,11 @@ public class JwtUtils {
         DecodedJWT jwt = JWT.decode(token);
         return  jwt.getSubject();
     }
+    public String getIdFromJwtToken(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        Claim claim= jwt.getClaim("id");
+        return claim.toString().replace("[","").replace("\"","").replace("]","");
+    }
     public String generateRefreshJwtToken(AppUserDetail userPrincipal){
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
         return JWT.create()
@@ -106,10 +112,11 @@ public class JwtUtils {
 
     public String generateVerificationEmailJwtToken(String username, UUID id) {
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
+        String ids = String.valueOf(id);
         String email_token = JWT.create()
                 .withSubject(username)
-                .withClaim("id", Collections.singletonList(id))
                 .withExpiresAt(new Date(System.currentTimeMillis()+ 600000))
+                .withClaim("id", Collections.singletonList(ids))
                 .sign(algorithm);
         return email_token;
     }

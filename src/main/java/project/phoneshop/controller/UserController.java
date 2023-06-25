@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import project.phoneshop.handler.AuthorizationHeader;
 import project.phoneshop.handler.HttpMessageNotReadableException;
 import project.phoneshop.handler.MethodArgumentNotValidException;
+import project.phoneshop.handler.RecordNotFoundException;
 import project.phoneshop.mapping.UserMapping;
 import project.phoneshop.model.entity.ProductEntity;
 import project.phoneshop.model.entity.UserEntity;
@@ -20,6 +21,7 @@ import project.phoneshop.model.payload.request.authentication.ReActiveRequest;
 import project.phoneshop.model.payload.request.user.*;
 import project.phoneshop.model.payload.response.SuccessResponse;
 import project.phoneshop.model.payload.response.product.ProductResponse;
+import project.phoneshop.security.JWT.JwtUtils;
 import project.phoneshop.service.EmailService;
 import project.phoneshop.service.ImageStorageService;
 import project.phoneshop.service.ProductService;
@@ -38,6 +40,8 @@ import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    @Autowired
+    JwtUtils jwtUtils;
     @Autowired
     AuthorizationHeader authorizationHeader;
     private final ImageStorageService imageStorageService;
@@ -238,21 +242,37 @@ public class UserController {
     }
     @PostMapping("/verification/email")
     public ResponseEntity<SuccessResponse> verificationEmail(HttpServletRequest request,@RequestBody @Valid ReActiveRequest reRequest, BindingResult errors) throws Exception{
+        UserEntity user=authorizationHeader.AuthorizationHeader(request);
+        if(user==null)
+            throw new BadCredentialsException("User not found");
         if (errors.hasErrors()) {
             throw new MethodArgumentNotValidException(errors);
         }
         if(userService.findByEmail(reRequest.getData())!=null){
             throw new HttpMessageNotReadableException("Email is Existed");
         }
-        UserEntity user=authorizationHeader.AuthorizationHeader(request);
+
         try{
-            if(user!=null){
-                emailService.sendmailVerification(user,reRequest.getData());
-            }
+            emailService.sendmailVerification(user,reRequest.getData());
             return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Send email successfully",null),HttpStatus.OK);
         }
         catch (Exception ex){
             throw  new Exception(ex.toString());
         }
+    }
+    @PostMapping("/confirm/email")
+    public ResponseEntity<SuccessResponse> confirmEmail(@RequestParam(defaultValue = "") String token) throws Exception{
+        if(token == null || token.equals("")){
+            throw new BadCredentialsException("token is not valid");
+        }
+        String email= jwtUtils.getUserNameFromJwtToken(token);
+        String id = jwtUtils.getIdFromJwtToken(token);
+        UserEntity user = userService.findById(UUID.fromString(id));
+        if(user == null){
+            throw new RecordNotFoundException("User not found, please check again");
+        }
+        user.setEmail(email);
+        userService.saveInfo(user);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(), "Update email successfully",null),HttpStatus.OK);
     }
 }

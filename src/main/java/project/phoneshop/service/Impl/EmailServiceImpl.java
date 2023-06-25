@@ -125,8 +125,8 @@ public class EmailServiceImpl implements EmailService {
         });
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress("phone.s.shop.2412@gmail.com", false));
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-        msg.setSubject("SPhone Reset password");
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+        msg.setSubject("SPhone Confirm Email");
         msg.setContent("<!DOCTYPE html>\n" +
                         "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"vi\" xml:lang=\"vi\">\n" +
                         "  <head>\n" +
