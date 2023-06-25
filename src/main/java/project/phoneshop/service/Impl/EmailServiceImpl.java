@@ -89,15 +89,15 @@ public class EmailServiceImpl implements EmailService {
                         "            <img src=\"https://res.cloudinary.com/duk2lo18t/image/upload/v1665719834/frontend/S-Phone_cpfelx.png\" width=\"200\" height=\"200\" style=\"margin: 1%;border-radius: 1rem;\"/>\n" +
                         "            <div>\n" +
                         "                <div style=\"width: 700px; border-radius: 2%; background-color: rgb(250, 250, 250); padding: 10px;margin: 10px;\">\n" +
-                        "                    <h1>Đặt lại mật khẩu</h1>\n" +
-                        "                    <h4>Xin chào bạn. Chúng tôi, bộ phận chăm sóc khách hàng của S-Phone đã nhận được yêu cầu đặt lại mật khẩu của bạn. Nếu bạn đã quên mật khẩu của mình, thì đừng lo hãy nhấn vào đường dẫn bên dưới để đặt lại mật khẩu bạn nhé </h4>\n" +
+                        "                    <h1>Reset Password</h1>\n" +
+                        "                    <h4>Hello. We, S-Phone customer service have received your password reset request. If you've forgotten your password, don't worry, click the link below to reset your password.</h4>\n" +
                         "                    <a href=\""+host+"?token="+jwtUtils.generateEmailJwtToken(user.getEmail())+"\"><div style=\"width: 150px; height: 50px; border-radius: 1rem; background-color: rgb(98, 130, 219); padding: 10px;margin: 10px;\">\n" +
-                        "                        <p>Đặt lại mật khẩu</p>\n" +
+                        "                        <p>Reset My Password</p>\n" +
                         "                    </div>\n" +
                         "                    \n" +
                         "                    </a>\n" +
                         "                </div>\n" +
-                        "                <h5>Nếu không phải là bạn? Hãy liên hệ với chúng tôi.</h4>\n" +
+                        "                <h5>If not you? Please contact us.</h4>\n" +
                         "                <h5>Tel: 0868704516 - Email: phone.s.shop.2412@gmail.com</h4>\n" +
                         "                <br/>\n" +
                         "            </div>\n" +
