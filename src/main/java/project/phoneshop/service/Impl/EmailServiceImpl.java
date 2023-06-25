@@ -75,19 +75,37 @@ public class EmailServiceImpl implements EmailService {
         Message msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress("phone.s.shop.2412@gmail.com", false));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-        msg.setSubject("Reset password");
+        msg.setSubject("SPhone Reset password");
         msg.setContent("<!DOCTYPE html>\n" +
-                "<html lang=\"en-US\">\n" +
-                "  <head>\n" +
-                "    <meta charset=\"utf-8\" />\n" +
-                "    <meta name=\"viewport\" content=\"width=device-width\" />\n" +
-                "    <title>My test page</title>\n" +
-                "  </head>\n" +
-                "  <body>\n" +
-                "    <img src=\"images/firefox-icon.png\" alt=\"My test image\" />\n" +
-                "  </body>\n" +
-                "</html>"
-//                "Click link to reset password: "+ host+"?token="+jwtUtils.generateEmailJwtToken(user.getEmail())
+                        "<html lang=\"en-US\">\n" +
+                        "  <head>\n" +
+                        "    <meta charset=\"utf-8\" />\n" +
+                        "    <meta name=\"viewport\" content=\"width=device-width\" />\n" +
+                        "    <title>Password Reset</title>\n" +
+                        "  </head>\n" +
+                        "  <body>\n" +
+                        "    <div style=\"background-color: rgb(226, 223, 223); width: 100%;height: 100%;\">\n" +
+                        "        <center>\n" +
+                        "            <img src=\"https://res.cloudinary.com/duk2lo18t/image/upload/v1665719834/frontend/S-Phone_cpfelx.png\" width=\"200\" height=\"200\" style=\"margin: 1%;border-radius: 1rem;\"/>\n" +
+                        "            <div>\n" +
+                        "                <div style=\"width: 700px; border-radius: 2%; background-color: rgb(250, 250, 250); padding: 10px;margin: 10px;\">\n" +
+                        "                    <h1>Đặt lại mật khẩu</h1>\n" +
+                        "                    <h4>Xin chào bạn. Chúng tôi, bộ phận chăm sóc khách hàng của S-Phone đã nhận được yêu cầu đặt lại mật khẩu của bạn. Nếu bạn đã quên mật khẩu của mình, thì đừng lo hãy nhấn vào đường dẫn bên dưới để đặt lại mật khẩu bạn nhé </h4>\n" +
+                        "                    <a href=\""+host+"?token="+jwtUtils.generateEmailJwtToken(user.getEmail())+"\"><div style=\"width: 150px; height: 50px; border-radius: 1rem; background-color: rgb(98, 130, 219); padding: 10px;margin: 10px;\">\n" +
+                        "                        <p>Đặt lại mật khẩu</p>\n" +
+                        "                    </div>\n" +
+                        "                    \n" +
+                        "                    </a>\n" +
+                        "                </div>\n" +
+                        "                <h5>Nếu không phải là bạn? Hãy liên hệ với chúng tôi.</h4>\n" +
+                        "                <h5>Tel: 0868704516 - Email: phone.s.shop.2412@gmail.com</h4>\n" +
+                        "                <br/>\n" +
+                        "            </div>\n" +
+                        "        </center>\n" +
+                        "        \n" +
+                        "    </div>\n" +
+                        "  </body>\n" +
+                        "</html>"
                 , "text/html");
         msg.setSentDate(new Date());
         Transport.send(msg);
