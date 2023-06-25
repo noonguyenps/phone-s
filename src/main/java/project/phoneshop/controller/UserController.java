@@ -241,9 +241,6 @@ public class UserController {
         if (errors.hasErrors()) {
             throw new MethodArgumentNotValidException(errors);
         }
-        if (request == null) {
-            throw new HttpMessageNotReadableException("Missing field");
-        }
         if(userService.findByEmail(reRequest.getData())!=null){
             throw new HttpMessageNotReadableException("Email is Existed");
         }
