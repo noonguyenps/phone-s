@@ -261,7 +261,7 @@ public class UserController {
             throw  new Exception(ex.toString());
         }
     }
-    @PostMapping("/confirm/email")
+    @GetMapping("/confirm/email")
     public ResponseEntity<SuccessResponse> confirmEmail(@RequestParam(defaultValue = "") String token, HttpServletResponse response) throws Exception{
         if(token == null || token.equals("")){
             throw new BadCredentialsException("token is not valid");
