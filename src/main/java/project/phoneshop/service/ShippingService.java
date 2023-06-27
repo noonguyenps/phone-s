@@ -17,6 +17,8 @@ public interface ShippingService {
     void create(ShippingEntity shipping);
     ShippingEntity findById(UUID id);
 
+    ShippingEntity findByOrderId(OrderEntity order);
+
     ShippingEntity findByShipper(UserEntity user, OrderEntity order);
 
     ShippingEntity getInfoShippingByOrderId(OrderEntity order);

@@ -50,6 +50,15 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
+    public ShippingEntity findByOrderId(OrderEntity order) {
+        Optional<ShippingEntity> shipping = shippingRepository.findByOrderShipping(order);
+        if(shipping.isEmpty()){
+            return null;
+
+        }return shipping.get();
+    }
+
+    @Override
     public ShippingEntity findByShipper(UserEntity user, OrderEntity order) {
         Optional<ShippingEntity> shipping = shippingRepository.findByUserOrderShippingAndOrderShipping(user,order);
         if(shipping.isEmpty()){

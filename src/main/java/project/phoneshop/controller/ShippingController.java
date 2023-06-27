@@ -52,9 +52,10 @@ public class ShippingController {
         data.put("listShipping",shippingResponses);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"List shipping",data),HttpStatus.OK);
     }
-    @GetMapping("/admin/shipping/export/pdf/{id}")
-    public void exportToPDF(HttpServletResponse response,@PathVariable UUID id) throws DocumentException, IOException, JSONException {
-        ShippingEntity shipping = shippingService.findById(id);
+    @GetMapping("/manager/shipping/export/pdf/{id}")
+    public void exportToPDF(HttpServletResponse response,@PathVariable int id) throws DocumentException, IOException, JSONException {
+        OrderEntity order = orderService.findById(id);
+        ShippingEntity shipping = shippingService.findByOrderId(order);
         if(shipping!=null) {
             response.setContentType("application/pdf");
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
