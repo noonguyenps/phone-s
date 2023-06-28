@@ -45,4 +45,29 @@ public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
             "where get_category_parent_root=category.category_id",
             nativeQuery = true)
     List<Object> sumTotalPerCategory();
+
+    @Query(value = "select product_id,create_at,product_description,product_discount,product_inventory, product_name, product_price, product_sell_amount, product_status, brand_id, category_id\n" +
+            "from products\n" +
+            "natural join (select product_id,count(product_id) from favorite_list group by product_id) as a\n" +
+            "where product_status= 1\n" +
+            "order by count DESC",
+            countQuery = "select product_id,create_at,product_description,product_discount, product_inventory, product_name, product_price, product_sell_amount, product_status, brand_id, category_id\n" +
+                    "from products\n" +
+                    "natural join (select product_id,count(product_id) from favorite_list group by product_id) as a\n" +
+                    "where product_status= 1\n" +
+                    "order by count DESC",
+            nativeQuery = true)
+    Page<ProductEntity> findProductFavorite(Pageable pageable);
+    @Query(value = "select product_id,create_at,product_description,product_discount, product_inventory, product_name, product_price, product_sell_amount, product_status, brand_id, category_id\n" +
+            "from products\n" +
+            "natural join (select product_id, avg(rating_point)from product_ratings group by product_id) as a\n" +
+            "where product_status= 1 and avg>3\n" +
+            "order by avg DESC",
+            countQuery = "select product_id,create_at,product_description,product_discount, product_inventory, product_name, product_price, product_sell_amount, product_status, brand_id, category_id\n" +
+                    "from products\n" +
+                    "natural join (select product_id, avg(rating_point)from product_ratings group by product_id) as a\n" +
+                    "where product_status= 1 and avg>3\n" +
+                    "order by avg DESC",
+            nativeQuery = true)
+    Page<ProductEntity> findProductHighRating(Pageable pageable);
 }

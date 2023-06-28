@@ -33,6 +33,10 @@ public interface ProductService {
 
     List<ProductEntity> findByProductStatus(int page, int size, int status);
 
+    List<ProductEntity> findByProductFavorite(int page, int size);
+
+    List<ProductEntity> findByHighRating(int page, int size);
+
     List<ProductEntity> findProductByCategory(CategoryEntity category, int pageNo, int pageSize, String sort);
 
     List<ProductEntity> findProductByBrand(BrandEntity brand, int pageNo, int pageSize, String sort);

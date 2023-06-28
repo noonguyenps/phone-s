@@ -86,6 +86,32 @@ public class ProductController {
         data.put("listProduct",listResponse);
         return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
     }
+    @GetMapping("/product/favorite/all")
+    private ResponseEntity<SuccessResponse> showAllProductFavorite(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "30") int size){
+        List<ProductEntity> listProduct = productService.findByProductFavorite(page,size);
+        if(listProduct.size() == 0)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"List Product is Empty",null), HttpStatus.OK);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
+        Map<String, Object> data = new HashMap<>();
+        data.put("listProduct",listResponse);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
+    }
+    @GetMapping("/product/rating/all")
+    private ResponseEntity<SuccessResponse> showAllProductHighRating(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "30") int size){
+        List<ProductEntity> listProduct = productService.findByHighRating(page,size);
+        if(listProduct.size() == 0)
+            return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.OK.value(),"List Product is Empty",null), HttpStatus.OK);
+        List<ProductResponse> listResponse = new ArrayList<>();
+        for (ProductEntity product : listProduct)
+            listResponse.add(productService.productResponse(product));
+        Map<String, Object> data = new HashMap<>();
+        data.put("listProduct",listResponse);
+        return new ResponseEntity<>(new SuccessResponse(true,HttpStatus.OK.value(),"Query Successfully",data), HttpStatus.OK);
+    }
     @GetMapping("/product/byCategory")
     private ResponseEntity<SuccessResponse> showAllProductByCategory(@RequestParam UUID idCategory,
                                                                      @RequestParam(defaultValue = "0") int page,

@@ -97,6 +97,18 @@ public class ProductServiceImpl implements ProductService {
         return pagedResult.toList();
     }
     @Override
+    public List<ProductEntity> findByProductFavorite(int page, int size){
+        Pageable paging = PageRequest.of(page, size);
+        Page<ProductEntity> pagedResult = productRepository.findProductFavorite(paging);
+        return pagedResult.toList();
+    }
+    @Override
+    public List<ProductEntity> findByHighRating(int page, int size){
+        Pageable paging = PageRequest.of(page, size);
+        Page<ProductEntity> pagedResult = productRepository.findProductHighRating(paging);
+        return pagedResult.toList();
+    }
+    @Override
     public List<ProductEntity> findProductByCategory(CategoryEntity category, int pageNo, int pageSize, String sort){
         Pageable paging = null;
         switch (sort){
