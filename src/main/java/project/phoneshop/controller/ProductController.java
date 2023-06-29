@@ -197,7 +197,7 @@ public class ProductController {
     @GetMapping("/product/{id}")
     private ResponseEntity<SuccessResponse> showProductById(@PathVariable UUID id){
         ProductEntity product = productService.findById(id);
-        if(product == null||product.getStatus()==1)
+        if(product == null||product.getStatus()==0)
             return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.FOUND.value(),"Product is Not Found",null), HttpStatus.FOUND);
         Map<String, Object> data = new HashMap<>();
         data.put("product",productService.productResponse(product));
