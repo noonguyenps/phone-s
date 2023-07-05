@@ -21,9 +21,6 @@ public class ShipEntity {
     private String shipType;
     @Column(name = "\"ship_price\"")
     private double shipPrice;
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "shipOrder",targetEntity = OrderEntity.class,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-//    private List<OrderEntity> order;
 
 
     public int getShipId() {

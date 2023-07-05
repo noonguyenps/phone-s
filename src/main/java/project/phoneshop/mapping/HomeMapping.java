@@ -20,12 +20,12 @@ public class HomeMapping {
         list.add(new QuickLink(10,"https://salt.tikicdn.com/cache/w100/ts/upload/4a/b2/c5/b388ee0e511889c83fab1217608fe82f.png.webp","Ưu đãi thanh toán",""));
     }
     public void getListEvent(List<QuickLink> list){
-        list.add(new QuickLink(1,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/21/iphone-14-1200x382.jpg","",""));
-        list.add(new QuickLink(2,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/04/tai-nghe-bwoo-1200x382.jpg","",""));
-        list.add(new QuickLink(3,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/06/laptop-gaming-gigabyte-1200x382.jpg","",""));
-        list.add(new QuickLink(4,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/19/web-hotsale-samsung-galaxy-a-series-01.jpg","",""));
-        list.add(new QuickLink(5,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/13/xiaomi-12t-series-1200x382.jpg", "", ""));
-        list.add(new QuickLink(6,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/11/vivo-v25-series-1200x382.jpg", "", ""));
+        list.add(new QuickLink(1,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/21/iphone-14-1200x382.jpg","","/product/37e26481-69e9-48b4-9433-d50e1dae6d24"));
+        list.add(new QuickLink(2,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/04/tai-nghe-bwoo-1200x382.jpg","","/product/327a943f-a27f-49a5-91f3-7da7db9d8ab6"));
+        list.add(new QuickLink(3,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/06/laptop-gaming-gigabyte-1200x382.jpg","","/product/a8ae9b41-de66-4bca-979a-3ba74bb02035"));
+        list.add(new QuickLink(4,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/19/web-hotsale-samsung-galaxy-a-series-01.jpg","","/product/5af02a0f-1f60-41a1-8fa3-104b15add7b1"));
+        list.add(new QuickLink(5,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/13/xiaomi-12t-series-1200x382.jpg", "", "/product/d5a8a49a-17e6-413d-9b62-cf8c8c561b59"));
+        list.add(new QuickLink(6,"https://cdn.hoanghamobile.com/i/home/Uploads/2022/10/11/vivo-v25-series-1200x382.jpg", "", "/product/9d1e31b0-449e-494f-9e0d-e22380ecd2eb"));
     }
     public void getListCategorySpecify(List<QuickLink> list){
         list.add(new QuickLink(1,

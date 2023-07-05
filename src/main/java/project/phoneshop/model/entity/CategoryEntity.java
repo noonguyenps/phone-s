@@ -38,10 +38,6 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "productCategory",cascade = CascadeType.ALL)
     private List<ProductEntity> listProduct;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "\"category_attribute\"", joinColumns = @JoinColumn(name = "\"category_id\""), inverseJoinColumns = @JoinColumn(name = "\"attribute_id\""))
-//    private Set<AttributeEntity> attributeEntities;
-
     public CategoryEntity() {
     }
 
@@ -90,14 +86,6 @@ public class CategoryEntity {
     public void setListProduct(List<ProductEntity> listProduct) {
         this.listProduct = listProduct;
     }
-//
-//    public Set<AttributeEntity> getAttributeEntities() {
-//        return attributeEntities;
-//    }
-//
-//    public void setAttributeEntities(Set<AttributeEntity> attributeEntities) {
-//        this.attributeEntities = attributeEntities;
-//    }
 
     @Override
     public String toString() {
