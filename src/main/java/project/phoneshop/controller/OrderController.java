@@ -165,6 +165,8 @@ public class OrderController {
             int resultCode = momoService.getResultCode(Integer.parseInt(orderId),requestId);
             if(resultCode==0){
                 orderEntity.setStatusPayment(true);
+                PaymentEntity payment = paymentService.getPaymentById(4);
+                orderEntity.setPaymentOrder(payment);
                 orderService.save(orderEntity);
             }
             response.sendRedirect("https://phone-s-fe.vercel.app/payment/"+orderId1);
@@ -202,7 +204,11 @@ public class OrderController {
             Payment payment=paypalService.executePayment(paymentId,payerId);
             if(payment.getState().equals("approved")){
                 Map<String,Object> data=new HashMap<>();
-                orderService.changePaymentStatus(Integer.parseInt(id),true);
+                OrderEntity order = orderService.findById(Integer.parseInt(id));
+                PaymentEntity paymentEntity = paymentService.getPaymentById(2);
+                order.setPaymentOrder(paymentEntity);
+                order.setStatusPayment(true);
+                orderService.save(order);
                 //Process order if payment success
                 data.put("orderId",id);
                 response.sendRedirect("https://phone-s-fe.vercel.app/payment/"+id);
