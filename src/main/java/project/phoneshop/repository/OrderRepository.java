@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<OrderEntity,Integer> {
     OrderEntity findByName(String name);
     Page<OrderEntity> findByUserOrderAndOrderStatus(UserEntity user, int status, Pageable pageable);
+    Page<OrderEntity> findByUserOrder(UserEntity user, Pageable pageable);
     Optional<OrderEntity> findByOrderId(int id);
     @Query(value = "SELECT * FROM products WHERE LOWER(products.product_name) LIKE %?1%",
             countQuery = "SELECT * FROM products WHERE LOWER(products.product_name) LIKE %?1%",

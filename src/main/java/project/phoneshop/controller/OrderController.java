@@ -292,26 +292,14 @@ public class OrderController {
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
             List<OrderResponse> orderResponseList = new ArrayList<>();
+            List<OrderEntity> orderEntities = orderService.findAllOrderByUser(page,size,user);
             if(!listOrderSort().contains(sort))
                 return new ResponseEntity<>(new SuccessResponse(false,HttpStatus.NOT_FOUND.value(), "Sort not found",null),HttpStatus.NOT_FOUND);
-            switch (sort){
-                case "total_down":user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal).reversed());break;
-                case "total_up": user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal));break;
-                case "created_date": user.getListOrder().sort(Comparator.comparing(OrderEntity::getCreatedDate));break;
-                case "order_id": user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId).reversed());break;
-            }
-            user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId));
-            int i = 0;
-            for(OrderEntity order:user.getListOrder()){
-                if(i>page*size&&i<(page+1)*size){
+            for(OrderEntity order:orderEntities){
                     List<CartResponseFE> cartResponseFEList = new ArrayList<>();
                     for(CartEntity cart: order.getCartOrder())
                         cartResponseFEList.add(cartService.getCartResponseFE(cart));
                     orderResponseList.add(orderService.getOrderResponse(order,cartResponseFEList));
-                }
-                i++;
-                if(orderResponseList.size()==size)
-                    break;
             }
             data.put("listOrder",orderResponseList);
             return new ResponseEntity<>(new SuccessResponse(true, HttpStatus.OK.value(), "List Order", data), HttpStatus.OK);
@@ -320,12 +308,12 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     @GetMapping("/user/order/status")
-    public ResponseEntity<SuccessResponse> getOrderByUserAndStatus(HttpServletRequest request, int status) throws Exception {
+    public ResponseEntity<SuccessResponse> getOrderByUserAndStatus(HttpServletRequest request,@RequestParam int status, @RequestParam int page, @RequestParam int size) throws Exception {
         UserEntity user = authorizationHeader.AuthorizationHeader(request);
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
             List<OrderResponse> orderResponseList = new ArrayList<>();
-            List<OrderEntity> orderEntities = orderService.findAllOrderByUser(status,1,10,user);
+            List<OrderEntity> orderEntities = orderService.findAllOrderByUser(status,page,size,user);
             for(OrderEntity order:orderEntities){
                 if(order.getOrderStatus()==status) {
                     List<CartResponseFE> cartResponseFEList = new ArrayList<>();

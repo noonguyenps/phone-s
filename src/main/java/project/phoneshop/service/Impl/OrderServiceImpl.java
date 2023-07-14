@@ -56,6 +56,12 @@ public class OrderServiceImpl implements OrderService {
         return page.toList();
     }
     @Override
+    public List<OrderEntity> findAllOrderByUser(int pageNo, int pageSize, UserEntity user){
+        Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by("orderId").descending());
+        Page<OrderEntity> page = orderRepository.findByUserOrder(user,pageable);
+        return page.toList();
+    }
+    @Override
     public OrderEntity findOrderByName(String name){
         return orderRepository.findByName(name);
     }
