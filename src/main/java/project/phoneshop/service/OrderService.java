@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.phoneshop.model.entity.OrderEntity;
 import project.phoneshop.model.entity.ProductEntity;
+import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.model.payload.response.order.OrderResponse;
 
@@ -17,6 +18,8 @@ public interface OrderService {
     List<OrderEntity> findAllOrder(int pageNo, int pageSize, String sort);
 
     List<OrderEntity> findAllOrderByStatus(int status, int pageNo, int pageSize);
+
+    List<OrderEntity> findAllOrderByUser(int status, int pageNo, int pageSize, UserEntity user);
 
     OrderEntity findOrderByName(String name);
 

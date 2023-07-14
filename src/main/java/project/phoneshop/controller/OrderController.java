@@ -325,7 +325,8 @@ public class OrderController {
         if(user != null) {
             Map<String, Object> data = new HashMap<>();
             List<OrderResponse> orderResponseList = new ArrayList<>();
-            for(OrderEntity order:user.getListOrder()){
+            List<OrderEntity> orderEntities = orderService.findAllOrderByUser(status,1,10,user);
+            for(OrderEntity order:orderEntities){
                 if(order.getOrderStatus()==status) {
                     List<CartResponseFE> cartResponseFEList = new ArrayList<>();
                     for(CartEntity cart: order.getCartOrder())

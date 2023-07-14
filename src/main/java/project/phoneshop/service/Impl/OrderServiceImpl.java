@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.OrderEntity;
+import project.phoneshop.model.entity.UserEntity;
 import project.phoneshop.model.payload.response.cart.CartResponseFE;
 import project.phoneshop.model.payload.response.order.OrderResponse;
 import project.phoneshop.repository.OrderRepository;
@@ -47,6 +48,12 @@ public class OrderServiceImpl implements OrderService {
         Pageable paging = PageRequest.of(pageNo, pageSize);
         Page<OrderEntity> pagedResult = orderRepository.findAllOrderByStatus(status,paging);
         return pagedResult.toList();
+    }
+    @Override
+    public List<OrderEntity> findAllOrderByUser(int status, int pageNo, int pageSize, UserEntity user){
+        Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by("order_id").descending());
+        Page<OrderEntity> page = orderRepository.findByUserOrderAndStatus(user,status);
+        return page.toList();
     }
     @Override
     public OrderEntity findOrderByName(String name){
