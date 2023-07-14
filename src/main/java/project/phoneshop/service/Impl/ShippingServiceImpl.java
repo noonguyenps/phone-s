@@ -2,6 +2,7 @@ package project.phoneshop.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.phoneshop.model.entity.CartEntity;
@@ -32,7 +33,7 @@ public class ShippingServiceImpl implements ShippingService {
 
     @Override
     public List<ShippingEntity> getAllShippingByShipper(UserEntity user, int page, int size) {
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size, Sort.by("create").descending());
         return shippingRepository.findByUserOrderShipping(user,pageable).toList();
     }
 
