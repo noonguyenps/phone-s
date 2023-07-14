@@ -298,7 +298,7 @@ public class OrderController {
                 case "total_down":user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal).reversed());break;
                 case "total_up": user.getListOrder().sort(Comparator.comparing(OrderEntity::getTotal));break;
                 case "created_date": user.getListOrder().sort(Comparator.comparing(OrderEntity::getCreatedDate));break;
-                case "order_id": user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId));break;
+                case "order_id": user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId).reversed());break;
             }
             user.getListOrder().sort(Comparator.comparing(OrderEntity::getOrderId));
             int i = 0;
