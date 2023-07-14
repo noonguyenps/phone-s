@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderEntity> findAllOrderByUser(int status, int pageNo, int pageSize, UserEntity user){
         Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by("order_id").descending());
-        Page<OrderEntity> page = orderRepository.findByUserOrderAndStatus(user,status);
+        Page<OrderEntity> page = orderRepository.findByUserOrderAndOrderStatus(user,status,pageable);
         return page.toList();
     }
     @Override
